@@ -1,0 +1,52 @@
+{
+    "_readme": [
+        "This file locks the dependencies of your project to a known state",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
+        "This file is @generated automatically"
+    ],
+    "content-hash": "4dcee6b243c161d3c8affd1b811edbdc",
+    "packages": [
+        {
+            "name": "saij/wp-app-framework",
+            "version": "dev-main",
+            "dist": {
+                "type": "path",
+                "url": "../wp-app-framework",
+                "reference": "8a3ab854ceaaa7397ca181ddebcba72b508d6f9f"
+            },
+            "require": {
+                "php": ">=8.5"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Saij\\WpAppFramework\\": "src/"
+                }
+            },
+            "license": [
+                "proprietary"
+            ],
+            "description": "Framework for standalone full site editing themes for WordPress.",
+            "transport-options": {
+                "symlink": true,
+                "relative": true
+            }
+        }
+    ],
+    "packages-dev": [],
+    "aliases": [],
+    "minimum-stability": "stable",
+    "stability-flags": {
+        "saij/wp-app-framework": 20
+    },
+    "prefer-stable": false,
+    "prefer-lowest": false,
+    "platform": {
+        "php": ">=8.5"
+    },
+    "platform-dev": {},
+    "platform-overrides": {
+        "php": "8.5"
+    },
+    "plugin-api-version": "2.9.0"
+}

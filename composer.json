@@ -1,0 +1,26 @@
+{
+    "name": "saij/theme-sections",
+    "description": "Full site editing theme focused on sections, built on wp-app-framework.",
+    "type": "wordpress-theme",
+    "license": "proprietary",
+    "repositories": [
+        {
+            "type": "path",
+            "url": "../wp-app-framework",
+            "options": {
+                "symlink": true,
+                "relative": true
+            }
+        }
+    ],
+    "require": {
+        "php": ">=8.5",
+        "saij/wp-app-framework": "@dev"
+    },
+    "config": {
+        "platform": {
+            "php": "8.5"
+        },
+        "sort-packages": true
+    }
+}
