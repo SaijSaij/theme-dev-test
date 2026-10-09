@@ -2,4 +2,9 @@
 
 declare(strict_types=1);
 
-// Framework boot (explicit autoloader selection, Theme::boot) is added in step 1 of the plan.
+// Release builds ship prefixed dependencies in vendor-prefixed/; source checkouts use Composer's vendor/.
+require is_file(__DIR__ . '/vendor-prefixed/autoload.php')
+    ? __DIR__ . '/vendor-prefixed/autoload.php'
+    : __DIR__ . '/vendor/autoload.php';
+
+Saij\WpAppFramework\Theme::boot();

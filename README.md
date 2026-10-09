@@ -16,3 +16,10 @@ git clone https://github.com/saijsaij/theme-sections.git
 ```
 
 For a local WordPress, use [wp-dev-env](https://github.com/saijsaij/wp-dev-env) in the same parent directory with `WP_THEMES=theme-sections` and `WP_ACTIVE_THEME=theme-sections`; its setup also runs `composer install` for this theme.
+
+## Structure
+
+- `functions.php` loads the autoloader (`vendor-prefixed/` in release builds, `vendor/` in source checkouts) and boots the framework.
+- `src/` contains the theme's PHP classes (PSR-4 `Saij\ThemeSections\`); they are discovered by the framework, see [wp-app-framework](https://github.com/saijsaij/wp-app-framework).
+
+Check the manifest build with `composer build-manifest` (writes nothing). In a source checkout the framework runs in development mode and caches the manifest in `wp-content/cache/theme-sections/manifest/`.

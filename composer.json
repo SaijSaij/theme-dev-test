@@ -17,6 +17,14 @@
         "php": ">=8.5",
         "saij/wp-app-framework": "@dev"
     },
+    "autoload": {
+        "psr-4": {
+            "Saij\\ThemeSections\\": "src/"
+        }
+    },
+    "scripts": {
+        "build-manifest": "wp-app-framework build"
+    },
     "config": {
         "platform": {
             "php": "8.5"

@@ -12,16 +12,32 @@
             "dist": {
                 "type": "path",
                 "url": "../wp-app-framework",
-                "reference": "8a3ab854ceaaa7397ca181ddebcba72b508d6f9f"
+                "reference": "63b98f8aa0282292e91dbe4eba6ce07ddf157d5a"
             },
             "require": {
                 "php": ">=8.5"
             },
+            "require-dev": {
+                "phpunit/phpunit": "^13.4"
+            },
+            "bin": [
+                "bin/wp-app-framework"
+            ],
             "type": "library",
             "autoload": {
                 "psr-4": {
                     "Saij\\WpAppFramework\\": "src/"
                 }
+            },
+            "autoload-dev": {
+                "psr-4": {
+                    "Saij\\WpAppFramework\\Tests\\": "tests/"
+                }
+            },
+            "scripts": {
+                "test": [
+                    "phpunit"
+                ]
             },
             "license": [
                 "proprietary"
