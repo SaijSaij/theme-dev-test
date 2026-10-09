@@ -1,0 +1,19 @@
+{
+	"name": "theme-sections",
+	"private": true,
+	"license": "GPL-2.0-or-later",
+	"engines": {
+		"node": ">=24"
+	},
+	"scripts": {
+		"build": "wp-scripts build",
+		"start": "wp-scripts start",
+		"test:e2e": "playwright test --config tests/e2e/playwright.config.js"
+	},
+	"devDependencies": {
+		"@playwright/test": "1.64.0",
+		"@saij/wp-app-framework": "file:vendor/saij/wp-app-framework",
+		"@wordpress/e2e-test-utils-playwright": "^3.0.0",
+		"@wordpress/scripts": "^36.1.0"
+	}
+}

@@ -1,0 +1,20 @@
+<section {{ block_wrapper_attributes({class: 'hero hero--' ~ attrs.gradient.value}) }}>
+    {% if attrs.imageId or is_editor() %}
+        <figure class="hero__image"{{ field('imageId') }}>{{ attachment_image(attrs.imageId, 'large') }}</figure>
+    {% endif %}
+    <div class="hero__content">
+        {% if attrs.topline or is_editor() %}
+            <p class="hero__topline"{{ field('topline') }}>{{ attrs.topline }}</p>
+        {% endif %}
+        {% if attrs.headline or is_editor() %}
+            <h1 class="hero__headline"{{ field('headline') }}>{{ attrs.headline|raw }}</h1>
+        {% endif %}
+        {% if attrs.buttons %}
+            <div class="hero__buttons">
+                {% for button in attrs.buttons %}
+                    <a class="hero__button" href="{{ button.url }}"{{ field(['buttons', loop.index0, 'label']) }}>{{ button.label }}</a>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+</section>

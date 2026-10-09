@@ -2,3 +2,4 @@
 /vendor-prefixed/
 /node_modules/
 /generated/
+/build/
