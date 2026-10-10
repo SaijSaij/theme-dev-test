@@ -101,6 +101,17 @@ async function createPost( requestUtils, post ) {
 }
 
 /**
+ * Registers a post created otherwise (e.g. by another user) for cleanUp().
+ *
+ * @param {number} id Post ID.
+ * @return {number} The ID.
+ */
+function trackPost( id ) {
+	createdPosts.push( id );
+	return id;
+}
+
+/**
  * Uploads an image to the media library.
  *
  * @param {Object} requestUtils
@@ -286,6 +297,7 @@ module.exports = {
 	screenshot,
 	storedContent,
 	trackMedia,
+	trackPost,
 	trackRenderRequests,
 	uploadImage,
 };

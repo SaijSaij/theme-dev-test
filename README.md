@@ -33,7 +33,7 @@ All checks run in wp-dev-env and must pass without errors or warnings.
 Build: `composer build-manifest` builds and checks the manifest (writes nothing) and must report
 
 ```
-Manifest OK: 30 service candidates, 18 services, 2 hooks, 16 routes, 6 template functions, 1 template filters, 8 blocks.
+Manifest OK: 32 service candidates, 19 services, 2 hooks, 16 routes, 6 template functions, 1 template filters, 9 blocks.
 ```
 
 Lint: PHP with PHPStan (level max, WordPress stubs) and PHP-CS-Fixer (PER Coding Style), JavaScript with ESLint (configuration of `@wordpress/scripts`):
@@ -60,6 +60,8 @@ The fixtures in `tests/e2e/fixtures.js` fail every test that causes a console wa
 | `blocks.spec.js` | Escaping and sanitizing of every value type on the front end (scalars, nullable, enum, nested value class, URL, image, inner blocks), supports, render arguments, stored content, block types in the editor, `usesContext` in a query loop | `src/Block/Check/`, `src/Block/PostInfo/`, `src/Block/Container/` |
 | `editor-runtime.spec.js` | Editor runtime: inline editing, refetch rule, batch rendering and cache, layout stability, images, containers, contentOnly, errors per block, site editor, list cards, canvas outlines, `registerPanel` | `src/Block/Hero/`, `src/Block/Section/` |
 | `inspector-controls.spec.js` | Generated inspector controls per value type, `#[Label]`, `#[Hidden]`, `Labeled`, `registerControl`, warnings of the extension points and of unmarked inline fields, inserting in contentOnly mode (`contentRole`) | `src/Block/Check/`, `src/Block/Unmarked/`, `src/Block/Container/` |
+| `post-content.spec.js` | `#[RichText(postContent: true)]`: text stored as inline HTML, root element as field, reload without validation errors, front end, empty text, kses for authors, contentOnly, outline | `src/Block/Paragraph/` |
+| `excerpt.spec.js` | Automatic excerpts from fields with `excerpt: true` (REST, archive with `core/post-excerpt`, feed), `excerptWrapper`, manual excerpts, posts without framework blocks | `src/Block/Hero/`, `src/Block/Paragraph/`, `src/Block/Section/` |
 | `inspector-fields.spec.js` | Fields edited in the inspector (`inspector: true`), also in list items; `field()` on such a field | `src/Block/Inspector/` |
 
 Expected log entries of a test run (WP_DEBUG): the failures of `dev-test/v1/items/fail` and `dev-test/v1/twig/undefined` and of the editor render of `dev-test/wrong-field`, which fails on purpose. Never store `dev-test/wrong-field` or `dev-test/unmarked` in a post: they exist to show errors.
@@ -68,7 +70,7 @@ Expected log entries of a test run (WP_DEBUG): the failures of `dev-test/v1/item
 
 - `functions.php` loads the autoloader (`vendor-prefixed/` in release builds, `vendor/` in source checkouts) and boots the framework.
 - `src/` contains the theme's PHP classes (PSR-4 `Saij\ThemeDevTest\`), discovered by the framework, with their Twig templates and editor scripts next to them, organized by the feature they test.
-- `templates/` holds the block templates (`index.html`, `single.html`).
+- `templates/` holds the block templates (`index.html` with titles and excerpts, `single.html`).
 - `build/` (not versioned) is the output of the script build.
 
 In a source checkout the framework runs in development mode and caches the manifest in `wp-content/cache/theme-dev-test/manifest/`.

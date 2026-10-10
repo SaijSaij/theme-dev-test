@@ -10,7 +10,7 @@ use Saij\WpAppFramework\Block\BlockCategory;
 use Saij\WpAppFramework\Block\Supports;
 use Saij\WpAppFramework\Twig\TemplateRenderer;
 
-#[Block('dev-test/section', title: 'Section', category: BlockCategory::Design, icon: 'columns', description: 'Container for hero blocks.', allowedBlocks: ['dev-test/hero'])]
+#[Block('dev-test/section', title: 'Section', category: BlockCategory::Design, icon: 'columns', description: 'Container for hero blocks.', allowedBlocks: ['dev-test/hero'], excerptWrapper: true)]
 #[Supports(contentRole: true, align: [Align::Wide, Align::Full])]
 final readonly class Section
 {

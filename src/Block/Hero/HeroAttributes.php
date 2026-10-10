@@ -16,9 +16,9 @@ final readonly class HeroAttributes
      * @param list<Button> $buttons
      */
     public function __construct(
-        #[PlainText]
+        #[PlainText(excerpt: true)]
         public string $topline = '',
-        #[RichText(allowedFormats: ['core/bold', 'core/italic'])]
+        #[RichText(allowedFormats: ['core/bold', 'core/italic'], excerpt: true)]
         public string $headline = '',
         #[Image]
         #[Label('Image')]
