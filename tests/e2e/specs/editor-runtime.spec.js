@@ -264,4 +264,46 @@ test.describe( 'Editor runtime', () => {
 		const attributes = JSON.parse( ( await storedContent( requestUtils, id ) ).match( /^<!-- wp:sections\/hero (\{.*\}) \/-->$/ )[ 1 ] );
 		expect( attributes.buttons.map( ( button ) => button.label ) ).toEqual( [ 'Second', 'First' ] );
 	} );
+
+	test( 'outlines the fields edited in the canvas on hovered and selected blocks', async ( { admin, editor, page, requestUtils } ) => {
+		const id = await openPostWith(
+			{ admin, editor, requestUtils },
+			[
+				block( 'sections/hero', { topline: 'Outer', headline: 'Head' } ),
+				block( 'sections/section', {}, block( 'sections/hero', { topline: 'Inner' } ) ),
+			].join( '\n\n' )
+		);
+		const outline = ( locator ) => locator.evaluate( ( element ) => getComputedStyle( element ).outlineStyle );
+		const heroes = editor.canvas.locator( '[data-type="sections/hero"]' );
+		const outer = heroes.nth( 0 );
+		const inner = heroes.nth( 1 );
+		await expect( outer.locator( '.hero__topline' ) ).toHaveAttribute( 'contenteditable', 'true' );
+		await expect( editor.canvas.locator( '#theme-sections-wp-app-framework-canvas-css' ) ).toBeAttached();
+		// canvas.scss uses the admin color scheme, which the editor also defines in the canvas.
+		expect( await editor.canvas.locator( 'body' ).evaluate( ( body ) => getComputedStyle( body ).getPropertyValue( '--wp-admin-theme-color' ) ) ).not.toBe( '' );
+
+		await page.mouse.move( 0, 0 );
+		await expect.poll( () => outline( outer.locator( '.hero__topline' ) ) ).toBe( 'none' );
+
+		await outer.locator( '.hero__content' ).hover();
+		await expect.poll( () => outline( outer.locator( '.hero__topline' ) ) ).toBe( 'dashed' );
+		await expect.poll( () => outline( outer.locator( '.hero__image' ) ) ).toBe( 'dashed' );
+		await screenshot( outer, 'canvas-outline-hovered' );
+
+		await outer.locator( '.hero__headline' ).click();
+		await page.mouse.move( 0, 0 );
+		await expect.poll( () => outline( outer.locator( '.hero__headline' ) ) ).toBe( 'solid' );
+		await expect.poll( () => outline( outer.locator( '.hero__topline' ) ) ).toBe( 'dashed' );
+		await screenshot( outer, 'canvas-outline-selected' );
+
+		// A selected container does not outline the fields of its inner blocks.
+		await editor.selectBlocks( editor.canvas.locator( '[data-type="sections/section"]' ) );
+		await page.mouse.move( 0, 0 );
+		await expect.poll( () => outline( inner.locator( '.hero__topline' ) ) ).toBe( 'none' );
+		await expect.poll( () => outline( outer.locator( '.hero__topline' ) ) ).toBe( 'none' );
+
+		await page.goto( `/?p=${ id }&preview=true` );
+		await expect( page.locator( '.wp-block-sections-hero' ).first() ).toBeVisible();
+		await expect( page.locator( '#theme-sections-wp-app-framework-canvas-css' ) ).toHaveCount( 0 );
+	} );
 } );
