@@ -66,7 +66,7 @@ docker compose run --rm e2e npm --prefix /workspace/theme-dev-test run test:e2e
 The same suite runs against the release ZIP: install it with `scripts/release-test` of wp-dev-env, then run the tests with `E2E_TARGET=release` (only mode-specific expectations differ, e.g. prefixed class names, the versioned Twig cache, no development warnings):
 
 ```sh
-scripts/release-test --theme ../theme-dev-test/dist/theme-dev-test-0.1.0.zip [--plugin ../plugin-dev-test/dist/plugin-dev-test-0.1.0.zip]
+scripts/release-test --theme ../theme-dev-test/dist/theme-dev-test-<version>.zip [--plugin ../plugin-dev-test/dist/plugin-dev-test-0.1.0.zip]
 set -a; . ./.env; set +a
 docker compose run --rm --no-deps -e WP_BASE_URL="$WP_RELEASE_URL" -e E2E_BROWSER_HOST_RULES="MAP $WP_RELEASE_HOST traefik" \
     -e E2E_TARGET=release -e E2E_OUTPUT_DIR=/results/release e2e npm --prefix /workspace/theme-dev-test run test:e2e
