@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Saij\ThemeSections\Block\Hero;
+namespace Saij\ThemeDevTest\Block\Hero;
 
 use Saij\WpAppFramework\Block\Labeled;
 

@@ -1,5 +1,5 @@
 {
-	"name": "theme-sections",
+	"name": "theme-dev-test",
 	"private": true,
 	"license": "GPL-2.0-or-later",
 	"engines": {
@@ -8,6 +8,8 @@
 	"scripts": {
 		"build": "wp-scripts build",
 		"start": "wp-scripts start",
+		"lint": "wp-scripts lint-js src tests webpack.config.js eslint.config.cjs",
+		"format": "wp-scripts format src tests webpack.config.js eslint.config.cjs",
 		"test:e2e": "playwright test --config tests/e2e/playwright.config.js"
 	},
 	"devDependencies": {

@@ -1,0 +1,40 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Saij\ThemeDevTest\Block\Check;
+
+use Saij\WpAppFramework\Block\Content;
+use Saij\WpAppFramework\Block\Hidden;
+use Saij\WpAppFramework\Block\Image;
+use Saij\WpAppFramework\Block\Label;
+use Saij\WpAppFramework\Block\PlainText;
+use Saij\WpAppFramework\Block\RichText;
+use Saij\WpAppFramework\Value\Url;
+
+/**
+ * One attribute per supported value type and editor marker.
+ */
+final readonly class CheckAttributes
+{
+    public function __construct(
+        #[PlainText]
+        public string $text = '',
+        #[RichText]
+        public string $rich = '',
+        #[Label('Amount')]
+        public int $count = 0,
+        #[Content]
+        #[Url]
+        public string $link = '',
+        public Variant $variant = Variant::Light,
+        #[Image]
+        public ?int $imageId = null,
+        public bool $flag = false,
+        public float $ratio = 0.5,
+        public ?string $note = null,
+        public Meta $meta = new Meta(),
+        #[Hidden]
+        public string $secret = 'hidden',
+    ) {}
+}

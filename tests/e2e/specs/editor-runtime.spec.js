@@ -1,21 +1,42 @@
-const { test, expect } = require( '@wordpress/e2e-test-utils-playwright' );
+const { test, expect } = require( '../fixtures' );
 
 const path = require( 'path' );
 
-const { block, blockCount, deletePostsOfTests, openBlockSettings, openPostWith, RENDER_ROUTE, screenshot, storedContent, trackRenderRequests } = require( '../helpers' );
+const {
+	block,
+	blockCount,
+	cleanUp,
+	openBlockSettings,
+	openPostWith,
+	RENDER_ROUTE,
+	screenshot,
+	storedContent,
+	trackMedia,
+	trackRenderRequests,
+} = require( '../helpers' );
 
 const IMAGE = path.join( __dirname, '../assets/image.png' );
 
 test.describe( 'Editor runtime', () => {
 	test.afterEach( async ( { requestUtils } ) => {
-		await deletePostsOfTests( requestUtils );
+		await cleanUp( requestUtils );
 	} );
 
-	test( 'edits inline fields in the canvas and stores only block comments', async ( { admin, editor, page, requestUtils } ) => {
+	test( 'edits inline fields in the canvas and stores only block comments', async ( {
+		admin,
+		editor,
+		page,
+		requestUtils,
+	} ) => {
 		const renders = trackRenderRequests( page );
-		const id = await openPostWith( { admin, editor, requestUtils }, block( 'sections/hero', { buttons: [ { label: 'Go', url: 'https://example.test/' } ] } ) );
+		const id = await openPostWith(
+			{ admin, editor, requestUtils },
+			block( 'dev-test/hero', {
+				buttons: [ { label: 'Go', url: 'https://example.test/' } ],
+			} )
+		);
 
-		const hero = editor.canvas.locator( '[data-type="sections/hero"]' );
+		const hero = editor.canvas.locator( '[data-type="dev-test/hero"]' );
 		const topline = hero.locator( '.hero__topline' );
 		await expect( topline ).toHaveAttribute( 'contenteditable', 'true' );
 		await expect.poll( () => renders.length ).toBe( 1 );
@@ -31,8 +52,16 @@ test.describe( 'Editor runtime', () => {
 		await page.keyboard.press( 'ControlOrMeta+b' );
 		// #[RichText(allowedFormats: bold, italic)]: no link in the toolbar.
 		await editor.showBlockToolbar();
-		await expect( page.getByRole( 'toolbar', { name: 'Block tools' } ).getByRole( 'button', { name: 'Bold' } ) ).toBeVisible();
-		await expect( page.getByRole( 'toolbar', { name: 'Block tools' } ).getByRole( 'button', { name: 'Link' } ) ).toHaveCount( 0 );
+		await expect(
+			page
+				.getByRole( 'toolbar', { name: 'Block tools' } )
+				.getByRole( 'button', { name: 'Bold' } )
+		).toBeVisible();
+		await expect(
+			page
+				.getByRole( 'toolbar', { name: 'Block tools' } )
+				.getByRole( 'button', { name: 'Link' } )
+		).toHaveCount( 0 );
 
 		const button = hero.locator( '.hero__button' );
 		await button.click();
@@ -46,30 +75,51 @@ test.describe( 'Editor runtime', () => {
 
 		await editor.saveDraft();
 		const content = await storedContent( requestUtils, id );
-		expect( content ).toMatch( /^<!-- wp:sections\/hero \{.*\} \/-->$/ );
-		const attributes = JSON.parse( content.match( /^<!-- wp:sections\/hero (\{.*\}) \/-->$/ )[ 1 ] );
+		expect( content ).toMatch( /^<!-- wp:dev-test\/hero \{.*\} \/-->$/ );
+		const attributes = JSON.parse(
+			content.match( /^<!-- wp:dev-test\/hero (\{.*\}) \/-->$/ )[ 1 ]
+		);
 		expect( attributes.topline ).toBe( 'Tom & <b>Jerry</b>' );
 		expect( attributes.headline ).toBe( 'Hello <strong>bold</strong>' );
-		expect( attributes.buttons ).toEqual( [ { label: 'Go now', url: 'https://example.test/' } ] );
+		expect( attributes.buttons ).toEqual( [
+			{ label: 'Go now', url: 'https://example.test/' },
+		] );
 
 		await page.goto( `/?p=${ id }&preview=true` );
-		const front = page.locator( '.wp-block-sections-hero' );
-		await expect( front.locator( '.hero__topline' ) ).toHaveText( 'Tom & <b>Jerry</b>' );
-		await expect( front.locator( '.hero__headline strong' ) ).toHaveText( 'bold' );
-		await expect( front.locator( '[data-field], [data-inner-blocks]' ) ).toHaveCount( 0 );
+		const front = page.locator( '.wp-block-dev-test-hero' );
+		await expect( front.locator( '.hero__topline' ) ).toHaveText(
+			'Tom & <b>Jerry</b>'
+		);
+		await expect( front.locator( '.hero__headline strong' ) ).toHaveText(
+			'bold'
+		);
+		await expect(
+			front.locator( '[data-field], [data-inner-blocks]' )
+		).toHaveCount( 0 );
 		await screenshot( front, 'hero-front' );
 	} );
 
-	test( 'refetches on non-inline changes only and reuses cached markup', async ( { admin, editor, page, pageUtils, requestUtils } ) => {
+	test( 'refetches on non-inline changes only and reuses cached markup', async ( {
+		admin,
+		editor,
+		page,
+		pageUtils,
+		requestUtils,
+	} ) => {
 		const renders = trackRenderRequests( page );
-		await openPostWith( { admin, editor, requestUtils }, block( 'sections/hero', { topline: 'Cached' } ) );
-		const hero = editor.canvas.locator( '[data-type="sections/hero"]' );
+		await openPostWith(
+			{ admin, editor, requestUtils },
+			block( 'dev-test/hero', { topline: 'Cached' } )
+		);
+		const hero = editor.canvas.locator( '[data-type="dev-test/hero"]' );
 		await expect( hero ).toHaveClass( /hero--black/ );
 		await expect.poll( () => renders.length ).toBe( 1 );
 
 		await hero.locator( '.hero__topline' ).click();
 		await openBlockSettings( page, editor );
-		await page.getByRole( 'combobox', { name: 'Gradient' } ).selectOption( 'blue' );
+		await page
+			.getByRole( 'combobox', { name: 'Gradient' } )
+			.selectOption( 'blue' );
 		await expect( hero ).toHaveClass( /hero--blue/ );
 		await expect.poll( () => renders.length ).toBe( 2 );
 
@@ -80,26 +130,51 @@ test.describe( 'Editor runtime', () => {
 
 		await hero.locator( '.hero__topline' ).click();
 		await pageUtils.pressKeys( 'primaryShift+d' );
-		await expect( editor.canvas.locator( '[data-type="sections/hero"]' ) ).toHaveCount( 2 );
-		await expect( editor.canvas.locator( '[data-type="sections/hero"]' ).nth( 1 ) ).toHaveClass( /hero--blue/ );
+		await expect(
+			editor.canvas.locator( '[data-type="dev-test/hero"]' )
+		).toHaveCount( 2 );
+		await expect(
+			editor.canvas.locator( '[data-type="dev-test/hero"]' ).nth( 1 )
+		).toHaveClass( /hero--blue/ );
 
 		// Undo, redo and the duplicate came from the cache.
 		await page.waitForTimeout( 1000 );
 		expect( renders ).toHaveLength( 2 );
 	} );
 
-	test( 'renders all blocks of the post in one request when the editor loads', async ( { admin, editor, page, requestUtils } ) => {
+	test( 'renders all blocks of the post in one request when the editor loads', async ( {
+		admin,
+		editor,
+		page,
+		requestUtils,
+	} ) => {
 		const renders = trackRenderRequests( page );
 		await openPostWith(
 			{ admin, editor, requestUtils },
 			[
-				block( 'sections/hero', { topline: 'One' } ),
-				block( 'sections/hero', { gradient: 'blue' } ),
-				block( 'sections/hero', { buttons: [ { label: 'A', url: '' } ] } ),
-				block( 'sections/section', {}, block( 'sections/hero', { topline: 'Inner', gradient: 'blue', buttons: [ { label: 'B', url: 'https://example.test/' } ] } ) ),
+				block( 'dev-test/hero', { topline: 'One' } ),
+				block( 'dev-test/hero', { gradient: 'blue' } ),
+				block( 'dev-test/hero', {
+					buttons: [ { label: 'A', url: '' } ],
+				} ),
+				block(
+					'dev-test/section',
+					{},
+					block( 'dev-test/hero', {
+						topline: 'Inner',
+						gradient: 'blue',
+						buttons: [
+							{ label: 'B', url: 'https://example.test/' },
+						],
+					} )
+				),
 			].join( '\n\n' )
 		);
-		await expect( editor.canvas.locator( '[data-type="sections/hero"] .hero__topline[contenteditable="true"]' ) ).toHaveCount( 4 );
+		await expect(
+			editor.canvas.locator(
+				'[data-type="dev-test/hero"] .hero__topline[contenteditable="true"]'
+			)
+		).toHaveCount( 4 );
 
 		await page.waitForTimeout( 1000 );
 		expect( renders ).toHaveLength( 1 );
@@ -107,16 +182,31 @@ test.describe( 'Editor runtime', () => {
 		expect( blockCount( renders[ 0 ] ) ).toBe( 5 );
 	} );
 
-	test( 'keeps the old markup without layout shift while new markup loads', async ( { admin, editor, page, requestUtils } ) => {
-		await openPostWith( { admin, editor, requestUtils }, block( 'sections/hero', { topline: 'Steady' } ) );
-		const hero = editor.canvas.locator( '[data-type="sections/hero"]' );
-		await expect( hero.locator( '.hero__topline' ) ).toHaveAttribute( 'contenteditable', 'true' );
+	test( 'keeps the old markup without layout shift while new markup loads', async ( {
+		admin,
+		editor,
+		page,
+		requestUtils,
+	} ) => {
+		await openPostWith(
+			{ admin, editor, requestUtils },
+			block( 'dev-test/hero', { topline: 'Steady' } )
+		);
+		const hero = editor.canvas.locator( '[data-type="dev-test/hero"]' );
+		await expect( hero.locator( '.hero__topline' ) ).toHaveAttribute(
+			'contenteditable',
+			'true'
+		);
 		const before = await hero.boundingBox();
 
 		let release;
 		const released = new Promise( ( resolve ) => ( release = resolve ) );
 		await page.route( '**/*', async ( route ) => {
-			if ( decodeURIComponent( route.request().url() ).includes( RENDER_ROUTE ) ) {
+			if (
+				decodeURIComponent( route.request().url() ).includes(
+					RENDER_ROUTE
+				)
+			) {
 				await released;
 			}
 			await route.continue();
@@ -124,7 +214,9 @@ test.describe( 'Editor runtime', () => {
 
 		await hero.locator( '.hero__topline' ).click();
 		await openBlockSettings( page, editor );
-		await page.getByRole( 'combobox', { name: 'Gradient' } ).selectOption( 'blue' );
+		await page
+			.getByRole( 'combobox', { name: 'Gradient' } )
+			.selectOption( 'blue' );
 
 		await expect( hero ).toHaveAttribute( 'aria-busy', 'true' );
 		await expect( hero ).toHaveClass( /hero--black/ );
@@ -138,40 +230,80 @@ test.describe( 'Editor runtime', () => {
 		await page.unroute( '**/*' );
 	} );
 
-	test( 'selects, replaces and resets the image in the canvas', async ( { admin, editor, page, requestUtils } ) => {
+	test( 'selects, replaces and resets the image in the canvas', async ( {
+		admin,
+		editor,
+		page,
+		requestUtils,
+	} ) => {
 		const renders = trackRenderRequests( page );
-		await openPostWith( { admin, editor, requestUtils }, block( 'sections/hero' ) );
-		const hero = editor.canvas.locator( '[data-type="sections/hero"]' );
+		await openPostWith(
+			{ admin, editor, requestUtils },
+			block( 'dev-test/hero' )
+		);
+		const hero = editor.canvas.locator( '[data-type="dev-test/hero"]' );
 		const figure = hero.locator( '.hero__image' );
-		await expect( figure.getByRole( 'button', { name: 'Upload' } ) ).toBeVisible();
+		await expect(
+			figure.getByRole( 'button', { name: 'Upload' } )
+		).toBeVisible();
 
 		await figure.locator( 'input[type="file"]' ).setInputFiles( IMAGE );
 		await expect( figure.locator( 'img' ) ).toBeVisible();
 		await expect.poll( () => renders.length ).toBe( 2 );
-		const id = await page.evaluate( () => window.wp.data.select( 'core/block-editor' ).getBlocks()[ 0 ].attributes.imageId );
+		const id = await page.evaluate(
+			() =>
+				window.wp.data.select( 'core/block-editor' ).getBlocks()[ 0 ]
+					.attributes.imageId
+		);
 		expect( Number.isInteger( id ) ).toBe( true );
+		trackMedia( id );
 		await screenshot( hero, 'hero-image' );
 
 		await editor.selectBlocks( hero );
 		await editor.showBlockToolbar();
-		await page.getByRole( 'toolbar', { name: 'Block tools' } ).getByRole( 'button', { name: 'Image' } ).click();
+		await page
+			.getByRole( 'toolbar', { name: 'Block tools' } )
+			.getByRole( 'button', { name: 'Image' } )
+			.click();
 		await page.getByRole( 'menuitem', { name: 'Reset' } ).click();
-		await expect( figure.getByRole( 'button', { name: 'Upload' } ) ).toBeVisible();
-
-		await requestUtils.deleteMedia( id );
+		await expect(
+			figure.getByRole( 'button', { name: 'Upload' } )
+		).toBeVisible();
 	} );
 
-	test( 'section accepts only the allowed blocks and stores no HTML', async ( { admin, editor, page, requestUtils } ) => {
-		const id = await openPostWith( { admin, editor, requestUtils }, block( 'sections/section', {}, block( 'sections/hero', { topline: 'Inside' } ) ) );
-		const section = editor.canvas.locator( '[data-type="sections/section"]' );
-		await expect( section.locator( '[data-type="sections/hero"] .hero__topline' ) ).toHaveText( 'Inside' );
+	test( 'section accepts only the allowed blocks and stores no HTML', async ( {
+		admin,
+		editor,
+		page,
+		requestUtils,
+	} ) => {
+		const id = await openPostWith(
+			{ admin, editor, requestUtils },
+			block(
+				'dev-test/section',
+				{},
+				block( 'dev-test/hero', { topline: 'Inside' } )
+			)
+		);
+		const section = editor.canvas.locator(
+			'[data-type="dev-test/section"]'
+		);
+		await expect(
+			section.locator( '[data-type="dev-test/hero"] .hero__topline' )
+		).toHaveText( 'Inside' );
 
 		const allowed = await page.evaluate( () => {
 			const editorStore = window.wp.data.select( 'core/block-editor' );
 			const [ sectionBlock ] = editorStore.getBlocks();
 			return {
-				hero: editorStore.canInsertBlockType( 'sections/hero', sectionBlock.clientId ),
-				paragraph: editorStore.canInsertBlockType( 'core/paragraph', sectionBlock.clientId ),
+				hero: editorStore.canInsertBlockType(
+					'dev-test/hero',
+					sectionBlock.clientId
+				),
+				paragraph: editorStore.canInsertBlockType(
+					'core/paragraph',
+					sectionBlock.clientId
+				),
 			};
 		} );
 		expect( allowed ).toEqual( { hero: true, paragraph: false } );
@@ -180,62 +312,136 @@ test.describe( 'Editor runtime', () => {
 		await page.keyboard.type( ' too' );
 		await editor.saveDraft();
 		expect( await storedContent( requestUtils, id ) ).toBe(
-			'<!-- wp:sections/section -->\n<!-- wp:sections/hero {"topline":"Inside too"} /-->\n<!-- /wp:sections/section -->'
+			'<!-- wp:dev-test/section -->\n<!-- wp:dev-test/hero {"topline":"Inside too"} /-->\n<!-- /wp:dev-test/section -->'
 		);
 	} );
 
-	test( 'shows the panel registered by the theme', async ( { admin, editor, page, requestUtils } ) => {
-		await openPostWith( { admin, editor, requestUtils }, block( 'sections/hero', { buttons: [ { label: 'A', url: '' }, { label: 'B', url: '' } ] } ) );
-		await editor.canvas.locator( '[data-type="sections/hero"] .hero__topline' ).click();
+	test( 'shows the panel registered by the theme', async ( {
+		admin,
+		editor,
+		page,
+		requestUtils,
+	} ) => {
+		await openPostWith(
+			{ admin, editor, requestUtils },
+			block( 'dev-test/hero', {
+				buttons: [
+					{ label: 'A', url: '' },
+					{ label: 'B', url: '' },
+				],
+			} )
+		);
+		await editor.canvas
+			.locator( '[data-type="dev-test/hero"] .hero__topline' )
+			.click();
 		await openBlockSettings( page, editor );
 		await page.getByRole( 'button', { name: 'Hero summary' } ).click();
-		await expect( page.locator( '.sections-hero-summary' ) ).toHaveText( '2 button(s)' );
+		await expect( page.locator( '.dev-test-hero-summary' ) ).toHaveText(
+			'2 button(s)'
+		);
 	} );
 
-	test( 'shows only content controls in contentOnly mode', async ( { admin, editor, page, requestUtils } ) => {
+	test( 'shows only content controls in contentOnly mode', async ( {
+		admin,
+		editor,
+		page,
+		requestUtils,
+	} ) => {
 		await openPostWith(
 			{ admin, editor, requestUtils },
 			'<!-- wp:group {"templateLock":"contentOnly"} -->\n<div class="wp-block-group">' +
-				block( 'sections/hero', { topline: 'Locked', buttons: [ { label: 'A', url: '' } ] } ) +
+				block( 'dev-test/hero', {
+					topline: 'Locked',
+					buttons: [ { label: 'A', url: '' } ],
+				} ) +
 				'</div>\n<!-- /wp:group -->'
 		);
-		const hero = editor.canvas.locator( '[data-type="sections/hero"]' );
+		const hero = editor.canvas.locator( '[data-type="dev-test/hero"]' );
 		await hero.locator( '.hero__topline' ).click();
 		await page.keyboard.type( '!' );
-		await expect( hero.locator( '.hero__topline' ) ).toHaveText( 'Locked!' );
+		await expect( hero.locator( '.hero__topline' ) ).toHaveText(
+			'Locked!'
+		);
 
 		await editor.openDocumentSettingsSidebar();
-		await expect( page.getByRole( 'button', { name: 'Add item to Buttons' } ) ).toBeVisible();
-		await expect( page.getByRole( 'combobox', { name: 'Gradient' } ) ).toHaveCount( 0 );
+		await expect(
+			page.getByRole( 'button', { name: 'Add item to Buttons' } )
+		).toBeVisible();
+		await expect(
+			page.getByRole( 'combobox', { name: 'Gradient' } )
+		).toHaveCount( 0 );
 		await screenshot( page, 'content-only-inspector' );
 	} );
 
-	test( 'shows an error per block and renders the others', async ( { admin, editor, requestUtils } ) => {
+	test( 'shows an error per block and renders the others', async ( {
+		admin,
+		editor,
+		requestUtils,
+	} ) => {
 		// The editor checks only the type of an attribute; the server also checks the required label of each button.
-		await openPostWith( { admin, editor, requestUtils }, [ block( 'sections/hero', { buttons: [ { url: '' } ] } ), block( 'sections/hero', { topline: 'Fine' } ) ].join( '\n\n' ) );
-		const heroes = editor.canvas.locator( '[data-type="sections/hero"]' );
-		await expect( heroes.nth( 0 ).getByText( 'label is a required property of attributes[buttons][0].' ) ).toBeVisible();
-		await expect( heroes.nth( 1 ).locator( '.hero__topline' ) ).toHaveText( 'Fine' );
+		await openPostWith(
+			{ admin, editor, requestUtils },
+			[
+				block( 'dev-test/hero', { buttons: [ { url: '' } ] } ),
+				block( 'dev-test/hero', { topline: 'Fine' } ),
+			].join( '\n\n' )
+		);
+		const heroes = editor.canvas.locator( '[data-type="dev-test/hero"]' );
+		await expect(
+			heroes
+				.nth( 0 )
+				.getByText(
+					'label is a required property of attributes[buttons][0].'
+				)
+		).toBeVisible();
+		await expect( heroes.nth( 1 ).locator( '.hero__topline' ) ).toHaveText(
+			'Fine'
+		);
 	} );
 
-	test( 'edits the hero in a template of the site editor', async ( { admin, editor, page } ) => {
+	test( 'edits the hero in a template of the site editor', async ( {
+		admin,
+		editor,
+		page,
+	} ) => {
 		const renders = trackRenderRequests( page );
-		await admin.visitSiteEditor( { postId: 'theme-sections//index', postType: 'wp_template', canvas: 'edit' } );
-		await editor.insertBlock( { name: 'sections/hero', attributes: { topline: 'Template' } } );
-		const topline = editor.canvas.locator( '[data-type="sections/hero"] .hero__topline' );
+		await admin.visitSiteEditor( {
+			postId: 'theme-dev-test//index',
+			postType: 'wp_template',
+			canvas: 'edit',
+		} );
+		await editor.insertBlock( {
+			name: 'dev-test/hero',
+			attributes: { topline: 'Template' },
+		} );
+		const topline = editor.canvas.locator(
+			'[data-type="dev-test/hero"] .hero__topline'
+		);
 		await expect( topline ).toHaveAttribute( 'contenteditable', 'true' );
 		await expect( topline ).toHaveText( 'Template' );
 		// Templates have no numeric post ID; the request must not send one.
-		expect( JSON.parse( renders[ 0 ].postData() ).blocks[ 0 ] ).not.toHaveProperty( 'postId' );
+		expect(
+			JSON.parse( renders[ 0 ].postData() ).blocks[ 0 ]
+		).not.toHaveProperty( 'postId' );
 		await screenshot( page, 'site-editor' );
 	} );
 
-	test( 'edits the button list as cards in the inspector', async ( { admin, editor, page, requestUtils } ) => {
+	test( 'edits the button list as cards in the inspector', async ( {
+		admin,
+		editor,
+		page,
+		requestUtils,
+	} ) => {
 		const id = await openPostWith(
 			{ admin, editor, requestUtils },
-			block( 'sections/hero', { buttons: [ { label: 'First', url: '' }, { label: 'Second', url: '' } ] } )
+			block( 'dev-test/hero', {
+				buttons: [
+					{ label: 'First', url: '' },
+					{ label: 'Second', url: '' },
+				],
+			} )
 		);
-		const hero = editor.canvas.locator( '[data-type="sections/hero"]' );
+		const hero = editor.canvas.locator( '[data-type="dev-test/hero"]' );
 		await hero.locator( '.hero__topline' ).click();
 		await editor.openDocumentSettingsSidebar();
 
@@ -243,67 +449,139 @@ test.describe( 'Editor runtime', () => {
 		const titles = list.locator( '.wp-app-framework-list__title' );
 		await expect( titles ).toHaveText( [ 'First', 'Second' ] );
 
-		await page.getByRole( 'button', { name: 'Add item to Buttons' } ).click();
+		await page
+			.getByRole( 'button', { name: 'Add item to Buttons' } )
+			.click();
 		await expect( titles ).toHaveText( [ 'First', 'Second', 'Item 3' ] );
 		const third = hero.locator( '.hero__button' ).nth( 2 );
 		await expect( third ).toHaveAttribute( 'contenteditable', 'true' );
 		await third.click();
 		await page.keyboard.type( 'Third' );
 		await expect( titles ).toHaveText( [ 'First', 'Second', 'Third' ] );
-		await screenshot( page.getByRole( 'region', { name: 'Editor settings' } ), 'inspector-hero-buttons' );
+		await screenshot(
+			page.getByRole( 'region', { name: 'Editor settings' } ),
+			'inspector-hero-buttons'
+		);
 
-		await page.getByRole( 'button', { name: 'Actions for item 1' } ).click();
+		await page
+			.getByRole( 'button', { name: 'Actions for item 1' } )
+			.click();
 		await page.getByRole( 'menuitem', { name: 'Move down' } ).click();
-		await expect( hero.locator( '.hero__button' ) ).toHaveText( [ 'Second', 'First', 'Third' ] );
+		await expect( hero.locator( '.hero__button' ) ).toHaveText( [
+			'Second',
+			'First',
+			'Third',
+		] );
 
-		await page.getByRole( 'button', { name: 'Actions for item 3' } ).click();
+		await page
+			.getByRole( 'button', { name: 'Actions for item 3' } )
+			.click();
 		await page.getByRole( 'menuitem', { name: 'Remove' } ).click();
-		await expect( hero.locator( '.hero__button' ) ).toHaveText( [ 'Second', 'First' ] );
+		await expect( hero.locator( '.hero__button' ) ).toHaveText( [
+			'Second',
+			'First',
+		] );
 
 		await editor.saveDraft();
-		const attributes = JSON.parse( ( await storedContent( requestUtils, id ) ).match( /^<!-- wp:sections\/hero (\{.*\}) \/-->$/ )[ 1 ] );
-		expect( attributes.buttons.map( ( button ) => button.label ) ).toEqual( [ 'Second', 'First' ] );
+		const attributes = JSON.parse(
+			( await storedContent( requestUtils, id ) ).match(
+				/^<!-- wp:dev-test\/hero (\{.*\}) \/-->$/
+			)[ 1 ]
+		);
+		expect( attributes.buttons.map( ( button ) => button.label ) ).toEqual(
+			[ 'Second', 'First' ]
+		);
 	} );
 
-	test( 'outlines the fields edited in the canvas on hovered and selected blocks', async ( { admin, editor, page, requestUtils } ) => {
+	test( 'outlines the fields edited in the canvas on hovered and selected blocks', async ( {
+		admin,
+		editor,
+		page,
+		requestUtils,
+	} ) => {
 		const id = await openPostWith(
 			{ admin, editor, requestUtils },
 			[
-				block( 'sections/hero', { topline: 'Outer', headline: 'Head' } ),
-				block( 'sections/section', {}, block( 'sections/hero', { topline: 'Inner' } ) ),
+				block( 'dev-test/hero', {
+					topline: 'Outer',
+					headline: 'Head',
+				} ),
+				block(
+					'dev-test/section',
+					{},
+					block( 'dev-test/hero', { topline: 'Inner' } )
+				),
 			].join( '\n\n' )
 		);
-		const outline = ( locator ) => locator.evaluate( ( element ) => getComputedStyle( element ).outlineStyle );
-		const heroes = editor.canvas.locator( '[data-type="sections/hero"]' );
+		const outline = ( locator ) =>
+			locator.evaluate(
+				( element ) => window.getComputedStyle( element ).outlineStyle
+			);
+		const heroes = editor.canvas.locator( '[data-type="dev-test/hero"]' );
 		const outer = heroes.nth( 0 );
 		const inner = heroes.nth( 1 );
-		await expect( outer.locator( '.hero__topline' ) ).toHaveAttribute( 'contenteditable', 'true' );
-		await expect( editor.canvas.locator( '#theme-sections-wp-app-framework-canvas-css' ) ).toBeAttached();
+		await expect( outer.locator( '.hero__topline' ) ).toHaveAttribute(
+			'contenteditable',
+			'true'
+		);
+		await expect(
+			editor.canvas.locator(
+				'#theme-dev-test-wp-app-framework-canvas-css'
+			)
+		).toBeAttached();
 		// canvas.scss uses the admin color scheme, which the editor also defines in the canvas.
-		expect( await editor.canvas.locator( 'body' ).evaluate( ( body ) => getComputedStyle( body ).getPropertyValue( '--wp-admin-theme-color' ) ) ).not.toBe( '' );
+		expect(
+			await editor.canvas
+				.locator( 'body' )
+				.evaluate( ( body ) =>
+					window
+						.getComputedStyle( body )
+						.getPropertyValue( '--wp-admin-theme-color' )
+				)
+		).not.toBe( '' );
 
 		await page.mouse.move( 0, 0 );
-		await expect.poll( () => outline( outer.locator( '.hero__topline' ) ) ).toBe( 'none' );
+		await expect
+			.poll( () => outline( outer.locator( '.hero__topline' ) ) )
+			.toBe( 'none' );
 
 		await outer.locator( '.hero__content' ).hover();
-		await expect.poll( () => outline( outer.locator( '.hero__topline' ) ) ).toBe( 'dashed' );
-		await expect.poll( () => outline( outer.locator( '.hero__image' ) ) ).toBe( 'dashed' );
+		await expect
+			.poll( () => outline( outer.locator( '.hero__topline' ) ) )
+			.toBe( 'dashed' );
+		await expect
+			.poll( () => outline( outer.locator( '.hero__image' ) ) )
+			.toBe( 'dashed' );
 		await screenshot( outer, 'canvas-outline-hovered' );
 
 		await outer.locator( '.hero__headline' ).click();
 		await page.mouse.move( 0, 0 );
-		await expect.poll( () => outline( outer.locator( '.hero__headline' ) ) ).toBe( 'solid' );
-		await expect.poll( () => outline( outer.locator( '.hero__topline' ) ) ).toBe( 'dashed' );
+		await expect
+			.poll( () => outline( outer.locator( '.hero__headline' ) ) )
+			.toBe( 'solid' );
+		await expect
+			.poll( () => outline( outer.locator( '.hero__topline' ) ) )
+			.toBe( 'dashed' );
 		await screenshot( outer, 'canvas-outline-selected' );
 
 		// A selected container does not outline the fields of its inner blocks.
-		await editor.selectBlocks( editor.canvas.locator( '[data-type="sections/section"]' ) );
+		await editor.selectBlocks(
+			editor.canvas.locator( '[data-type="dev-test/section"]' )
+		);
 		await page.mouse.move( 0, 0 );
-		await expect.poll( () => outline( inner.locator( '.hero__topline' ) ) ).toBe( 'none' );
-		await expect.poll( () => outline( outer.locator( '.hero__topline' ) ) ).toBe( 'none' );
+		await expect
+			.poll( () => outline( inner.locator( '.hero__topline' ) ) )
+			.toBe( 'none' );
+		await expect
+			.poll( () => outline( outer.locator( '.hero__topline' ) ) )
+			.toBe( 'none' );
 
 		await page.goto( `/?p=${ id }&preview=true` );
-		await expect( page.locator( '.wp-block-sections-hero' ).first() ).toBeVisible();
-		await expect( page.locator( '#theme-sections-wp-app-framework-canvas-css' ) ).toHaveCount( 0 );
+		await expect(
+			page.locator( '.wp-block-dev-test-hero' ).first()
+		).toBeVisible();
+		await expect(
+			page.locator( '#theme-dev-test-wp-app-framework-canvas-css' )
+		).toHaveCount( 0 );
 	} );
 } );

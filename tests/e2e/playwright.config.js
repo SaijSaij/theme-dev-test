@@ -3,7 +3,7 @@
  * (https://github.com/saijsaij/wp-dev-env), which provides WordPress, the
  * credentials and a writable results directory:
  *
- *     docker compose run --rm e2e npm --prefix /workspace/theme-sections run test:e2e
+ *     docker compose run --rm e2e npm --prefix /workspace/theme-dev-test run test:e2e
  */
 const path = require( 'path' );
 const { defineConfig } = require( '@playwright/test' );
@@ -11,7 +11,9 @@ const { defineConfig } = require( '@playwright/test' );
 function required( name ) {
 	const value = process.env[ name ];
 	if ( ! value ) {
-		throw new Error( `${ name } is not set; run the browser tests in the e2e service of wp-dev-env.` );
+		throw new Error(
+			`${ name } is not set; run the browser tests in the e2e service of wp-dev-env.`
+		);
 	}
 	return value;
 }
@@ -44,7 +46,9 @@ module.exports = defineConfig( {
 		screenshot: 'only-on-failure',
 		trace: 'retain-on-failure',
 		launchOptions: {
-			args: [ `--host-resolver-rules=${ required( 'E2E_BROWSER_HOST_RULES' ) }` ],
+			args: [
+				`--host-resolver-rules=${ required( 'E2E_BROWSER_HOST_RULES' ) }`,
+			],
 		},
 	},
 	projects: [ { name: 'chromium', use: { browserName: 'chromium' } } ],

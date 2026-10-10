@@ -4,8 +4,8 @@
 import { registerPanel } from '@saij/wp-app-framework';
 import { PanelBody } from '@wordpress/components';
 
-registerPanel( 'sections/hero', ( { attributes } ) => (
+registerPanel( 'dev-test/hero', ( { attributes } ) => (
 	<PanelBody title="Hero summary" initialOpen={ false }>
-		<p className="sections-hero-summary">{ `${ attributes.buttons.length } button(s)` }</p>
+		<p className="dev-test-hero-summary">{ `${ attributes.buttons.length } button(s)` }</p>
 	</PanelBody>
 ) );

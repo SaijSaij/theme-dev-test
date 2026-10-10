@@ -1,0 +1,6 @@
+<div class="check">
+    {% include 'Twig/Partial.twig' %}
+    <p class="greeting">{{ dev_test_greeting(name) }}</p>
+    <p class="filter">{{ name|dev_test_emphasize }}</p>
+    <p class="raw-filter">{{ '<b>safe</b>'|raw|dev_test_emphasize }}</p>
+</div>

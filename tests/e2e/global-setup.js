@@ -9,7 +9,10 @@ const { RequestUtils } = require( '@wordpress/e2e-test-utils-playwright' );
 module.exports = async function globalSetup( config ) {
 	const { baseURL, storageState } = config.projects[ 0 ].use;
 	const requestContext = await request.newContext( { baseURL } );
-	const requestUtils = new RequestUtils( requestContext, { storageStatePath: storageState, baseURL } );
+	const requestUtils = new RequestUtils( requestContext, {
+		storageStatePath: storageState,
+		baseURL,
+	} );
 	await requestUtils.setupRest();
 	await requestContext.dispose();
 };
