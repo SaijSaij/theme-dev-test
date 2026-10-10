@@ -7,7 +7,7 @@ const { block, blockCount, deletePostsOfTests, openBlockSettings, openPostWith, 
 const IMAGE = path.join( __dirname, '../assets/image.png' );
 
 test.describe( 'Editor runtime', () => {
-	test.afterAll( async ( { requestUtils } ) => {
+	test.afterEach( async ( { requestUtils } ) => {
 		await deletePostsOfTests( requestUtils );
 	} );
 
@@ -228,5 +228,40 @@ test.describe( 'Editor runtime', () => {
 		// Templates have no numeric post ID; the request must not send one.
 		expect( JSON.parse( renders[ 0 ].postData() ).blocks[ 0 ] ).not.toHaveProperty( 'postId' );
 		await screenshot( page, 'site-editor' );
+	} );
+
+	test( 'edits the button list as cards in the inspector', async ( { admin, editor, page, requestUtils } ) => {
+		const id = await openPostWith(
+			{ admin, editor, requestUtils },
+			block( 'sections/hero', { buttons: [ { label: 'First', url: '' }, { label: 'Second', url: '' } ] } )
+		);
+		const hero = editor.canvas.locator( '[data-type="sections/hero"]' );
+		await hero.locator( '.hero__topline' ).click();
+		await editor.openDocumentSettingsSidebar();
+
+		const list = page.locator( '.wp-app-framework-list' );
+		const titles = list.locator( '.wp-app-framework-list__title' );
+		await expect( titles ).toHaveText( [ 'First', 'Second' ] );
+
+		await page.getByRole( 'button', { name: 'Add item to Buttons' } ).click();
+		await expect( titles ).toHaveText( [ 'First', 'Second', 'Item 3' ] );
+		const third = hero.locator( '.hero__button' ).nth( 2 );
+		await expect( third ).toHaveAttribute( 'contenteditable', 'true' );
+		await third.click();
+		await page.keyboard.type( 'Third' );
+		await expect( titles ).toHaveText( [ 'First', 'Second', 'Third' ] );
+		await screenshot( page.getByRole( 'region', { name: 'Editor settings' } ), 'inspector-hero-buttons' );
+
+		await page.getByRole( 'button', { name: 'Actions for item 1' } ).click();
+		await page.getByRole( 'menuitem', { name: 'Move down' } ).click();
+		await expect( hero.locator( '.hero__button' ) ).toHaveText( [ 'Second', 'First', 'Third' ] );
+
+		await page.getByRole( 'button', { name: 'Actions for item 3' } ).click();
+		await page.getByRole( 'menuitem', { name: 'Remove' } ).click();
+		await expect( hero.locator( '.hero__button' ) ).toHaveText( [ 'Second', 'First' ] );
+
+		await editor.saveDraft();
+		const attributes = JSON.parse( ( await storedContent( requestUtils, id ) ).match( /^<!-- wp:sections\/hero (\{.*\}) \/-->$/ )[ 1 ] );
+		expect( attributes.buttons.map( ( button ) => button.label ) ).toEqual( [ 'Second', 'First' ] );
 	} );
 } );
