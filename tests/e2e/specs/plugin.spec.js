@@ -4,11 +4,11 @@
  * template functions and filters, and overrides of its templates. The
  * expectations depend on whether the plugin is active: in wp-dev-env and in
  * the release test with both ZIPs it is, in the release test of the theme
- * alone it is not.
+ * alone it is not. An active child theme overrides plugin templates before the theme.
  */
 const { test, expect } = require( '../fixtures' );
 
-const { restResponse } = require( '../helpers' );
+const { activeTheme, restResponse } = require( '../helpers' );
 
 /**
  * Whether the test plugin is installed and active, from the plugins endpoint of WordPress.
@@ -92,12 +92,13 @@ test.describe( 'Test plugin', () => {
 			expect( overridable.status ).toBe( 404 );
 			return;
 		}
-		expect( overridable ).toEqual(
-			expect.objectContaining( {
-				status: 200,
-				body: '<p class="overridable">overridden by theme-dev-test</p>\n',
-			} )
-		);
+		expect( overridable.status ).toBe( 200 );
+		// An active child theme overrides the template before the theme; the child theme's tests check that.
+		if ( ! ( await activeTheme( requestUtils ) ).isChild ) {
+			expect( overridable.body ).toBe(
+				'<p class="overridable">overridden by theme-dev-test</p>\n'
+			);
+		}
 		// @plugin addresses the plugin's own template.
 		expect( exact ).toEqual(
 			expect.objectContaining( {

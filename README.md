@@ -21,6 +21,8 @@ For a local WordPress, use [wp-dev-env](https://github.com/saijsaij/wp-dev-env) 
 
 The theme is also the consumer of the test plugin [plugin-dev-test](https://github.com/saijsaij/plugin-dev-test): it injects the plugin's public API, calls its public template functions (`extra.wp-app-framework.template-plugins`) and overrides one of its templates (`overrides/plugin-dev-test/`). The plugin is a development dependency (`require-dev`, for static analysis); the release ZIP does not contain it. Check it out next to the theme and activate it in wp-dev-env (`WP_PLUGINS=plugin-dev-test`, `WP_PACKAGE_LINKS=saij/wp-app-framework=wp-app-framework,saij/plugin-dev-test=plugin-dev-test`). The tests of `plugin.spec.js` expect the plugin's behavior if it is active and the theme's fallback otherwise.
 
+The theme is also the parent of the test child theme [theme-dev-test-child](https://github.com/saijsaij/theme-dev-test-child), which uses its public API (`Saij\ThemeDevTest\Api\DevTestApi`, `#[PublicApi]`), its public template functions `theme_dev_test_badge(label)` and `theme_dev_test_partial(name)` and overrides `Twig/ChildOverridable.twig`. In wp-dev-env the child theme may be the active theme (`WP_ACTIVE_THEME=theme-dev-test-child`); the theme's tests pass with and without it and leave what the child theme does to the child theme's tests.
+
 Scripts (the framework's editor runtime and the editor scripts in `src/`) are built with `@wordpress/scripts` into `build/`; `npm install` needs `vendor/` from `composer install` first. In wp-dev-env:
 
 ```sh
@@ -45,7 +47,8 @@ All checks run in wp-dev-env and must pass without errors or warnings.
 Build: `composer build-manifest` builds and checks the manifest (writes nothing) and must report
 
 ```
-Manifest OK (theme theme-dev-test): 35 service candidates, 22 services, 2 hooks, 19 routes, 7 template functions, 1 template filters, 9 blocks. Nothing written (no --output).
+Manifest OK (theme theme-dev-test): 37 service candidates, 24 services, 2 hooks, 21 routes, 9 template functions, 1 template filters, 9 blocks. Nothing written (no --output).
+Public: 1 APIs, 2 template functions and filters.
 Templates use the public template callables of: plugin-dev-test.
 ```
 
@@ -78,7 +81,7 @@ The fixtures in `tests/e2e/fixtures.js` fail every test that causes a console wa
 |---|---|---|
 | `hook.spec.js` | `#[Hook]` action and filter, injected services, WordPress arguments, `#[NoService]`, init hook of the framework | `src/Hook/` |
 | `rest.spec.js` | REST arguments (`int`, `float`, `bool`, enum, `#[Param]` keywords), `WP_REST_Request` parameter, enum path parameters, 400/401/403/404/500, 201/204, `OPTIONS`, `Capability`/`Callback` and the `Allow` header, `#[ListOf]` | `src/Rest/` |
-| `twig.spec.js` | Theme templates with partial, `#[TemplateFunction]`, `#[TemplateFilter]` (`pre_escape`), lazy services, `strict_variables`, cache directory | `src/Twig/` |
+| `twig.spec.js` | Theme templates with partial, `#[TemplateFunction]`, `#[TemplateFilter]` (`pre_escape`), lazy services, `strict_variables`, cache directory, `@theme` of a template a child theme may override | `src/Twig/` |
 | `blocks.spec.js` | Escaping and sanitizing of every value type on the front end (scalars, nullable, enum, nested value class, URL, image, inner blocks), supports, render arguments, stored content, block types in the editor, `usesContext` in a query loop | `src/Block/Check/`, `src/Block/PostInfo/`, `src/Block/Container/` |
 | `editor-runtime.spec.js` | Editor runtime: inline editing, refetch rule, batch rendering and cache, layout stability, images, containers, contentOnly, errors per block, site editor, list cards, canvas outlines, `registerPanel` | `src/Block/Hero/`, `src/Block/Section/` |
 | `inspector-controls.spec.js` | Generated inspector controls per value type, `#[Label]`, `#[Hidden]`, `Labeled`, `registerControl`, warnings of the extension points and of unmarked inline fields, inserting in contentOnly mode (`contentRole`) | `src/Block/Check/`, `src/Block/Unmarked/`, `src/Block/Container/` |

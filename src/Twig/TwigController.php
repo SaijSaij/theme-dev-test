@@ -70,6 +70,24 @@ final readonly class TwigController
     }
 
     /**
+     * A template the test child theme overrides in overrides/theme-dev-test/.
+     */
+    #[RestRoute('/child-overridable', HttpMethod::Get, new PublicAccess())]
+    public function childOverridable(): string
+    {
+        return $this->renderer->render('Twig/ChildOverridable.twig');
+    }
+
+    /**
+     * The same template by its exact name, which no child theme overrides.
+     */
+    #[RestRoute('/child-overridable-exact', HttpMethod::Get, new PublicAccess())]
+    public function childOverridableExact(): string
+    {
+        return $this->renderer->render('@theme/Twig/ChildOverridable.twig');
+    }
+
+    /**
      * @return array<string, mixed>
      */
     #[RestRoute('/undefined', HttpMethod::Get, new PublicAccess())]

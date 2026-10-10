@@ -3,6 +3,7 @@ const { test, expect } = require( '../fixtures' );
 const path = require( 'path' );
 
 const {
+	activeTheme,
 	block,
 	blockCount,
 	cleanUp,
@@ -403,10 +404,13 @@ test.describe( 'Editor runtime', () => {
 		admin,
 		editor,
 		page,
+		requestUtils,
 	} ) => {
+		// Template IDs name the active theme, a child theme if one is active.
+		const { stylesheet } = await activeTheme( requestUtils );
 		const renders = trackRenderRequests( page );
 		await admin.visitSiteEditor( {
-			postId: 'theme-dev-test//index',
+			postId: `${ stylesheet }//index`,
 			postType: 'wp_template',
 			canvas: 'edit',
 		} );

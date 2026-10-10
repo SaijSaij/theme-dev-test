@@ -5,7 +5,12 @@
  */
 const { test, expect } = require( '../fixtures' );
 
-const { IS_RELEASE, restResponse, VENDOR_PREFIX } = require( '../helpers' );
+const {
+	activeTheme,
+	IS_RELEASE,
+	restResponse,
+	VENDOR_PREFIX,
+} = require( '../helpers' );
 
 const TWIG = '/dev-test/v1/twig';
 
@@ -88,5 +93,31 @@ test.describe( 'Twig', () => {
 						expect.stringMatching( /^[0-9a-f]{2}$/ ),
 					] )
 		);
+	} );
+
+	test( 'renders the theme template unless a child theme overrides it', async ( {
+		requestUtils,
+	} ) => {
+		const template = await restResponse( requestUtils, {
+			path: `${ TWIG }/child-overridable`,
+			as: 'anonymous',
+		} );
+		const exact = await restResponse( requestUtils, {
+			path: `${ TWIG }/child-overridable-exact`,
+			as: 'anonymous',
+		} );
+
+		// @theme addresses the theme's own template, also with a child theme.
+		expect( exact.status ).toBe( 200 );
+		expect( exact.body ).toBe(
+			'<p class="overridable">from theme-dev-test</p>\n'
+		);
+		expect( template.status ).toBe( 200 );
+		// A child theme may override it in overrides/theme-dev-test/; the child theme's tests check that.
+		if ( ! ( await activeTheme( requestUtils ) ).isChild ) {
+			expect( template.body ).toBe(
+				'<p class="overridable">from theme-dev-test</p>\n'
+			);
+		}
 	} );
 } );

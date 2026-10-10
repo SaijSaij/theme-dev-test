@@ -210,6 +210,29 @@ async function restResponse(
 }
 
 /**
+ * The active theme: its directory name (stylesheet) and that of its parent
+ * (template; the same without a child theme). In wp-dev-env the test child theme
+ * (https://github.com/saijsaij/theme-dev-test-child) may be active; the theme's
+ * tests must pass with and without it.
+ *
+ * @param {Object} requestUtils
+ * @return {Promise<{stylesheet: string, template: string, isChild: boolean}>} Active theme.
+ */
+async function activeTheme( requestUtils ) {
+	const response = await restResponse( requestUtils, {
+		path: '/wp/v2/themes',
+		params: { status: 'active' },
+	} );
+	if ( response.status !== 200 || response.body.length !== 1 ) {
+		throw new Error(
+			`Cannot read the active theme: HTTP ${ response.status }.`
+		);
+	}
+	const { stylesheet, template } = response.body[ 0 ];
+	return { stylesheet, template, isChild: stylesheet !== template };
+}
+
+/**
  * @param {import('@playwright/test').APIResponse} response
  * @return {Promise<{status: number, headers: Object<string, string>, body: (Object|Array|string|number|boolean|null)}>} Decoded response.
  */
@@ -290,6 +313,7 @@ async function cleanUp( requestUtils ) {
 }
 
 module.exports = {
+	activeTheme,
 	block,
 	blockCount,
 	cleanUp,
