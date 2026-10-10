@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "d0d8eb5c05d5e30a5924bd7e115e1d5a",
+    "content-hash": "e50502382db1d929d8ae8f7961f4d4f7",
     "packages": [
         {
             "name": "saij/wp-app-framework",
@@ -12,12 +12,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/SaijSaij/wp-app-framework.git",
-                "reference": "abf6b785b0a47f6c46bfb7e3dd4457decbe55841"
+                "reference": "25bbd72b854401afafbae4ba10c0401f0a4ed07e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/SaijSaij/wp-app-framework/zipball/abf6b785b0a47f6c46bfb7e3dd4457decbe55841",
-                "reference": "abf6b785b0a47f6c46bfb7e3dd4457decbe55841",
+                "url": "https://api.github.com/repos/SaijSaij/wp-app-framework/zipball/25bbd72b854401afafbae4ba10c0401f0a4ed07e",
+                "reference": "25bbd72b854401afafbae4ba10c0401f0a4ed07e",
                 "shasum": ""
             },
             "require": {
@@ -66,7 +66,7 @@
                 "source": "https://github.com/SaijSaij/wp-app-framework/tree/main",
                 "issues": "https://github.com/SaijSaij/wp-app-framework/issues"
             },
-            "time": "2026-10-10T12:03:05+00:00"
+            "time": "2026-10-10T13:54:09+00:00"
         },
         {
             "name": "symfony/deprecation-contracts",
@@ -1750,6 +1750,75 @@
             "time": "2024-06-11T12:45:25+00:00"
         },
         {
+            "name": "saij/plugin-dev-test",
+            "version": "dev-main",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/SaijSaij/plugin-dev-test.git",
+                "reference": "cc1b1adda5fe06047b49267f2d55440bdde45b31"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/SaijSaij/plugin-dev-test/zipball/cc1b1adda5fe06047b49267f2d55440bdde45b31",
+                "reference": "cc1b1adda5fe06047b49267f2d55440bdde45b31",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=8.5",
+                "saij/wp-app-framework": "dev-main"
+            },
+            "require-dev": {
+                "friendsofphp/php-cs-fixer": "^3.95",
+                "php-stubs/wordpress-stubs": "^7.1",
+                "phpstan/phpstan": "^2.3",
+                "szepeviktor/phpstan-wordpress": "^2.0"
+            },
+            "default-branch": true,
+            "type": "wordpress-plugin",
+            "extra": {
+                "strauss": {
+                    "target_directory": "vendor-prefixed",
+                    "namespace_prefix": "Saij\\PluginDevTest\\Vendor\\",
+                    "classmap_prefix": "Saij_PluginDevTest_Vendor_",
+                    "include_root_autoload": true,
+                    "update_call_sites": [
+                        "src",
+                        "plugin-dev-test.php"
+                    ],
+                    "delete_vendor_packages": false
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Saij\\PluginDevTest\\": "src/"
+                }
+            },
+            "scripts": {
+                "build-manifest": [
+                    "wp-app-framework build"
+                ],
+                "lint": [
+                    "phpstan analyse --no-progress --memory-limit=1G",
+                    "php-cs-fixer check --diff"
+                ],
+                "fix": [
+                    "php-cs-fixer fix"
+                ],
+                "release": [
+                    "wp-app-framework release"
+                ]
+            },
+            "license": [
+                "proprietary"
+            ],
+            "description": "Test plugin for wp-app-framework: its build and browser tests run against this plugin next to the test theme.",
+            "support": {
+                "source": "https://github.com/SaijSaij/plugin-dev-test/tree/main",
+                "issues": "https://github.com/SaijSaij/plugin-dev-test/issues"
+            },
+            "time": "2026-10-10T13:54:38+00:00"
+        },
+        {
             "name": "sebastian/diff",
             "version": "9.0.1",
             "source": {
@@ -3170,6 +3239,7 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
+        "saij/plugin-dev-test": 20,
         "saij/wp-app-framework": 20
     },
     "prefer-stable": false,

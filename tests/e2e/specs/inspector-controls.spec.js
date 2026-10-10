@@ -111,7 +111,7 @@ test.describe( 'Inspector controls', () => {
 		expectConsole.push(
 			{
 				type: 'warning',
-				text: 'wp-app-framework: registerPanel( "dev-test/unknown" ): no block of this theme has that name.',
+				text: 'wp-app-framework: registerPanel( "dev-test/unknown" ): no block of this theme or plugin has that name.',
 			},
 			{
 				type: 'warning',

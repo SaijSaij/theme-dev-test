@@ -19,6 +19,8 @@ git clone https://github.com/saijsaij/theme-dev-test.git
 
 For a local WordPress, use [wp-dev-env](https://github.com/saijsaij/wp-dev-env) in the same parent directory with `WP_THEMES=theme-dev-test` and `WP_ACTIVE_THEME=theme-dev-test`; its setup also runs `composer install`, `npm ci` and `npm run build` for this theme.
 
+The theme is also the consumer of the test plugin [plugin-dev-test](https://github.com/saijsaij/plugin-dev-test): it injects the plugin's public API, calls its public template functions (`extra.wp-app-framework.template-plugins`) and overrides one of its templates (`overrides/plugin-dev-test/`). The plugin is a development dependency (`require-dev`, for static analysis); the release ZIP does not contain it. Check it out next to the theme and activate it in wp-dev-env (`WP_PLUGINS=plugin-dev-test`, `WP_PACKAGE_LINKS=saij/wp-app-framework=wp-app-framework,saij/plugin-dev-test=plugin-dev-test`). The tests of `plugin.spec.js` expect the plugin's behavior if it is active and the theme's fallback otherwise.
+
 Scripts (the framework's editor runtime and the editor scripts in `src/`) are built with `@wordpress/scripts` into `build/`; `npm install` needs `vendor/` from `composer install` first. In wp-dev-env:
 
 ```sh
@@ -43,7 +45,8 @@ All checks run in wp-dev-env and must pass without errors or warnings.
 Build: `composer build-manifest` builds and checks the manifest (writes nothing) and must report
 
 ```
-Manifest OK: 33 service candidates, 20 services, 2 hooks, 17 routes, 6 template functions, 1 template filters, 9 blocks.
+Manifest OK (theme theme-dev-test): 35 service candidates, 22 services, 2 hooks, 19 routes, 7 template functions, 1 template filters, 9 blocks. Nothing written (no --output).
+Templates use the public template callables of: plugin-dev-test.
 ```
 
 Lint: PHP with PHPStan (level max, WordPress stubs) and PHP-CS-Fixer (PER Coding Style), JavaScript with ESLint (configuration of `@wordpress/scripts`):
@@ -63,7 +66,7 @@ docker compose run --rm e2e npm --prefix /workspace/theme-dev-test run test:e2e
 The same suite runs against the release ZIP: install it with `scripts/release-test` of wp-dev-env, then run the tests with `E2E_TARGET=release` (only mode-specific expectations differ, e.g. prefixed class names, the versioned Twig cache, no development warnings):
 
 ```sh
-scripts/release-test ../theme-dev-test/dist/theme-dev-test-0.1.0.zip
+scripts/release-test --theme ../theme-dev-test/dist/theme-dev-test-0.1.0.zip [--plugin ../plugin-dev-test/dist/plugin-dev-test-0.1.0.zip]
 set -a; . ./.env; set +a
 docker compose run --rm --no-deps -e WP_BASE_URL="$WP_RELEASE_URL" -e E2E_BROWSER_HOST_RULES="MAP $WP_RELEASE_HOST traefik" \
     -e E2E_TARGET=release -e E2E_OUTPUT_DIR=/results/release e2e npm --prefix /workspace/theme-dev-test run test:e2e
@@ -83,6 +86,7 @@ The fixtures in `tests/e2e/fixtures.js` fail every test that causes a console wa
 | `excerpt.spec.js` | Automatic excerpts from fields with `excerpt: true` (REST, archive with `core/post-excerpt`, feed), `excerptWrapper`, manual excerpts, posts without framework blocks | `src/Block/Hero/`, `src/Block/Paragraph/`, `src/Block/Section/` |
 | `inspector-fields.spec.js` | Fields edited in the inspector (`inspector: true`), also in list items; `field()` on such a field | `src/Block/Inspector/` |
 | `mode.spec.js` | Development mode in the checkout, release mode with the ZIP: built manifest, no development cache, prefixed framework and Twig classes in the theme code | `src/Mode/` |
+| `plugin.spec.js` | The theme as consumer of plugin-dev-test: `#[PluginApi]` (data with the plugin, `null` without), public template functions and filters with `has_plugin()`, templates with the same path in theme and plugin in one request, override of a plugin template, `@plugin` | `src/Plugin/`, `overrides/plugin-dev-test/` |
 
 Expected log entries of a test run (WP_DEBUG): the failures of `dev-test/v1/items/fail` and `dev-test/v1/twig/undefined` and of the editor render of `dev-test/wrong-field`, which fails on purpose. Never store `dev-test/wrong-field` or `dev-test/unmarked` in a post: they exist to show errors.
 
@@ -91,6 +95,7 @@ Expected log entries of a test run (WP_DEBUG): the failures of `dev-test/v1/item
 - `functions.php` loads the autoloader (`vendor-prefixed/` in release builds, `vendor/` in source checkouts) and boots the framework.
 - `src/` contains the theme's PHP classes (PSR-4 `Saij\ThemeDevTest\`), discovered by the framework, with their Twig templates and editor scripts next to them, organized by the feature they test.
 - `templates/` holds the block templates (`index.html` with titles and excerpts, `single.html`).
+- `overrides/plugin-dev-test/` overrides templates of the test plugin.
 - `build/` (not versioned) is the output of the script build.
 
 In a source checkout the framework runs in development mode and caches the manifest in `wp-content/cache/theme-dev-test/manifest/`. The release ZIP contains `generated/manifest.php` (release mode) and caches compiled templates in `wp-content/cache/theme-dev-test/twig/<template version>/`.

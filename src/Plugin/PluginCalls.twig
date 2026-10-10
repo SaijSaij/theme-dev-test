@@ -1,0 +1,8 @@
+{% if has_plugin('plugin-dev-test') %}
+<p class="count">{{ plugin_dev_test_note_count() }}</p>
+{% include 'Twig/Partial.twig' with {name: 'theme'} %}
+{{ plugin_dev_test_partial('plugin') }}
+<p class="highlight">{{ title|plugin_dev_test_highlight }}</p>
+{% else %}
+<p class="none">plugin-dev-test is not active</p>
+{% endif %}

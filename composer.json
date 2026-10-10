@@ -7,6 +7,10 @@
         {
             "type": "vcs",
             "url": "https://github.com/saijsaij/wp-app-framework"
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/saijsaij/plugin-dev-test"
         }
     ],
     "require": {
@@ -28,6 +32,11 @@
         "release": "wp-app-framework release"
     },
     "extra": {
+        "wp-app-framework": {
+            "template-plugins": [
+                "plugin-dev-test"
+            ]
+        },
         "strauss": {
             "target_directory": "vendor-prefixed",
             "namespace_prefix": "Saij\\ThemeDevTest\\Vendor\\",
@@ -50,6 +59,7 @@
         "friendsofphp/php-cs-fixer": "^3.95",
         "php-stubs/wordpress-stubs": "^7.1",
         "phpstan/phpstan": "^2.3",
+        "saij/plugin-dev-test": "dev-main",
         "szepeviktor/phpstan-wordpress": "^2.0"
     },
     "scripts-descriptions": {

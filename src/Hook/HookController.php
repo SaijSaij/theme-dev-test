@@ -22,7 +22,7 @@ final class HookController
     #[RestRoute('/init', HttpMethod::Get, new PublicAccess())]
     public function init(): int
     {
-        return did_action('wp_app_framework/init');
+        return did_action('wp_app_framework/init/theme-dev-test');
     }
 
     #[RestRoute('/filter', HttpMethod::Get, new PublicAccess())]
