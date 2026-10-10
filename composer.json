@@ -64,6 +64,6 @@
     },
     "scripts-descriptions": {
         "build-manifest": "Builds and checks the manifest (writes nothing).",
-        "release": "Builds the release ZIP into dist/ (see the README of saij/wp-app-framework)."
+        "release": "Builds the release ZIP into dist/ (see https://saijsaij.github.io/wp-app-framework/next/build-and-release/release.html)."
     }
 }

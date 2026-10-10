@@ -32,7 +32,7 @@ docker compose run --rm tools npm --prefix /workspace/theme-dev-test run start  
 
 ## Release
 
-`composer release` builds `dist/theme-dev-test-<version>.zip` with the release pipeline of the framework (see its README); the framework comes from the lock file. To build with the local framework checkout instead:
+`composer release` builds `dist/theme-dev-test-<version>.zip` with the release pipeline of the framework (see [Release](https://saijsaij.github.io/wp-app-framework/next/build-and-release/release.html) in its documentation); the framework comes from the lock file. To build with the local framework checkout instead:
 
 ```sh
 docker compose run --rm tools composer --working-dir=/workspace/theme-dev-test release -- --package-source=saij/wp-app-framework=../wp-app-framework

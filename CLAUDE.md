@@ -1,6 +1,6 @@
 # CLAUDE.md – theme-dev-test
 
-Test theme of [wp-app-framework](https://github.com/saijsaij/wp-app-framework) (slug `theme-dev-test`, blocks `dev-test/…`, REST `dev-test/v1`, PHP `Saij\ThemeDevTest\`). Not a product theme: everything here exists to exercise the framework, and the framework's build and browser tests run against it. Framework principles and rules: the framework's CLAUDE.md and README; this file covers the theme.
+Test theme of [wp-app-framework](https://github.com/saijsaij/wp-app-framework) (slug `theme-dev-test`, blocks `dev-test/…`, REST `dev-test/v1`, PHP `Saij\ThemeDevTest\`). Not a product theme: everything here exists to exercise the framework, and the framework's build and browser tests run against it. Framework principles and rules: the framework's CLAUDE.md and its [documentation](https://saijsaij.github.io/wp-app-framework/); this file covers the theme.
 
 <!-- Maintainers: keep this file under 200 lines; the README holds commands in full and the spec table. -->
 
