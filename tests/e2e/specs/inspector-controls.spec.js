@@ -7,6 +7,7 @@ const { test, expect } = require( '../fixtures' );
 const {
 	block,
 	cleanUp,
+	IS_RELEASE,
 	openBlockSettings,
 	openPostWith,
 	storedContent,
@@ -125,16 +126,19 @@ test.describe( 'Inspector controls', () => {
 		} );
 	} );
 
-	test( 'warns in development mode about inline fields without field()', async ( {
+	test( 'warns in development mode about inline fields without field(), not in a release', async ( {
 		admin,
 		editor,
 		expectConsole,
 		requestUtils,
 	} ) => {
-		expectConsole.push( {
-			type: 'warning',
-			text: 'wp-app-framework: dev-test/unmarked renders no element with field( "title" ) in the editor, so it cannot be edited inline.',
-		} );
+		// The warning is a development aid; in a release the console guard fails on any warning.
+		if ( ! IS_RELEASE ) {
+			expectConsole.push( {
+				type: 'warning',
+				text: 'wp-app-framework: dev-test/unmarked renders no element with field( "title" ) in the editor, so it cannot be edited inline.',
+			} );
+		}
 		await openPostWith( { admin, editor, requestUtils }, '' );
 		await editor.insertBlock( {
 			name: 'dev-test/unmarked',

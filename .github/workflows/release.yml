@@ -1,0 +1,15 @@
+# Release for a tag v<version> (= Version in style.css): builds the ZIP, tests it
+# in a plain WordPress and attaches it to the GitHub release of the tag.
+# The test theme follows the framework's main branch; themes pin a framework tag.
+name: Release
+
+on:
+  push:
+    tags: ['v*']
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    uses: SaijSaij/wp-app-framework/.github/workflows/consumer-release.yml@main

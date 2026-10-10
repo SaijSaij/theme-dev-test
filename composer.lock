@@ -4,15 +4,21 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "88a796ff63268ebcdefeec97c84020a5",
+    "content-hash": "d0d8eb5c05d5e30a5924bd7e115e1d5a",
     "packages": [
         {
             "name": "saij/wp-app-framework",
             "version": "dev-main",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/SaijSaij/wp-app-framework.git",
+                "reference": "abf6b785b0a47f6c46bfb7e3dd4457decbe55841"
+            },
             "dist": {
-                "type": "path",
-                "url": "../wp-app-framework",
-                "reference": "4013019a2309051690788a483bcc5f4047dc5301"
+                "type": "zip",
+                "url": "https://api.github.com/repos/SaijSaij/wp-app-framework/zipball/abf6b785b0a47f6c46bfb7e3dd4457decbe55841",
+                "reference": "abf6b785b0a47f6c46bfb7e3dd4457decbe55841",
+                "shasum": ""
             },
             "require": {
                 "php": ">=8.5",
@@ -25,6 +31,7 @@
                 "phpunit/phpunit": "^13.4",
                 "szepeviktor/phpstan-wordpress": "^2.0"
             },
+            "default-branch": true,
             "bin": [
                 "bin/wp-app-framework"
             ],
@@ -55,10 +62,11 @@
                 "proprietary"
             ],
             "description": "Framework for standalone full site editing themes for WordPress.",
-            "transport-options": {
-                "symlink": true,
-                "relative": true
-            }
+            "support": {
+                "source": "https://github.com/SaijSaij/wp-app-framework/tree/main",
+                "issues": "https://github.com/SaijSaij/wp-app-framework/issues"
+            },
+            "time": "2026-10-10T12:03:05+00:00"
         },
         {
             "name": "symfony/deprecation-contracts",

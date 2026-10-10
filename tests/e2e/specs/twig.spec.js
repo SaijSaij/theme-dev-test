@@ -5,7 +5,7 @@
  */
 const { test, expect } = require( '../fixtures' );
 
-const { restResponse } = require( '../helpers' );
+const { IS_RELEASE, restResponse, VENDOR_PREFIX } = require( '../helpers' );
 
 const TWIG = '/dev-test/v1/twig';
 
@@ -61,7 +61,7 @@ test.describe( 'Twig', () => {
 		const { body } = response;
 		expect( body.code ).toBe( 'wp_app_framework_internal_error' );
 		expect( body.data.exception ).toMatchObject( {
-			class: 'Twig\\Error\\RuntimeError',
+			class: `${ VENDOR_PREFIX }Twig\\Error\\RuntimeError`,
 			message:
 				'Variable "missing" does not exist in "Twig/Undefined.twig" at line 1.',
 		} );
@@ -79,5 +79,14 @@ test.describe( 'Twig', () => {
 			'wp-content/cache/theme-dev-test/twig'
 		);
 		expect( response.body.compiled ).toBeGreaterThan( 0 );
+		// Development mode: Twig's hash directories (auto reload). Release mode: one directory
+		// named after the template version of the release, as templates are never recompiled.
+		expect( response.body.subdirectories ).toEqual(
+			IS_RELEASE
+				? [ expect.stringMatching( /^[0-9a-f]{16}$/ ) ]
+				: expect.arrayContaining( [
+						expect.stringMatching( /^[0-9a-f]{2}$/ ),
+					] )
+		);
 	} );
 } );

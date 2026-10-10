@@ -19,6 +19,12 @@ function required( name ) {
 }
 
 const output = required( 'E2E_OUTPUT_DIR' );
+// dev: the theme checkout in wp-dev-env; release: the release ZIP (scripts/release-test).
+if ( ! [ 'dev', 'release' ].includes( required( 'E2E_TARGET' ) ) ) {
+	throw new Error(
+		`E2E_TARGET must be dev or release, found ${ process.env.E2E_TARGET }.`
+	);
+}
 const playwrightVersion = require( '@playwright/test/package.json' ).version;
 if ( playwrightVersion !== required( 'PLAYWRIGHT_VERSION' ) ) {
 	throw new Error(

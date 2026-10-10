@@ -10,7 +10,7 @@ Unit tests and every build error (with fixtures that would break a theme's build
 
 ## Development
 
-The framework is included through a Composer `path` repository that symlinks `vendor/saij/wp-app-framework` to a checkout of [wp-app-framework](https://github.com/saijsaij/wp-app-framework) in the same parent directory (relative symlink). Clone both repositories side by side:
+The framework is required from its GitHub repository as `dev-main`: the test theme always follows the current framework, and the lock file pins the commit. For development, [wp-dev-env](https://github.com/saijsaij/wp-dev-env) replaces `vendor/saij/wp-app-framework` by a relative symlink to a checkout of [wp-app-framework](https://github.com/saijsaij/wp-app-framework) in the same parent directory (`.env`: `WP_PACKAGE_LINKS=saij/wp-app-framework=wp-app-framework`). After a framework change is pushed, `composer update saij/wp-app-framework` moves the lock file to it. Clone both repositories side by side:
 
 ```sh
 git clone https://github.com/saijsaij/wp-app-framework.git
@@ -26,6 +26,16 @@ docker compose run --rm tools npm --prefix /workspace/theme-dev-test run build
 docker compose run --rm tools npm --prefix /workspace/theme-dev-test run start   # watch, also picks up framework changes
 ```
 
+## Release
+
+`composer release` builds `dist/theme-dev-test-<version>.zip` with the release pipeline of the framework (see its README); the framework comes from the lock file. To build with the local framework checkout instead:
+
+```sh
+docker compose run --rm tools composer --working-dir=/workspace/theme-dev-test release -- --package-source=saij/wp-app-framework=../wp-app-framework
+```
+
+`.gitattributes` marks the development files (`export-ignore`) the ZIP leaves out. A tag `v<version>` (= `Version` in `style.css`) runs `.github/workflows/release.yml`: build, release test with all browser tests, then the ZIP is attached to the GitHub release of the tag.
+
 ## Tests
 
 All checks run in wp-dev-env and must pass without errors or warnings.
@@ -33,7 +43,7 @@ All checks run in wp-dev-env and must pass without errors or warnings.
 Build: `composer build-manifest` builds and checks the manifest (writes nothing) and must report
 
 ```
-Manifest OK: 32 service candidates, 19 services, 2 hooks, 16 routes, 6 template functions, 1 template filters, 9 blocks.
+Manifest OK: 33 service candidates, 20 services, 2 hooks, 17 routes, 6 template functions, 1 template filters, 9 blocks.
 ```
 
 Lint: PHP with PHPStan (level max, WordPress stubs) and PHP-CS-Fixer (PER Coding Style), JavaScript with ESLint (configuration of `@wordpress/scripts`):
@@ -50,6 +60,15 @@ Browser tests (Playwright, `tests/e2e/`) run in the `e2e` service of wp-dev-env,
 docker compose run --rm e2e npm --prefix /workspace/theme-dev-test run test:e2e
 ```
 
+The same suite runs against the release ZIP: install it with `scripts/release-test` of wp-dev-env, then run the tests with `E2E_TARGET=release` (only mode-specific expectations differ, e.g. prefixed class names, the versioned Twig cache, no development warnings):
+
+```sh
+scripts/release-test ../theme-dev-test/dist/theme-dev-test-0.1.0.zip
+set -a; . ./.env; set +a
+docker compose run --rm --no-deps -e WP_BASE_URL="$WP_RELEASE_URL" -e E2E_BROWSER_HOST_RULES="MAP $WP_RELEASE_HOST traefik" \
+    -e E2E_TARGET=release -e E2E_OUTPUT_DIR=/results/release e2e npm --prefix /workspace/theme-dev-test run test:e2e
+```
+
 The fixtures in `tests/e2e/fixtures.js` fail every test that causes a console warning, console error or uncaught page error. A test that checks a warning declares it with `expectConsole`; it must then appear. The only general exception is a warning WordPress causes itself with every theme (documented in `ALLOWED`); if it stops appearing while the editor was opened, the run fails so the entry gets removed.
 
 | Spec | Covers | Code under test |
@@ -63,6 +82,7 @@ The fixtures in `tests/e2e/fixtures.js` fail every test that causes a console wa
 | `post-content.spec.js` | `#[RichText(postContent: true)]`: text stored as inline HTML, root element as field, reload without validation errors, front end, empty text, kses for authors, contentOnly, outline | `src/Block/Paragraph/` |
 | `excerpt.spec.js` | Automatic excerpts from fields with `excerpt: true` (REST, archive with `core/post-excerpt`, feed), `excerptWrapper`, manual excerpts, posts without framework blocks | `src/Block/Hero/`, `src/Block/Paragraph/`, `src/Block/Section/` |
 | `inspector-fields.spec.js` | Fields edited in the inspector (`inspector: true`), also in list items; `field()` on such a field | `src/Block/Inspector/` |
+| `mode.spec.js` | Development mode in the checkout, release mode with the ZIP: built manifest, no development cache, prefixed framework and Twig classes in the theme code | `src/Mode/` |
 
 Expected log entries of a test run (WP_DEBUG): the failures of `dev-test/v1/items/fail` and `dev-test/v1/twig/undefined` and of the editor render of `dev-test/wrong-field`, which fails on purpose. Never store `dev-test/wrong-field` or `dev-test/unmarked` in a post: they exist to show errors.
 
@@ -73,4 +93,4 @@ Expected log entries of a test run (WP_DEBUG): the failures of `dev-test/v1/item
 - `templates/` holds the block templates (`index.html` with titles and excerpts, `single.html`).
 - `build/` (not versioned) is the output of the script build.
 
-In a source checkout the framework runs in development mode and caches the manifest in `wp-content/cache/theme-dev-test/manifest/`.
+In a source checkout the framework runs in development mode and caches the manifest in `wp-content/cache/theme-dev-test/manifest/`. The release ZIP contains `generated/manifest.php` (release mode) and caches compiled templates in `wp-content/cache/theme-dev-test/twig/<template version>/`.

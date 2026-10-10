@@ -5,17 +5,13 @@
     "license": "proprietary",
     "repositories": [
         {
-            "type": "path",
-            "url": "../wp-app-framework",
-            "options": {
-                "symlink": true,
-                "relative": true
-            }
+            "type": "vcs",
+            "url": "https://github.com/saijsaij/wp-app-framework"
         }
     ],
     "require": {
         "php": ">=8.5",
-        "saij/wp-app-framework": "@dev"
+        "saij/wp-app-framework": "dev-main"
     },
     "autoload": {
         "psr-4": {
@@ -28,7 +24,21 @@
             "phpstan analyse --no-progress --memory-limit=1G",
             "php-cs-fixer check --diff"
         ],
-        "fix": "php-cs-fixer fix"
+        "fix": "php-cs-fixer fix",
+        "release": "wp-app-framework release"
+    },
+    "extra": {
+        "strauss": {
+            "target_directory": "vendor-prefixed",
+            "namespace_prefix": "Saij\\ThemeDevTest\\Vendor\\",
+            "classmap_prefix": "Saij_ThemeDevTest_Vendor_",
+            "include_root_autoload": true,
+            "update_call_sites": [
+                "src",
+                "functions.php"
+            ],
+            "delete_vendor_packages": false
+        }
     },
     "config": {
         "platform": {
@@ -41,5 +51,9 @@
         "php-stubs/wordpress-stubs": "^7.1",
         "phpstan/phpstan": "^2.3",
         "szepeviktor/phpstan-wordpress": "^2.0"
+    },
+    "scripts-descriptions": {
+        "build-manifest": "Builds and checks the manifest (writes nothing).",
+        "release": "Builds the release ZIP into dist/ (see the README of saij/wp-app-framework)."
     }
 }

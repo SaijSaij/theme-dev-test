@@ -43,7 +43,7 @@ final readonly class TwigController
     /**
      * Renders a template and reports the compiled templates in the cache directory of the instance.
      *
-     * @return array{directory: string, compiled: int}
+     * @return array{directory: string, compiled: int, subdirectories: list<string>}
      */
     #[RestRoute('/cache', HttpMethod::Get, new PublicAccess())]
     public function cache(): array
@@ -51,14 +51,22 @@ final readonly class TwigController
         $this->renderer->render('Twig/Partial.twig', ['name' => 'cache']);
         $directory = WP_CONTENT_DIR . '/cache/' . get_template() . '/twig';
         $compiled = 0;
+        $subdirectories = [];
         if (is_dir($directory)) {
+            // Twig's own hash directories in development mode, the template version of the release in release mode.
+            foreach (new FilesystemIterator($directory) as $entry) {
+                if ($entry instanceof \SplFileInfo && $entry->isDir()) {
+                    $subdirectories[] = $entry->getFilename();
+                }
+            }
+            sort($subdirectories);
             /** @var \SplFileInfo $file */
             foreach (new RecursiveIteratorIterator(new RecursiveDirectoryIterator($directory, FilesystemIterator::SKIP_DOTS)) as $file) {
                 $compiled += $file->getExtension() === 'php' ? 1 : 0;
             }
         }
 
-        return ['directory' => substr($directory, strlen(ABSPATH)), 'compiled' => $compiled];
+        return ['directory' => substr($directory, strlen(ABSPATH)), 'compiled' => $compiled, 'subdirectories' => $subdirectories];
     }
 
     /**
