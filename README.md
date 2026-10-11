@@ -47,7 +47,7 @@ All checks run in wp-dev-env and must pass without errors or warnings.
 Build: `composer build-manifest` builds and checks the manifest (writes nothing) and must report
 
 ```
-Manifest OK (theme theme-dev-test): 47 service candidates, 31 services, 2 hooks, 21 routes, 9 template functions, 1 template filters, 12 blocks. Nothing written (no --output).
+Manifest OK (theme theme-dev-test): 54 service candidates, 34 services, 2 hooks, 25 routes, 14 template functions, 1 template filters, 13 blocks. Nothing written (no --output).
 Public: 1 APIs, 2 template functions and filters.
 Templates use the public template callables of: plugin-dev-test.
 ```
@@ -92,9 +92,11 @@ The fixtures in `tests/e2e/fixtures.js` fail every test that causes a console wa
 | `styles.spec.js` | Stylesheet built with Tailwind: exactly the utilities of the templates and overrides, tokens on `theme.json` values on the front end and in the canvas of the post and site editor, not in the editor's main document | `src/styles.css`, `src/Block/Styled/`, `overrides/plugin-dev-test/` |
 | `parity.spec.js` | The same sizes, spacing and type of every element of a block in the canvas of the post and site editor as on the front end, and the same space between two blocks (`measureBlocks()` in `helpers.js`) | `src/Block/Card/`, `theme.json` (`blockGap`) |
 | `supports.spec.js` | Block supports of the theme: attributes with defaults (also per block), classes on the root element on the front end and in the canvas of the post and site editor, controls in the Styles tab and the Settings panel, none in contentOnly mode and pattern sections, `registerSupportControl`, a service with an injected dependency, the error without `block_wrapper_attributes()` | `src/Support/`, `src/Block/Card/`, `src/Block/Hero/`, `src/Block/SupportUnwrapped/`, `src/styles.css` |
+| `settings.spec.js` | Settings groups: options with schema and defaults in `/wp/v2/settings`, injection into a service and the template global `settings` (defaults, saved values, every value type), image, text, rich text (classic editor) and references on the settings page, invalid values rejected by the REST API, fallback of an invalid stored value, the settings page under Appearance with a tab per group (order by `position`), saving all groups in one request, the error message of a rejected save, no access without `manage_options` | `src/Setting/` |
+| `references.spec.js` | `#[PostReference]` (one and a list, limited to post types), `#[TermReference]`, `#[UserReference]`: resolution on the front end (missing, other type, drafts left out), drafts shown in the editor, search controls in the inspector (choose, reorder, remove, title of a stored ID), `role: content` | `src/Block/References/` |
 | `plugin.spec.js` | The theme as consumer of plugin-dev-test: `#[PluginApi]` (data with the plugin, `null` without), public template functions and filters with `has_plugin()`, templates with the same path in theme and plugin in one request, override of a plugin template, `@plugin` | `src/Plugin/`, `overrides/plugin-dev-test/` |
 
-Expected log entries of a test run (WP_DEBUG): the failures of `dev-test/v1/items/fail` and `dev-test/v1/twig/undefined` and of the editor renders of `dev-test/wrong-field` and `dev-test/support-unwrapped`, which fail on purpose. Never store `dev-test/wrong-field`, `dev-test/unmarked` or `dev-test/support-unwrapped` in a post: they exist to show errors.
+Expected log entries of a test run (WP_DEBUG): the failures of `dev-test/v1/items/fail` and `dev-test/v1/twig/undefined` and of the editor renders of `dev-test/wrong-field` and `dev-test/support-unwrapped`, which fail on purpose, and the invalid stored value of `theme_dev_test_general[density]` (`settings.spec.js`). Never store `dev-test/wrong-field`, `dev-test/unmarked` or `dev-test/support-unwrapped` in a post: they exist to show errors.
 
 ## Structure
 
