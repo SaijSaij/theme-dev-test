@@ -1,6 +1,6 @@
 <section {{ block_wrapper_attributes({class: 'hero hero--' ~ attrs.gradient.value}) }}>
     {% if attrs.imageId or is_editor() %}
-        <figure class="hero__image"{{ field('imageId') }}>{{ attachment_image(attrs.imageId, 'large') }}</figure>
+        <figure class="hero__image"{{ field('imageId') }}>{{ wp_attachment_image(attrs.imageId, 'large') }}</figure>
     {% endif %}
     <div class="hero__content">
         {% if attrs.topline or is_editor() %}

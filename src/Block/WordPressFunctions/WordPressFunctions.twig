@@ -1,0 +1,26 @@
+<div {{ block_wrapper_attributes({class: 'wordpress-functions'}) }}>
+    <p data-fn="attachment_image">{{ wp_attachment_image(attrs.attachment, 'thumbnail', {class: 'wordpress-functions__image'}) }}</p>
+    <p data-fn="attachment_image_url">{{ wp_attachment_image_url(attrs.attachment, 'thumbnail') }}</p>
+    <p data-fn="attachment_url">{{ wp_attachment_url(attrs.attachment) }}</p>
+    <p data-fn="attachment_caption">{{ wp_attachment_caption(attrs.attachment) }}</p>
+    <p data-fn="attachment_alt">{{ wp_attachment_alt(attrs.attachment) }}</p>
+    <p data-fn="post_url">{{ wp_post_url(attrs.post) }}</p>
+    <p data-fn="post_title">{{ wp_post_title(attrs.post) }}</p>
+    <p data-fn="post_excerpt">{{ wp_post_excerpt(attrs.post) }}</p>
+    <p data-fn="post_date">{{ wp_post_date(attrs.post) }}</p>
+    <p data-fn="post_date_format">{{ wp_post_date(attrs.post, 'Y-m-d H:i') }}</p>
+    <p data-fn="post_thumbnail">{{ wp_post_thumbnail(attrs.post, 'thumbnail') }}</p>
+    <p data-fn="user_name">{{ wp_user_name(attrs.user) }}</p>
+    <p data-fn="user_url">{{ wp_user_url(attrs.user) }}</p>
+    <p data-fn="avatar">{{ wp_avatar(attrs.user, 48) }}</p>
+    <p data-fn="home_url">{{ wp_home_url('/shop') }}</p>
+    <p data-fn="site_name">{{ wp_site_name() }}</p>
+    <p data-fn="site_description">{{ wp_site_description() }}</p>
+    <p data-fn="login_url">{{ wp_login_url('/shop') }}</p>
+    <p data-fn="logout_url"><a href="{{ wp_logout_url() }}">Log out</a></p>
+    <p data-fn="is_user_logged_in">{{ wp_is_user_logged_in() ? 'yes' : 'no' }}</p>
+    <p data-fn="date">{{ wp_date('Y-m-d', attrs.timestamp) }}</p>
+    <p data-fn="human_time_diff">{{ wp_human_time_diff(attrs.timestamp, attrs.timestamp + 300) }}</p>
+    <p data-fn="number_format">{{ wp_number_format(attrs.number, 2) }}</p>
+    <p data-fn="size_format">{{ wp_size_format(attrs.bytes) }}</p>
+</div>

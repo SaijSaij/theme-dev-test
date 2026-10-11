@@ -1,7 +1,7 @@
 {# Spacing, type and colors only from the theme's tokens (theme.json) and Tailwind's scale. #}
 <article {{ block_wrapper_attributes({class: 'card flex flex-col gap-4 max-w-content p-section border-2 border-solid border-primary rounded-lg'}) }}>
     {% if attrs.imageId or is_editor() %}
-        <figure class="card__image m-0"{{ field('imageId') }}>{{ attachment_image(attrs.imageId, 'medium') }}</figure>
+        <figure class="card__image m-0"{{ field('imageId') }}>{{ wp_attachment_image(attrs.imageId, 'medium') }}</figure>
     {% endif %}
     {% if attrs.title or is_editor() %}
         <h3 class="card__title m-0 text-lead leading-snug font-bold wrap-anywhere"{{ field('title') }}>{{ attrs.title|raw }}</h3>

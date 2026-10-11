@@ -3,7 +3,7 @@
     <div class="check__rich"{{ field('rich') }}>{{ attrs.rich|raw }}</div>
     <p class="check__count">{{ attrs.count }}</p>
     <a class="check__link" href="{{ attrs.link }}">Link</a>
-    <figure class="check__image"{{ field('imageId') }}>{{ attachment_image(attrs.imageId, 'thumbnail') }}</figure>
+    <figure class="check__image"{{ field('imageId') }}>{{ wp_attachment_image(attrs.imageId, 'thumbnail') }}</figure>
     <p class="check__values">{{ attrs.flag ? 'on' : 'off' }} {{ attrs.ratio }} {{ attrs.note ?? 'none' }} {{ attrs.secret }}</p>
     <figure class="check__meta">
         <figcaption{{ field('meta.caption') }}>{{ attrs.meta.caption }}</figcaption>

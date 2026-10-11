@@ -1,6 +1,6 @@
 <div {{ block_wrapper_attributes({class: 'references'}) }}>
-    <p class="references__page"><a href="{{ post_url(attrs.page) }}">{{ post_title(attrs.page) }}</a></p>
-    <ul class="references__posts">{% for id in attrs.posts %}<li>{{ post_title(id) }}</li>{% endfor %}</ul>
-    <p class="references__topic"><a href="{{ term_url(attrs.topic) }}">{{ term_name(attrs.topic) }}</a></p>
-    <p class="references__author">{{ user_name(attrs.author) }}</p>
+    <p class="references__page"><a href="{{ wp_post_url(attrs.page) }}">{{ wp_post_title(attrs.page) }}</a></p>
+    <ul class="references__posts">{% for id in attrs.posts %}<li>{{ wp_post_title(id) }}</li>{% endfor %}</ul>
+    <p class="references__topic"><a href="{{ wp_term_url(attrs.topic) }}">{{ wp_term_name(attrs.topic) }}</a></p>
+    <p class="references__author">{{ wp_user_name(attrs.author) }}</p>
 </div>

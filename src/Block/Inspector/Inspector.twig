@@ -2,7 +2,7 @@
     <div class="inspector-check__summary">{{ attrs.summary|raw }}</div>
     {% for slide in attrs.slides %}
         <figure class="inspector-check__slide">
-            {{ attachment_image(slide.imageId, 'thumbnail') }}
+            {{ wp_attachment_image(slide.imageId, 'thumbnail') }}
             <figcaption{{ field(['slides', loop.index0, 'caption']) }}>{{ slide.caption }}</figcaption>
         </figure>
     {% endfor %}
