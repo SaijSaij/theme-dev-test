@@ -11,6 +11,31 @@
 /* Words in the templates that are no utilities: the BEM class of dev-test/container and Twig's filter tag. */
 @source not inline("container filter");
 
+/* Classes of the block supports (src/Support/), built at run time, so they are plain CSS, not utilities. */
+@layer components {
+	.surface-light {
+		background-color: var(--wp--preset--color--contrast);
+		color: #1e1e1e;
+	}
+
+	.surface-dark {
+		background-color: #1e1e1e;
+		color: var(--wp--preset--color--contrast);
+	}
+
+	.is-framed {
+		outline: 3px solid var(--wp--preset--color--primary);
+	}
+
+	.accent-coral {
+		border-inline-start: 6px solid #ff7f50;
+	}
+
+	.accent-teal {
+		border-inline-start: 6px solid #008080;
+	}
+}
+
 @theme inline {
 	--color-primary: var(--wp--preset--color--primary);
 	--color-contrast: var(--wp--preset--color--contrast);
