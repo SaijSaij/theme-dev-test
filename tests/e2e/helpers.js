@@ -272,6 +272,100 @@ async function screenshot( target, name ) {
 	} );
 }
 
+/** Computed properties that decide the size, spacing and type of an element. */
+const MEASURED_PROPERTIES = [
+	'display',
+	'box-sizing',
+	'margin-top',
+	'margin-right',
+	'margin-bottom',
+	'margin-left',
+	'padding-top',
+	'padding-right',
+	'padding-bottom',
+	'padding-left',
+	'border-top-width',
+	'border-right-width',
+	'border-bottom-width',
+	'border-left-width',
+	'row-gap',
+	'column-gap',
+	'font-family',
+	'font-size',
+	'font-weight',
+	'font-style',
+	'line-height',
+	'letter-spacing',
+	'text-align',
+	// Not white-space: RichText sets pre-wrap on every field in the editor, to keep typed spaces visible.
+	'overflow-wrap',
+	'color',
+	'background-color',
+];
+
+/**
+ * Measures blocks and every element inside them: position relative to the
+ * block, size and the computed properties above, plus the space between two
+ * consecutive blocks. The result is the same for the front end and the editor
+ * canvas if both render the block alike. The margins of a block are left out:
+ * they place it in its container (centered in a container that is narrower in
+ * the editor, the gap to a preceding sibling); the gaps between the blocks are
+ * measured instead.
+ *
+ * @param {import('@playwright/test').Locator} blocks Root elements of the blocks.
+ * @return {Promise<{blocks: Array<Array<Object>>, gaps: Array<number>}>} Measurements, rounded to 0.5px.
+ */
+async function measureBlocks( blocks ) {
+	return blocks.evaluateAll( ( roots, properties ) => {
+		const round = ( value ) => Math.round( value * 2 ) / 2;
+		const measure = ( root ) => {
+			const origin = root.getBoundingClientRect();
+			return [ root, ...root.querySelectorAll( '*' ) ].map(
+				( element ) => {
+					const rect = element.getBoundingClientRect();
+					const style = window.getComputedStyle( element );
+					return {
+						element:
+							element.tagName.toLowerCase() +
+							( element === root
+								? ''
+								: `.${ [ ...element.classList ]
+										.filter( ( name ) =>
+											/^[a-z]+__/.test( name )
+										)
+										.join( '.' ) }` ),
+						x: round( rect.left - origin.left ),
+						y: round( rect.top - origin.top ),
+						width: round( rect.width ),
+						height: round( rect.height ),
+						...Object.fromEntries(
+							properties
+								.filter(
+									( property ) =>
+										element !== root ||
+										! property.startsWith( 'margin-' )
+								)
+								.map( ( property ) => [
+									property,
+									style.getPropertyValue( property ),
+								] )
+						),
+					};
+				}
+			);
+		};
+		const gaps = roots
+			.slice( 1 )
+			.map( ( root, index ) =>
+				round(
+					root.getBoundingClientRect().top -
+						roots[ index ].getBoundingClientRect().bottom
+				)
+			);
+		return { blocks: roots.map( measure ), gaps };
+	}, MEASURED_PROPERTIES );
+}
+
 /**
  * Opens the "Settings" tab of the block inspector (the generated settings
  * controls and registered panels; content controls are on the other tab).
@@ -321,6 +415,7 @@ module.exports = {
 	createPost,
 	createUserWithPassword,
 	IS_RELEASE,
+	measureBlocks,
 	openBlockSettings,
 	openPostWith,
 	RENDER_ROUTE,

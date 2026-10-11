@@ -23,7 +23,7 @@ The theme is also the consumer of the test plugin [plugin-dev-test](https://gith
 
 The theme is also the parent of the test child theme [theme-dev-test-child](https://github.com/saijsaij/theme-dev-test-child), which uses its public API (`Saij\ThemeDevTest\Api\DevTestApi`, `#[PublicApi]`), its public template functions `theme_dev_test_badge(label)` and `theme_dev_test_partial(name)` and overrides `Twig/ChildOverridable.twig`. In wp-dev-env the child theme may be the active theme (`WP_ACTIVE_THEME=theme-dev-test-child`); the theme's tests pass with and without it and leave what the child theme does to the child theme's tests.
 
-Scripts (the framework's editor runtime and the editor scripts in `src/`) are built with `@wordpress/scripts` into `build/`; `npm install` needs `vendor/` from `composer install` first. In wp-dev-env:
+Scripts (the framework's editor runtime and the editor scripts in `src/`) and the stylesheet `src/styles.css` (Tailwind CSS, tokens on the values of `theme.json`) are built with `@wordpress/scripts` and the framework's webpack helper into `build/`; `npm install` needs `vendor/` from `composer install` first. In wp-dev-env:
 
 ```sh
 docker compose run --rm tools npm --prefix /workspace/theme-dev-test run build
@@ -47,7 +47,7 @@ All checks run in wp-dev-env and must pass without errors or warnings.
 Build: `composer build-manifest` builds and checks the manifest (writes nothing) and must report
 
 ```
-Manifest OK (theme theme-dev-test): 37 service candidates, 24 services, 2 hooks, 21 routes, 9 template functions, 1 template filters, 9 blocks. Nothing written (no --output).
+Manifest OK (theme theme-dev-test): 42 service candidates, 26 services, 2 hooks, 21 routes, 9 template functions, 1 template filters, 11 blocks. Nothing written (no --output).
 Public: 1 APIs, 2 template functions and filters.
 Templates use the public template callables of: plugin-dev-test.
 ```
@@ -89,6 +89,8 @@ The fixtures in `tests/e2e/fixtures.js` fail every test that causes a console wa
 | `excerpt.spec.js` | Automatic excerpts from fields with `excerpt: true` (REST, archive with `core/post-excerpt`, feed), `excerptWrapper`, manual excerpts, posts without framework blocks | `src/Block/Hero/`, `src/Block/Paragraph/`, `src/Block/Section/` |
 | `inspector-fields.spec.js` | Fields edited in the inspector (`inspector: true`), also in list items; `field()` on such a field | `src/Block/Inspector/` |
 | `mode.spec.js` | Development mode in the checkout, release mode with the ZIP: built manifest, no development cache, prefixed framework and Twig classes in the theme code | `src/Mode/` |
+| `styles.spec.js` | Stylesheet built with Tailwind: exactly the utilities of the templates and overrides, tokens on `theme.json` values on the front end and in the canvas of the post and site editor, not in the editor's main document | `src/styles.css`, `src/Block/Styled/`, `overrides/plugin-dev-test/` |
+| `parity.spec.js` | The same sizes, spacing and type of every element of a block in the canvas of the post and site editor as on the front end, and the same space between two blocks (`measureBlocks()` in `helpers.js`) | `src/Block/Card/`, `theme.json` (`blockGap`) |
 | `plugin.spec.js` | The theme as consumer of plugin-dev-test: `#[PluginApi]` (data with the plugin, `null` without), public template functions and filters with `has_plugin()`, templates with the same path in theme and plugin in one request, override of a plugin template, `@plugin` | `src/Plugin/`, `overrides/plugin-dev-test/` |
 
 Expected log entries of a test run (WP_DEBUG): the failures of `dev-test/v1/items/fail` and `dev-test/v1/twig/undefined` and of the editor render of `dev-test/wrong-field`, which fails on purpose. Never store `dev-test/wrong-field` or `dev-test/unmarked` in a post: they exist to show errors.
@@ -99,6 +101,7 @@ Expected log entries of a test run (WP_DEBUG): the failures of `dev-test/v1/item
 - `src/` contains the theme's PHP classes (PSR-4 `Saij\ThemeDevTest\`), discovered by the framework, with their Twig templates and editor scripts next to them, organized by the feature they test.
 - `templates/` holds the block templates (`index.html` with titles and excerpts, `single.html`).
 - `overrides/plugin-dev-test/` overrides templates of the test plugin.
-- `build/` (not versioned) is the output of the script build.
+- `theme.json` defines the colors, font size, spacing, layout sizes and block gap the stylesheet maps to Tailwind tokens. `settings.spacing.blockGap` is set on purpose: without it, WordPress 7.1 puts space between blocks in the editor but not on the front end.
+- `build/` (not versioned) is the output of the script and stylesheet build.
 
 In a source checkout the framework runs in development mode and caches the manifest in `wp-content/cache/theme-dev-test/manifest/`. The release ZIP contains `generated/manifest.php` (release mode) and caches compiled templates in `wp-content/cache/theme-dev-test/twig/<template version>/`.

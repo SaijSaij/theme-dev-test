@@ -96,7 +96,7 @@ test.describe( 'Test plugin', () => {
 		// An active child theme overrides the template before the theme; the child theme's tests check that.
 		if ( ! ( await activeTheme( requestUtils ) ).isChild ) {
 			expect( overridable.body ).toBe(
-				'<p class="overridable">overridden by theme-dev-test</p>\n'
+				'<p class="overridable italic">overridden by theme-dev-test</p>\n'
 			);
 		}
 		// @plugin addresses the plugin's own template.

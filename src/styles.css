@@ -1,0 +1,20 @@
+/*
+ * Stylesheet of the theme, compiled with Tailwind CSS by the framework's webpack helper
+ * (build/styles.css). Tokens point to the CSS variables WordPress generates from theme.json.
+ */
+@layer theme, base, components, utilities;
+@import "tailwindcss/theme.css" layer(theme);
+@import "tailwindcss/utilities.css" layer(utilities) source(none);
+
+@source "./**/*.twig";
+@source "../overrides/**/*.twig";
+/* Words in the templates that are no utilities: the BEM class of dev-test/container and Twig's filter tag. */
+@source not inline("container filter");
+
+@theme inline {
+	--color-primary: var(--wp--preset--color--primary);
+	--color-contrast: var(--wp--preset--color--contrast);
+	--spacing-section: var(--wp--preset--spacing--section);
+	--container-content: var(--wp--style--global--content-size);
+	--text-lead: var(--wp--preset--font-size--lead);
+}

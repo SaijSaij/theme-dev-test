@@ -1,0 +1,19 @@
+{# Spacing, type and colors only from the theme's tokens (theme.json) and Tailwind's scale. #}
+<article {{ block_wrapper_attributes({class: 'card flex flex-col gap-4 max-w-content p-section border-2 border-solid border-primary rounded-lg'}) }}>
+    {% if attrs.imageId or is_editor() %}
+        <figure class="card__image m-0"{{ field('imageId') }}>{{ attachment_image(attrs.imageId, 'medium') }}</figure>
+    {% endif %}
+    {% if attrs.title or is_editor() %}
+        <h3 class="card__title m-0 text-lead leading-snug font-bold wrap-anywhere"{{ field('title') }}>{{ attrs.title|raw }}</h3>
+    {% endif %}
+    {% if attrs.text or is_editor() %}
+        <div class="card__text m-0 text-base leading-relaxed"{{ field('text') }}>{{ attrs.text|raw }}</div>
+    {% endif %}
+    {% if attrs.links %}
+        <p class="card__links m-0">
+            {% for link in attrs.links %}
+                <a class="card__link inline-block me-2 px-4 py-2 bg-primary text-contrast no-underline" href="{{ link.url }}"{{ field(['links', loop.index0, 'label']) }}>{{ link.label }}</a>
+            {% endfor %}
+        </p>
+    {% endif %}
+</article>

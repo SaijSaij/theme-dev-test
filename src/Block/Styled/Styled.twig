@@ -1,0 +1,4 @@
+{# Complete class names per value, so the stylesheet finds them in this template. #}
+<div {{ block_wrapper_attributes({class: attrs.highlighted ? 'styled p-section max-w-content bg-primary text-contrast' : 'styled p-section max-w-content'}) }}>
+    <p{{ field('text') }}>{{ attrs.text }}</p>
+</div>
