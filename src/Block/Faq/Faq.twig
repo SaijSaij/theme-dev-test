@@ -1,0 +1,5 @@
+{# The answer is always shown in the editor, so it can be edited inline; the view script opens and closes it on the front end. #}
+<div {{ block_wrapper_attributes({class: 'faq'}) }}>
+    <button type="button" class="faq__question" aria-expanded="{{ attrs.open ? 'true' : 'false' }}"{{ field('question') }}>{{ attrs.question }}</button>
+    <div class="faq__answer"{{ field('answer') }}{% if not attrs.open and not is_editor() %} hidden{% endif %}>{{ attrs.answer|raw }}</div>
+</div>

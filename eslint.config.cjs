@@ -11,6 +11,7 @@ const defaults = require( '@wordpress/scripts/config/eslint.config.cjs' );
 const PROVIDED_AT_RUNTIME = [
 	'@wordpress/components',
 	'@saij/wp-app-framework',
+	'@saij/wp-app-framework/view',
 ];
 
 module.exports = [

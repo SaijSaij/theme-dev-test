@@ -8,8 +8,8 @@
 
 @source "./**/*.twig";
 @source "../overrides/**/*.twig";
-/* Words in the templates that are no utilities: the BEM class of dev-test/container and Twig's filter tag. */
-@source not inline("container filter");
+/* Words in the templates that are no utilities: the BEM class of dev-test/container, Twig's filter tag and the hidden attribute of dev-test/faq. */
+@source not inline("container filter hidden");
 
 /* Classes of the block supports (src/Support/), built at run time, so they are plain CSS, not utilities. */
 @layer components {
