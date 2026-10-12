@@ -1,5 +1,5 @@
 const path = require( 'path' );
-const { request: apiRequest } = require( '@playwright/test' );
+const { expect, request: apiRequest } = require( '@playwright/test' );
 
 const RENDER_ROUTE = '/wp-app-framework/v1/theme-dev-test/render';
 
@@ -406,6 +406,23 @@ async function cleanUp( requestUtils ) {
 	}
 }
 
+/**
+ * Whether the test plugin (https://github.com/saijsaij/plugin-dev-test) is installed and active, from the plugins endpoint of WordPress.
+ *
+ * @param {Object} requestUtils
+ * @return {Promise<boolean>} Active.
+ */
+async function pluginActive( requestUtils ) {
+	const response = await restResponse( requestUtils, {
+		path: '/wp/v2/plugins/plugin-dev-test/plugin-dev-test',
+	} );
+	if ( response.status === 404 ) {
+		return false;
+	}
+	expect( response.status ).toBe( 200 );
+	return response.body.status === 'active';
+}
+
 module.exports = {
 	activeTheme,
 	block,
@@ -418,6 +435,7 @@ module.exports = {
 	measureBlocks,
 	openBlockSettings,
 	openPostWith,
+	pluginActive,
 	RENDER_ROUTE,
 	restResponse,
 	screenshot,

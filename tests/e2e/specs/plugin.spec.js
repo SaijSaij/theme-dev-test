@@ -8,24 +8,7 @@
  */
 const { test, expect } = require( '../fixtures' );
 
-const { activeTheme, restResponse } = require( '../helpers' );
-
-/**
- * Whether the test plugin is installed and active, from the plugins endpoint of WordPress.
- *
- * @param {Object} requestUtils
- * @return {Promise<boolean>} Active.
- */
-async function pluginActive( requestUtils ) {
-	const response = await restResponse( requestUtils, {
-		path: '/wp/v2/plugins/plugin-dev-test/plugin-dev-test',
-	} );
-	if ( response.status === 404 ) {
-		return false;
-	}
-	expect( response.status ).toBe( 200 );
-	return response.body.status === 'active';
-}
+const { activeTheme, pluginActive, restResponse } = require( '../helpers' );
 
 async function get( requestUtils, path ) {
 	return restResponse( requestUtils, { path, as: 'anonymous' } );
