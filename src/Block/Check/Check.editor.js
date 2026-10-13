@@ -4,7 +4,7 @@
 import { registerControl } from '@saij/wp-app-framework';
 import { RangeControl } from '@wordpress/components';
 
-registerControl( 'dev-test/check', 'ratio', ( { value, onChange } ) => (
+registerControl( 'check', 'ratio', ( { value, onChange } ) => (
 	<RangeControl
 		__next40pxDefaultSize
 		__nextHasNoMarginBottom

@@ -15,7 +15,7 @@ use Saij\WpAppFramework\Block\Supports;
  * block_wrapper_attributes(), so rendering fails. Only rendered through the
  * render route by the browser tests; never stored in a post.
  */
-#[Block('dev-test/support-unwrapped', title: 'Unwrapped support check', category: BlockCategory::Widgets, icon: 'warning')]
+#[Block('support-unwrapped', title: 'Unwrapped support check', category: BlockCategory::Widgets, icon: 'warning')]
 #[Supports(inserter: false)]
 #[UseSupport(Framed::class)]
 final readonly class SupportUnwrapped

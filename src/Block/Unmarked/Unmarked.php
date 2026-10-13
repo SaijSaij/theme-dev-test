@@ -13,7 +13,7 @@ use Saij\WpAppFramework\Twig\TemplateRenderer;
  * the editor runtime warns in development mode. Only inserted in the editor by
  * the browser tests.
  */
-#[Block('dev-test/unmarked', title: 'Unmarked field check', category: BlockCategory::Widgets, icon: 'warning')]
+#[Block('unmarked', title: 'Unmarked field check', category: BlockCategory::Widgets, icon: 'warning')]
 final readonly class Unmarked
 {
     public function __construct(private TemplateRenderer $renderer) {}

@@ -16,7 +16,7 @@ use Saij\WpAppFramework\Twig\TemplateRenderer;
  * Faq.editor.js. Uses the block support Reveal, which has a view script too
  * (frontend.spec.js).
  */
-#[Block('dev-test/faq', title: 'FAQ', category: BlockCategory::Text, icon: 'editor-help', description: 'Question with an answer that opens and closes.')]
+#[Block('faq', title: 'FAQ', category: BlockCategory::Text, icon: 'editor-help', description: 'Question with an answer that opens and closes.')]
 #[UseSupport(Reveal::class)]
 final readonly class Faq
 {

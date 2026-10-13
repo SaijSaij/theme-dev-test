@@ -13,7 +13,7 @@ use Saij\WpAppFramework\Block\Support\UseSupport;
 use Saij\WpAppFramework\Block\Supports;
 use Saij\WpAppFramework\Twig\TemplateRenderer;
 
-#[Block('dev-test/hero', title: 'Hero', category: BlockCategory::Design, icon: 'cover-image', description: 'Intro with topline, headline, image and buttons.')]
+#[Block('hero', title: 'Hero', category: BlockCategory::Design, icon: 'cover-image', description: 'Intro with topline, headline, image and buttons.')]
 #[Supports(align: [Align::Wide, Align::Full])]
 #[UseSupport(Surface::class)]
 #[UseSupport(Accent::class)]

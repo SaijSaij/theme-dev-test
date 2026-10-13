@@ -13,7 +13,7 @@ use Saij\WpAppFramework\Rest\RestRoute;
 /**
  * Applies the filter of FilterCheck, so the browser tests can observe it.
  */
-#[RestController(Api::NAMESPACE, base: '/hook')]
+#[RestController(Api::VERSION, base: '/hook')]
 final class HookController
 {
     /**

@@ -15,7 +15,7 @@ use Twig\Environment;
 /**
  * Reports the mode of the framework instance (step 6): source checkout or release build.
  */
-#[RestController(Api::NAMESPACE)]
+#[RestController(Api::VERSION)]
 final readonly class ModeController
 {
     public function __construct(private Theme $theme) {}

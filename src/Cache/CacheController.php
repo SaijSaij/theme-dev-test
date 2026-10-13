@@ -20,7 +20,7 @@ use WP_REST_Response;
 /**
  * Cached routes, CacheStore::remember() and the controls of cache.spec.js (forced backends, invalidation).
  */
-#[RestController(Api::NAMESPACE, base: '/cache')]
+#[RestController(Api::VERSION, base: '/cache')]
 final readonly class CacheController
 {
     public function __construct(

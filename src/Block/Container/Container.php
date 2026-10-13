@@ -14,7 +14,7 @@ use Saij\WpAppFramework\Twig\TemplateRenderer;
  * contentOnly mode nothing can be inserted into it (unlike dev-test/section).
  * Its supports differ from WordPress' defaults (only inserted through markup).
  */
-#[Block('dev-test/container', title: 'Container', category: BlockCategory::Design, icon: 'columns')]
+#[Block('container', title: 'Container', category: BlockCategory::Design, icon: 'columns')]
 #[Supports(customClassName: false, multiple: false, reusable: false, inserter: false, lock: false, renaming: false)]
 final readonly class Container
 {

@@ -18,8 +18,8 @@ const {
 const IMAGE = path.join( __dirname, '../assets/image.png' );
 
 const PAGE = '/wp-admin/themes.php?page=theme-dev-test-settings';
-const GENERAL = 'theme_dev_test_general';
-const LAYOUT = 'theme_dev_test_layout';
+const GENERAL = 'dev_test_general';
+const LAYOUT = 'dev_test_layout';
 const DEFAULTS = {
 	[ GENERAL ]: {
 		tagline: 'Just a test',

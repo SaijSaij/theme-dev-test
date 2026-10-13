@@ -11,7 +11,7 @@ use Saij\WpAppFramework\Twig\TemplateRenderer;
 /**
  * Styled with Tailwind utilities of the theme's stylesheet (src/styles.css).
  */
-#[Block('dev-test/styled', title: 'Styled', category: BlockCategory::Design, icon: 'art', description: 'Styled with the utilities of the theme stylesheet.')]
+#[Block('styled', title: 'Styled', category: BlockCategory::Design, icon: 'art', description: 'Styled with the utilities of the theme stylesheet.')]
 final readonly class Styled
 {
     public function __construct(private TemplateRenderer $renderer) {}

@@ -140,12 +140,12 @@ for ( const backend of [ 'file', 'transient', 'object' ] ) {
 					const settings = await restResponse( requestUtils, {
 						path: '/wp/v2/settings',
 					} );
-					const layout = settings.body.theme_dev_test_layout;
+					const layout = settings.body.dev_test_layout;
 					await requestUtils.rest( {
 						method: 'POST',
 						path: '/wp/v2/settings',
 						data: {
-							theme_dev_test_layout: {
+							dev_test_layout: {
 								...layout,
 								columns: layout.columns + 1,
 							},
@@ -155,7 +155,7 @@ for ( const backend of [ 'file', 'transient', 'object' ] ) {
 					await requestUtils.rest( {
 						method: 'POST',
 						path: '/wp/v2/settings',
-						data: { theme_dev_test_layout: layout },
+						data: { dev_test_layout: layout },
 					} );
 				},
 				'an invalidated tag': () =>

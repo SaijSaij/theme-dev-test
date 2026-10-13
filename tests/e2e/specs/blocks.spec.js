@@ -155,8 +155,13 @@ test.describe( 'Blocks', () => {
 				sectionSupports:
 					window.wp.blocks.getBlockType( 'dev-test/section' )
 						.supports,
+				sectionAllowedBlocks:
+					window.wp.blocks.getBlockType( 'dev-test/section' )
+						.allowedBlocks,
 			};
 		} );
+		// Declared as allowedBlocks: ['hero']; the build adds the namespace of the theme.
+		expect( type.sectionAllowedBlocks ).toEqual( [ 'dev-test/hero' ] );
 		expect( type.containerSupports ).toEqual( {
 			html: false,
 			customClassName: false,

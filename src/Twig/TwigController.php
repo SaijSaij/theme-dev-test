@@ -17,7 +17,7 @@ use Saij\WpAppFramework\Twig\TemplateRenderer;
 /**
  * Renders the templates of this directory through the injected renderer.
  */
-#[RestController(Api::NAMESPACE, base: '/twig')]
+#[RestController(Api::VERSION, base: '/twig')]
 final readonly class TwigController
 {
     public function __construct(private TemplateRenderer $renderer) {}

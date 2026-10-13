@@ -15,7 +15,7 @@ use Saij\WpAppFramework\Value\PostReference;
 use Saij\WpAppFramework\Value\Url;
 
 /**
- * A settings group with every kind of value: option theme_dev_test_general.
+ * A settings group with every kind of value: option dev_test_general.
  */
 #[SettingsGroup('general', title: 'General', description: 'Settings of the test theme.', position: 20)]
 final readonly class GeneralSettings

@@ -13,7 +13,7 @@ use Saij\WpAppFramework\Twig\TemplateRenderer;
 /**
  * No view script of its own, only the one of the Reveal support (frontend.spec.js).
  */
-#[Block('dev-test/reveal-box', title: 'Reveal box', category: BlockCategory::Design)]
+#[Block('reveal-box', title: 'Reveal box', category: BlockCategory::Design)]
 #[UseSupport(Reveal::class, default: true)]
 final readonly class RevealBox
 {

@@ -33,6 +33,7 @@
     },
     "extra": {
         "wp-app-framework": {
+            "namespace": "dev-test",
             "template-plugins": [
                 "plugin-dev-test"
             ]

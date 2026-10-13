@@ -18,7 +18,7 @@ use WP_Block;
  * A cached block that shows how often it rendered (Counter), the URL parameter "variant" and the post of its
  * context; its view script marks the root element (cache.spec.js).
  */
-#[Block('dev-test/cached', title: 'Cached', category: BlockCategory::Widgets, icon: 'database', description: 'Shows how often it rendered; cached.', usesContext: ['postId'])]
+#[Block('cached', title: 'Cached', category: BlockCategory::Widgets, icon: 'database', description: 'Shows how often it rendered; cached.', usesContext: ['postId'])]
 #[Cache(
     ttl: 300,
     tags: [new PostTypeTag('post'), new SettingsTag(LayoutSettings::class), Feed::Stats],

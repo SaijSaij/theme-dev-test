@@ -4,7 +4,7 @@
 import { registerToolbarButton } from '@saij/wp-app-framework';
 import { ToolbarButton } from '@wordpress/components';
 
-registerToolbarButton( 'dev-test/faq', ( { attributes, setAttributes } ) => (
+registerToolbarButton( 'faq', ( { attributes, setAttributes } ) => (
 	<ToolbarButton
 		icon="arrow-down-alt2"
 		label={ attributes.open ? 'Closed by default' : 'Open by default' }

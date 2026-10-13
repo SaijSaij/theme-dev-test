@@ -9,5 +9,5 @@ use Saij\WpAppFramework\DependencyInjection\NoService;
 #[NoService]
 final class Api
 {
-    public const string NAMESPACE = 'dev-test/v1';
+    public const string VERSION = 'v1';
 }

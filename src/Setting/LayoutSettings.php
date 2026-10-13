@@ -7,7 +7,7 @@ namespace Saij\ThemeDevTest\Setting;
 use Saij\WpAppFramework\Setting\SettingsGroup;
 
 /**
- * A second group, shown before "General" (position): option theme_dev_test_layout.
+ * A second group, shown before "General" (position): option dev_test_layout.
  */
 #[SettingsGroup('layout', title: 'Layout', position: 5)]
 final readonly class LayoutSettings

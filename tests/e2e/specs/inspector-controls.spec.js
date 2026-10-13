@@ -111,18 +111,23 @@ test.describe( 'Inspector controls', () => {
 		expectConsole.push(
 			{
 				type: 'warning',
-				text: 'wp-app-framework: registerPanel( "dev-test/unknown" ): no block of this theme or plugin has that name.',
+				text: 'wp-app-framework: registerPanel( "unknown" ): no block of this theme or plugin has that name.',
 			},
 			{
 				type: 'warning',
-				text: 'wp-app-framework: registerControl( "dev-test/check", "unknown" ): the block has no attribute with that name.',
+				text: 'wp-app-framework: registerControl( "check", "unknown" ): the block has no attribute with that name.',
+			},
+			{
+				type: 'warning',
+				text: 'wp-app-framework: registerToolbarButton( "dev-test/faq" ): use the block name without namespace, e.g. "faq"; the namespace of this theme or plugin is added.',
 			}
 		);
 		await openPostWith( { admin, editor, requestUtils }, '' );
 		await page.evaluate( () => {
 			const instance = window.wpAppFramework[ 'theme-dev-test' ];
-			instance.registerPanel( 'dev-test/unknown', () => null );
-			instance.registerControl( 'dev-test/check', 'unknown', () => null );
+			instance.registerPanel( 'unknown', () => null );
+			instance.registerControl( 'check', 'unknown', () => null );
+			instance.registerToolbarButton( 'dev-test/faq', () => null );
 		} );
 	} );
 

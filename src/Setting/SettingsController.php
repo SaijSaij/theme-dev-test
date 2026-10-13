@@ -18,10 +18,10 @@ use WP_REST_Request;
  * writes the raw options (to store invalid values and to restore the options
  * after a test).
  */
-#[RestController(Api::NAMESPACE, base: '/settings')]
+#[RestController(Api::VERSION, base: '/settings')]
 final readonly class SettingsController
 {
-    private const array OPTIONS = ['general' => 'theme_dev_test_general', 'layout' => 'theme_dev_test_layout'];
+    private const array OPTIONS = ['general' => 'dev_test_general', 'layout' => 'dev_test_layout'];
 
     public function __construct(
         private GeneralSettings $general,

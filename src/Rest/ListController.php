@@ -13,7 +13,7 @@ use Saij\WpAppFramework\Value\ListOf;
 /**
  * Lists of value objects and enums as request arguments.
  */
-#[RestController(Api::NAMESPACE, base: '/lists')]
+#[RestController(Api::VERSION, base: '/lists')]
 final class ListController
 {
     /**

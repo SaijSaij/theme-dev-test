@@ -11,7 +11,7 @@ use Saij\WpAppFramework\Twig\TemplateRenderer;
 /**
  * References to posts, terms and users, printed with the template functions of the framework.
  */
-#[Block('dev-test/references', title: 'References', category: BlockCategory::Design, icon: 'admin-links', description: 'References to a page, posts, a category and a user.')]
+#[Block('references', title: 'References', category: BlockCategory::Design, icon: 'admin-links', description: 'References to a page, posts, a category and a user.')]
 final readonly class References
 {
     public function __construct(private TemplateRenderer $renderer) {}

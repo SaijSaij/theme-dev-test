@@ -11,7 +11,7 @@ use Saij\WpAppFramework\Twig\TemplateRenderer;
 /**
  * Text stored as inline HTML in the post content; the root element is the field.
  */
-#[Block('dev-test/paragraph', title: 'Paragraph', category: BlockCategory::Text, icon: 'editor-paragraph', description: 'Text stored in the post content.')]
+#[Block('paragraph', title: 'Paragraph', category: BlockCategory::Text, icon: 'editor-paragraph', description: 'Text stored in the post content.')]
 final readonly class Paragraph
 {
     public function __construct(private TemplateRenderer $renderer) {}

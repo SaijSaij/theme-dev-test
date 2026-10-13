@@ -13,7 +13,7 @@ use Saij\WpAppFramework\Twig\TemplateRenderer;
  * with field(), which throws when rendering. Only inserted in the editor by
  * the browser tests, never stored.
  */
-#[Block('dev-test/wrong-field', title: 'Wrong field check', category: BlockCategory::Widgets, icon: 'warning')]
+#[Block('wrong-field', title: 'Wrong field check', category: BlockCategory::Widgets, icon: 'warning')]
 final readonly class WrongField
 {
     public function __construct(private TemplateRenderer $renderer) {}

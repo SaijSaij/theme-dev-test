@@ -18,7 +18,7 @@ use Saij\WpAppFramework\Twig\TemplateRenderer;
  * Uses the test plugin (https://github.com/saijsaij/plugin-dev-test) if it is
  * active: its public API and its public template functions and filters.
  */
-#[RestController(Api::NAMESPACE, base: '/plugin')]
+#[RestController(Api::VERSION, base: '/plugin')]
 final readonly class PluginController
 {
     public function __construct(

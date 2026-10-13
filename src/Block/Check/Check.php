@@ -14,7 +14,7 @@ use WP_Block;
 /**
  * Covers escaping and sanitizing of every value type, the supports and the render arguments.
  */
-#[Block('dev-test/check', title: 'Check', category: BlockCategory::Widgets, icon: 'yes', description: 'Escaping, sanitizing and supports of the framework.')]
+#[Block('check', title: 'Check', category: BlockCategory::Widgets, icon: 'yes', description: 'Escaping, sanitizing and supports of the framework.')]
 #[Supports(anchor: true, align: [Align::Wide], customCSS: false)]
 final readonly class Check
 {

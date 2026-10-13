@@ -20,7 +20,7 @@ use WP_REST_Response;
 /**
  * Routes covering argument handling, status codes and permissions.
  */
-#[RestController(Api::NAMESPACE, base: '/items')]
+#[RestController(Api::VERSION, base: '/items')]
 final class ItemController
 {
     /** ID that the permission callback of update() refuses. */
