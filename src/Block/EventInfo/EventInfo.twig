@@ -1,0 +1,17 @@
+{% set event = post(postId) %}
+<div {{ block_wrapper_attributes({class: 'event-info'}) }}>
+    {% if event %}
+        {% set details = event.meta('details') %}
+        <p class="event-info__kind">{{ details.kind.label }}</p>
+        <p class="event-info__capacity">{{ details.capacity }}</p>
+        <p class="event-info__venue">{{ details.venue ? details.venue.title : '' }}</p>
+        <ul class="event-info__tickets">
+            {% for ticket in details.tickets %}
+                <li>{{ ticket.label }}: {{ ticket.price }}</li>
+            {% endfor %}
+        </ul>
+        <div class="event-info__note">{{ details.note|raw }}</div>
+        <a class="event-info__website" href="{{ details.website }}">{{ details.website }}</a>
+        <p class="event-info__genres">{{ event.terms('Saij\\ThemeDevTest\\Post\\Genre')|map(term => term.name)|join(', ') }}</p>
+    {% endif %}
+</div>

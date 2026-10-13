@@ -47,8 +47,8 @@ All checks run in wp-dev-env and must pass without errors or warnings.
 Build: `composer build-manifest` builds and checks the manifest (writes nothing) and must report
 
 ```
-Manifest OK (theme theme-dev-test): 67 service candidates, 42 services, 3 hooks, 33 routes, 33 template functions, 1 template filters, 17 blocks. Nothing written (no --output).
-Block markup OK: 5 templates, template parts and patterns checked.
+Manifest OK (theme theme-dev-test): 72 service candidates, 45 services, 3 hooks, 38 routes, 34 template functions, 1 template filters, 18 blocks. Nothing written (no --output).
+Block markup OK: 7 templates, template parts and patterns checked.
 Public: 1 APIs, 2 template functions and filters.
 Templates use the public template callables of: plugin-dev-test.
 ```
@@ -87,6 +87,7 @@ The fixtures in `tests/e2e/fixtures.js` fail every test that causes a console wa
 | `editor-runtime.spec.js` | Editor runtime: inline editing, refetch rule, batch rendering and cache, layout stability, images, containers, contentOnly, errors per block, site editor, list cards, canvas outlines, `registerPanel` | `src/Block/Hero/`, `src/Block/Section/` |
 | `inspector-controls.spec.js` | Generated inspector controls per value type, `#[Label]`, `#[Hidden]`, `Labeled`, `registerControl`, warnings of the extension points and of unmarked inline fields, inserting in contentOnly mode (`contentRole`) | `src/Block/Check/`, `src/Block/Unmarked/`, `src/Block/Container/` |
 | `post-content.spec.js` | `#[RichText(postContent: true)]`: text stored as inline HTML, root element as field, reload without validation errors, front end, empty text, kses for authors, contentOnly, outline | `src/Block/Paragraph/` |
+| `post-types.spec.js` | Post types, meta and post objects: `dev_test_event`, `dev_test_venue` and `dev_test_genre` with their meta in the REST API (schema, 400 for an invalid value), URLs `/event/…` and the archive without saving the permalinks, template with a `core/post-meta` binding and the block `event-info` (`post()` in Twig), the panel in the block editor (all values saved with the post in one request, rich text in the classic editor), the meta box of the data type on the classic edit screen (no "Custom Fields" box, rejected value with its path), loading, changing and creating posts in PHP (references as objects, terms, nothing written for an unsaved reference), fallback of an invalid stored value, meta of posts through `Post` | `src/Post/`, `src/Block/EventInfo/`, `templates/single-dev_test_event.html`, `templates/archive-dev_test_event.html` |
 | `excerpt.spec.js` | Automatic excerpts from fields with `excerpt: true` (REST, archive with `core/post-excerpt`, feed), `excerptWrapper`, manual excerpts, posts without framework blocks | `src/Block/Hero/`, `src/Block/Paragraph/`, `src/Block/Section/` |
 | `inspector-fields.spec.js` | Fields edited in the inspector (`inspector: true`), also in list items; `field()` on such a field | `src/Block/Inspector/` |
 | `mode.spec.js` | Development mode in the checkout, release mode with the ZIP: built manifest, no development cache, prefixed framework and Twig classes in the theme code | `src/Mode/` |
@@ -101,7 +102,7 @@ The fixtures in `tests/e2e/fixtures.js` fail every test that causes a console wa
 | `patterns.spec.js` | Block template, template part and pattern of the theme, which the build checks against its blocks: front end of `single-post-e2e-patterns.html` with the header part, the pattern (PHP output in a block of the theme and a core block) and a plugin block (rendered only with the plugin); the pattern inserted as a contentOnly section, editable, with `contentRole` for inserting | `templates/`, `parts/`, `patterns/` |
 | `cache.spec.js` | The cache with each backend (files, transients, the object cache only if the site has one): a cached block renders once per input, context and variant (`QueryParamVary`), its view script runs also from the cache, invalidation by a saved post (`PostTypeTag`), saved settings (`SettingsTag`) and a tag of the theme; fresh renders in the editor and its preview; cached REST routes (arguments, `UserVary`, the permission check on every request, a `WP_REST_Response` with status and headers, not stored with status 404) and `CacheStore::remember()` | `src/Cache/` |
 
-Expected log entries of a test run (WP_DEBUG): the failures of `dev-test/v1/items/fail` and `dev-test/v1/twig/undefined` and of the editor renders of `dev-test/wrong-field` and `dev-test/support-unwrapped`, which fail on purpose, and the invalid stored value of `dev_test_general[density]` (`settings.spec.js`). Never store `dev-test/wrong-field`, `dev-test/unmarked` or `dev-test/support-unwrapped` in a post: they exist to show errors.
+Expected log entries of a test run (WP_DEBUG): the failures of `dev-test/v1/items/fail` and `dev-test/v1/twig/undefined` and of the editor renders of `dev-test/wrong-field` and `dev-test/support-unwrapped`, which fail on purpose, the invalid stored value of `dev_test_general[density]` (`settings.spec.js`) and the invalid stored value of `dev_test_kind` (`post-types.spec.js`). Never store `dev-test/wrong-field`, `dev-test/unmarked` or `dev-test/support-unwrapped` in a post: they exist to show errors.
 
 ## Structure
 
