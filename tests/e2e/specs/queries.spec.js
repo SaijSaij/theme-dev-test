@@ -1,8 +1,9 @@
 /**
  * Step 17: queries of post objects – conditions on meta fields and terms,
  * groups, missing meta values as their default, sorting by meta fields,
- * pages, cached results and the block event-list (src/Post/QueryController.php,
- * src/Block/EventList/).
+ * pages, cached results, the block event-list, and posts and pages of WordPress
+ * by their standard fields and core taxonomies (src/Post/QueryController.php,
+ * src/Block/EventList/, templates/page-wide.html).
  */
 const { test, expect } = require( '../fixtures' );
 
@@ -83,6 +84,27 @@ async function run( requestUtils, name, posts ) {
 		total: response.body.total,
 		pages: response.body.pages,
 	};
+}
+
+/**
+ * Runs a query of QueryController::standard() on the given posts or pages.
+ *
+ * @param {Object}                requestUtils
+ * @param {string}                name         Case of StandardCase.
+ * @param {Object<string,number>} posts        Post IDs by name.
+ * @param {number}                [term]       Category, tag or parent page.
+ * @return {Promise<string[]>} The names of the found posts.
+ */
+async function standard( requestUtils, name, posts, term = 0 ) {
+	const response = await restResponse( requestUtils, {
+		path: `${ QUERIES }/standard`,
+		params: { case: name, ids: Object.values( posts ).join( ',' ), term },
+	} );
+	expect( response.status, name ).toBe( 200 );
+	const names = Object.fromEntries(
+		Object.entries( posts ).map( ( [ key, id ] ) => [ id, key ] )
+	);
+	return response.body.ids.map( ( id ) => names[ id ] ?? id );
 }
 
 test.describe( 'Queries', () => {
@@ -261,6 +283,122 @@ test.describe( 'Queries', () => {
 			).toHaveText( [ 'Early', 'Late' ] );
 		} finally {
 			await deleteGenre( requestUtils, genre );
+		}
+	} );
+
+	test( 'queries posts of WordPress by categories, tags and standard fields', async ( {
+		requestUtils,
+	} ) => {
+		const category = await requestUtils.rest( {
+			method: 'POST',
+			path: '/wp/v2/categories',
+			data: { name: `E2E news ${ Date.now() }` },
+		} );
+		const tag = await requestUtils.rest( {
+			method: 'POST',
+			path: '/wp/v2/tags',
+			data: { name: `E2E internal ${ Date.now() }` },
+		} );
+		try {
+			const blue = await create( requestUtils, 'posts', {
+				title: 'E2E Blue moon',
+				content: 'A song.',
+				categories: [ category.id ],
+				tags: [ tag.id ],
+				format: 'video',
+				sticky: true,
+			} );
+			const river = await create( requestUtils, 'posts', {
+				title: 'E2E Moon river',
+				content: 'Another song.',
+				comment_status: 'closed',
+			} );
+			const other = await create( requestUtils, 'posts', {
+				title: 'E2E Other',
+				content: 'The moon.',
+				tags: [ tag.id ],
+			} );
+			await requestUtils.rest( {
+				method: 'POST',
+				path: '/wp/v2/comments',
+				data: { post: other.id, content: 'Nice.' },
+			} );
+			const posts = { blue: blue.id, river: river.id, other: other.id };
+
+			const expected = {
+				category: [ 'blue' ],
+				// Not tagged "internal".
+				tag: [ 'river' ],
+				title: [ 'blue' ],
+				'modified-after': [ 'blue', 'river', 'other' ],
+				'modified-before': [],
+				video: [ 'blue' ],
+				standard: [ 'river', 'other' ],
+				sticky: [ 'blue' ],
+				'not-sticky': [ 'river', 'other' ],
+				commented: [ 'other' ],
+				'comments-closed': [ 'river' ],
+				// "moon" in the title only: not in the content of "other".
+				'search-title': [ 'blue', 'river' ],
+				'search-phrase': [ 'river' ],
+			};
+			for ( const [ name, names ] of Object.entries( expected ) ) {
+				const term = name === 'category' ? category.id : tag.id;
+				expect(
+					await standard( requestUtils, name, posts, term ),
+					name
+				).toEqual( names );
+			}
+		} finally {
+			for ( const [ base, term ] of [
+				[ 'categories', category ],
+				[ 'tags', tag ],
+			] ) {
+				await requestUtils.rest( {
+					method: 'DELETE',
+					path: `/wp/v2/${ base }/${ term.id }`,
+					params: { force: true },
+				} );
+			}
+		}
+	} );
+
+	test( 'queries pages by slug, parent, template, password and menu order', async ( {
+		requestUtils,
+	} ) => {
+		const parent = await create( requestUtils, 'pages', {
+			title: 'E2E parent',
+		} );
+		const imprint = await create( requestUtils, 'pages', {
+			title: 'E2E imprint',
+			slug: 'e2e-imprint',
+			parent: parent.id,
+			menu_order: 2,
+			template: 'page-wide',
+		} );
+		const locked = await create( requestUtils, 'pages', {
+			title: 'E2E locked',
+			password: 'secret',
+		} );
+		const pages = {
+			parent: parent.id,
+			imprint: imprint.id,
+			locked: locked.id,
+		};
+
+		const expected = {
+			slug: [ 'imprint' ],
+			'parent-in': [ 'imprint' ],
+			template: [ 'imprint' ],
+			'default-template': [ 'parent', 'locked' ],
+			password: [ 'locked' ],
+			'menu-order': [ 'imprint' ],
+		};
+		for ( const [ name, names ] of Object.entries( expected ) ) {
+			expect(
+				await standard( requestUtils, name, pages, parent.id ),
+				name
+			).toEqual( names );
 		}
 	} );
 } );

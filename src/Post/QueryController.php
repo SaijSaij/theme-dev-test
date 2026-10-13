@@ -4,13 +4,21 @@ declare(strict_types=1);
 
 namespace Saij\ThemeDevTest\Post;
 
+use DateTimeImmutable;
 use Saij\ThemeDevTest\Rest\Api;
 use Saij\WpAppFramework\Post\AbstractPost;
+use Saij\WpAppFramework\Post\Category;
+use Saij\WpAppFramework\Post\Page;
 use Saij\WpAppFramework\Post\Post;
+use Saij\WpAppFramework\Post\PostFormat;
 use Saij\WpAppFramework\Post\PostStatus;
+use Saij\WpAppFramework\Post\Tag;
 use Saij\WpAppFramework\Query\Any;
+use Saij\WpAppFramework\Query\Comparison;
 use Saij\WpAppFramework\Query\Direction;
+use Saij\WpAppFramework\Query\DiscussionStatus;
 use Saij\WpAppFramework\Query\PostOrder;
+use Saij\WpAppFramework\Query\SearchColumn;
 use Saij\WpAppFramework\Query\Terms;
 use Saij\WpAppFramework\Rest\HttpMethod;
 use Saij\WpAppFramework\Rest\Permission\Capability;
@@ -54,6 +62,44 @@ final readonly class QueryController
         };
 
         return ['ids' => self::ids($query->get()), 'total' => $query->count(), 'pages' => 1];
+    }
+
+    /**
+     * Queries of posts and pages of WordPress by their standard fields, on the posts and pages a test created.
+     * `term` is a category, tag or parent page, depending on the case.
+     *
+     * @return array{ids: list<int|null>}
+     */
+    #[RestRoute('/standard', HttpMethod::Get, new Capability('edit_posts'))]
+    public function standard(StandardCase $case, string $ids, int $term = 0): array
+    {
+        $ids = array_map(intval(...), array_filter(explode(',', $ids), is_numeric(...)));
+        $posts = Post::query()->ids(...$ids)->orderBy(PostOrder::Id);
+        $pages = Page::query()->ids(...$ids)->orderBy(PostOrder::Id);
+
+        $query = match ($case) {
+            StandardCase::Category => $posts->where(Terms::in(Category::class, [$term])),
+            StandardCase::Tag => $posts->where(Terms::notIn(Tag::class, [$term])),
+            StandardCase::Slug => $pages->slug('e2e-imprint'),
+            StandardCase::Title => $posts->title('E2E Blue moon'),
+            StandardCase::ModifiedAfter => $posts->modifiedAfter(new DateTimeImmutable('-1 day')),
+            StandardCase::ModifiedBefore => $posts->modifiedBefore(new DateTimeImmutable('2000-01-01')),
+            StandardCase::ParentIn => $pages->parentIn($term),
+            StandardCase::Template => $pages->template('page-wide'),
+            StandardCase::DefaultTemplate => $pages->defaultTemplate(),
+            StandardCase::Video => $posts->format(PostFormat::Video),
+            StandardCase::Standard => $posts->format(PostFormat::Standard),
+            StandardCase::Sticky => $posts->sticky(),
+            StandardCase::NotSticky => $posts->sticky(false),
+            StandardCase::Password => $pages->hasPassword(),
+            StandardCase::MenuOrder => $pages->menuOrder(2),
+            StandardCase::Commented => $posts->commentCount(1, Comparison::GreaterOrEqual),
+            StandardCase::CommentsClosed => $posts->commentStatus(DiscussionStatus::Closed),
+            StandardCase::SearchTitle => $posts->search('moon', columns: [SearchColumn::Title]),
+            StandardCase::SearchPhrase => $posts->search('moon river', sentence: true),
+        };
+
+        return ['ids' => self::ids($query->get())];
     }
 
     /**
