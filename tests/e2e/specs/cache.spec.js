@@ -250,6 +250,36 @@ for ( const backend of [ 'file', 'transient', 'object' ] ) {
 				).status
 			).toBe( 401 );
 
+			// A response keeps status and headers; one with status 404 is not stored.
+			const response = await cacheRoute( requestUtils, '/response', {
+				params: { status: 202 },
+			} );
+			expect( response.status ).toBe( 202 );
+			expect( response.body.method ).toBe( 'GET' );
+			const cachedResponse = await cacheRoute(
+				requestUtils,
+				'/response',
+				{
+					params: { status: 202 },
+				}
+			);
+			expect( cachedResponse.status ).toBe( 202 );
+			expect( cachedResponse.body ).toEqual( response.body );
+			expect( cachedResponse.headers[ 'x-dev-test-count' ] ).toBe(
+				String( response.body.count )
+			);
+			const missing = await cacheRoute( requestUtils, '/response', {
+				params: { status: 404 },
+			} );
+			expect( missing.status ).toBe( 404 );
+			expect(
+				(
+					await cacheRoute( requestUtils, '/response', {
+						params: { status: 404 },
+					} )
+				).body.count
+			).not.toBe( missing.body.count );
+
 			const remembered = await cacheRoute( requestUtils, '/remembered' );
 			expect(
 				( await cacheRoute( requestUtils, '/remembered' ) ).body

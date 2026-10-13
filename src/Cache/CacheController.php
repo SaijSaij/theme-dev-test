@@ -14,6 +14,8 @@ use Saij\WpAppFramework\Rest\Permission\PublicAccess;
 use Saij\WpAppFramework\Rest\RestController;
 use Saij\WpAppFramework\Rest\RestRoute;
 use Saij\WpAppFramework\Value\ListOf;
+use WP_REST_Request;
+use WP_REST_Response;
 
 /**
  * Cached routes, CacheStore::remember() and the controls of cache.spec.js (forced backends, invalidation).
@@ -34,6 +36,18 @@ final readonly class CacheController
     public function counted(string $label = ''): array
     {
         return ['label' => $label, 'count' => $this->counter->next('counted'), 'user' => get_current_user_id()];
+    }
+
+    /**
+     * A response with status and header that takes the request; stored only with a status below 400.
+     */
+    #[RestRoute('/response', HttpMethod::Get, new PublicAccess())]
+    #[Cache(ttl: 300, tags: [Feed::Stats])]
+    public function response(WP_REST_Request $request, int $status = 200): WP_REST_Response
+    {
+        $count = $this->counter->next('response');
+
+        return new WP_REST_Response(['count' => $count, 'method' => $request->get_method()], $status, ['X-Dev-Test-Count' => (string) $count]);
     }
 
     /**
