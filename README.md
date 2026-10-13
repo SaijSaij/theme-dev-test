@@ -47,7 +47,8 @@ All checks run in wp-dev-env and must pass without errors or warnings.
 Build: `composer build-manifest` builds and checks the manifest (writes nothing) and must report
 
 ```
-Manifest OK (theme theme-dev-test): 61 service candidates, 38 services, 2 hooks, 25 routes, 33 template functions, 1 template filters, 16 blocks. Nothing written (no --output).
+Manifest OK (theme theme-dev-test): 67 service candidates, 42 services, 3 hooks, 32 routes, 33 template functions, 1 template filters, 17 blocks. Nothing written (no --output).
+Block markup OK: 5 templates, template parts and patterns checked.
 Public: 1 APIs, 2 template functions and filters.
 Templates use the public template callables of: plugin-dev-test.
 ```
@@ -98,6 +99,7 @@ The fixtures in `tests/e2e/fixtures.js` fail every test that causes a console wa
 | `wordpress-functions.spec.js` | The WordPress template functions of the framework (`wp_…`) against the REST API: attachments (image, URLs, caption as HTML, alternative text), posts (URL, title, manual and automatic excerpt as plain text, date, thumbnail), users (name, author archive, avatar), site values decoded and escaped once, login and logout URL, login status with and without a session, formatting; `''` for a draft and missing objects | `src/Block/WordPressFunctions/` |
 | `plugin.spec.js` | The theme as consumer of plugin-dev-test: `#[PluginApi]` (data with the plugin, `null` without), public template functions and filters with `has_plugin()`, templates with the same path in theme and plugin in one request, override of a plugin template, `@plugin` | `src/Plugin/`, `overrides/plugin-dev-test/` |
 | `patterns.spec.js` | Block template, template part and pattern of the theme, which the build checks against its blocks: front end of `single-post-e2e-patterns.html` with the header part, the pattern (PHP output in a block of the theme and a core block) and a plugin block (rendered only with the plugin); the pattern inserted as a contentOnly section, editable, with `contentRole` for inserting | `templates/`, `parts/`, `patterns/` |
+| `cache.spec.js` | The cache with each backend (files, transients, the object cache only if the site has one): a cached block renders once per input, context and variant (`QueryParamVary`), its view script runs also from the cache, invalidation by a saved post (`PostTypeTag`), saved settings (`SettingsTag`) and a tag of the theme; fresh renders in the editor and its preview; cached REST routes (arguments, `UserVary`, the permission check on every request) and `CacheStore::remember()` | `src/Cache/` |
 
 Expected log entries of a test run (WP_DEBUG): the failures of `dev-test/v1/items/fail` and `dev-test/v1/twig/undefined` and of the editor renders of `dev-test/wrong-field` and `dev-test/support-unwrapped`, which fail on purpose, and the invalid stored value of `theme_dev_test_general[density]` (`settings.spec.js`). Never store `dev-test/wrong-field`, `dev-test/unmarked` or `dev-test/support-unwrapped` in a post: they exist to show errors.
 
