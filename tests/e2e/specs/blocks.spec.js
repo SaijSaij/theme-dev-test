@@ -160,7 +160,7 @@ test.describe( 'Blocks', () => {
 						.allowedBlocks,
 			};
 		} );
-		// Declared as allowedBlocks: ['hero']; the build adds the namespace of the theme.
+		// Declared as #[InnerBlocks(allowed: [Hero::class])]; the build resolves the class to the block name.
 		expect( type.sectionAllowedBlocks ).toEqual( [ 'dev-test/hero' ] );
 		expect( type.containerSupports ).toEqual( {
 			html: false,

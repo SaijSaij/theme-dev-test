@@ -1,0 +1,5 @@
+<section {{ block_wrapper_attributes({class: 'tab', 'data-tone': tone ? tone.value : 'none', 'data-active': active}) }}>
+    <h3 class="tab__title"{{ field('title') }}>{{ attrs.title }}</h3>
+    <p class="tab__context">{{ tone ? tone.label : 'No tabs' }} / {{ active }}</p>
+    <div{{ inner_blocks() }}>{{ content|raw }}</div>
+</section>
