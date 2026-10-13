@@ -1,0 +1,7 @@
+<ul {{ block_wrapper_attributes({class: 'event-list'}) }}>
+    {% for event in events %}
+        <li class="event-list__event"><a href="{{ event.url }}">{{ event.title }}</a> <span class="event-list__start">{{ event.meta('details').start }}</span></li>
+    {% else %}
+        <li class="event-list__empty">No events</li>
+    {% endfor %}
+</ul>
