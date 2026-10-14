@@ -11,7 +11,7 @@ const {
 
 const STYLESHEET = '#theme-dev-test-styles-css';
 
-// Values of theme.json, through the tokens of src/styles.css.
+// Values of theme.json, through the tokens of assets/styles.css.
 const HIGHLIGHTED = {
 	'background-color': 'rgb(30, 77, 140)',
 	color: 'rgb(250, 250, 250)',
@@ -49,7 +49,7 @@ function utilitiesLayer( css ) {
 }
 
 /**
- * The theme's stylesheet src/styles.css, compiled with Tailwind by the framework's
+ * The theme's stylesheet assets/styles.css, compiled with Tailwind by the framework's
  * webpack helper and loaded on the front end and in the editor canvas.
  */
 test.describe( 'Stylesheet', () => {

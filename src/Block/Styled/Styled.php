@@ -9,7 +9,7 @@ use Saij\WpAppFramework\Block\BlockCategory;
 use Saij\WpAppFramework\Twig\TemplateRenderer;
 
 /**
- * Styled with Tailwind utilities of the theme's stylesheet (src/styles.css).
+ * Styled with Tailwind utilities of the theme's stylesheet (assets/styles.css).
  */
 #[Block('styled', title: 'Styled', category: BlockCategory::Design, icon: 'art', description: 'Styled with the utilities of the theme stylesheet.')]
 final readonly class Styled

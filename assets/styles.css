@@ -6,7 +6,7 @@
 @import "tailwindcss/theme.css" layer(theme);
 @import "tailwindcss/utilities.css" layer(utilities) source(none);
 
-@source "./**/*.twig";
+@source "../src/**/*.twig";
 @source "../overrides/**/*.twig";
 /* Words in the templates that are no utilities: the BEM class of dev-test/container, Twig's filter tag and the hidden attribute of dev-test/faq. */
 @source not inline("container filter hidden");

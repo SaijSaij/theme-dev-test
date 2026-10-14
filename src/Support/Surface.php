@@ -8,7 +8,7 @@ use Saij\WpAppFramework\Block\Support\BlockSupport;
 
 /**
  * Block support with an enum value, in the Styles tab: the class surface-light or
- * surface-dark (styled in styles.css).
+ * surface-dark (styled in assets/styles.css).
  */
 #[BlockSupport('surface', label: 'Surface')]
 final class Surface
