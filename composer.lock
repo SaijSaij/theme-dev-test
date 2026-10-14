@@ -12,12 +12,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/SaijSaij/wp-app-framework.git",
-                "reference": "aea6c776517d952ac200c13b0c6380f0e8317561"
+                "reference": "80ca4a6fa609e4804d4dcb3d12eb5447d16f5544"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/SaijSaij/wp-app-framework/zipball/aea6c776517d952ac200c13b0c6380f0e8317561",
-                "reference": "aea6c776517d952ac200c13b0c6380f0e8317561",
+                "url": "https://api.github.com/repos/SaijSaij/wp-app-framework/zipball/80ca4a6fa609e4804d4dcb3d12eb5447d16f5544",
+                "reference": "80ca4a6fa609e4804d4dcb3d12eb5447d16f5544",
                 "shasum": ""
             },
             "require": {
@@ -66,7 +66,7 @@
                 "source": "https://github.com/SaijSaij/wp-app-framework/tree/main",
                 "issues": "https://github.com/SaijSaij/wp-app-framework/issues"
             },
-            "time": "2026-10-14T14:07:01+00:00"
+            "time": "2026-10-14T18:42:16+00:00"
         },
         {
             "name": "symfony/deprecation-contracts",
