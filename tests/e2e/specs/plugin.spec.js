@@ -2,9 +2,9 @@
  * Step 7: the theme as consumer of the test plugin
  * (https://github.com/saijsaij/plugin-dev-test) – its public API, its public
  * template functions and filters, and overrides of its templates. The
- * expectations depend on whether the plugin is active: in wp-dev-env and in
- * the release test with both ZIPs it is, in the release test of the theme
- * alone it is not. An active child theme overrides plugin templates before the theme.
+ * expectations depend on whether the plugin is active: in the pool tdt-full and
+ * in the release test with both ZIPs it is, in the pool tdt-bare and the
+ * release test of the theme alone it is not. An active child theme overrides plugin templates before the theme.
  */
 const { test, expect } = require( '../fixtures' );
 

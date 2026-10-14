@@ -17,7 +17,7 @@ git clone https://github.com/saijsaij/wp-app-framework.git
 git clone https://github.com/saijsaij/theme-dev-test.git
 ```
 
-For a local WordPress, use [wp-dev-env](https://github.com/saijsaij/wp-dev-env) in the same parent directory with `WP_THEMES=theme-dev-test` and `WP_ACTIVE_THEME=theme-dev-test`; its setup also runs `composer install`, `npm ci` and `npm run build` for this theme.
+For a local WordPress to develop with, use [wp-dev-env](https://github.com/saijsaij/wp-dev-env) in the same parent directory with `WP_THEMES=theme-dev-test` and `WP_ACTIVE_THEME=theme-dev-test`; its setup also runs `composer install`, `npm ci` and `npm run build` for this theme. Tests run in [wp-test-env](https://github.com/saijsaij/wp-test-env) instead (see [Tests](#tests)), which links the framework checkout the same way (`bin/prepare --link`).
 
 The theme is also the consumer of the test plugin [plugin-dev-test](https://github.com/saijsaij/plugin-dev-test): it injects the plugin's public API, calls its public template functions (`extra.wp-app-framework.template-plugins`) and overrides one of its templates (`overrides/plugin-dev-test/`). The plugin is a development dependency (`require-dev`, for static analysis); the release ZIP does not contain it. Check it out next to the theme and activate it in wp-dev-env (`WP_PLUGINS=plugin-dev-test`, `WP_PACKAGE_LINKS=saij/wp-app-framework=wp-app-framework,saij/plugin-dev-test=plugin-dev-test`). The tests of `plugin.spec.js` expect the plugin's behavior if it is active and the theme's fallback otherwise.
 
@@ -32,17 +32,17 @@ docker compose run --rm tools npm --prefix /workspace/theme-dev-test run start  
 
 ## Release
 
-`composer release` builds `dist/theme-dev-test-<version>.zip` with the release pipeline of the framework (see [Release](https://saijsaij.github.io/wp-app-framework/next/build-and-release/release.html) in its documentation); the framework comes from the lock file. To build with the local framework checkout instead:
+`composer release` builds `dist/theme-dev-test-<version>.zip` with the release pipeline of the framework (see [Release](https://saijsaij.github.io/wp-app-framework/next/build-and-release/release.html) in its documentation); the framework comes from the lock file. To build with the local framework checkout instead (from this directory, with [wp-test-env](https://github.com/saijsaij/wp-test-env) next to it):
 
 ```sh
-docker compose run --rm tools composer --working-dir=/workspace/theme-dev-test release -- --package-source=saij/wp-app-framework=../wp-app-framework
+../wp-test-env/bin/tools -w theme-dev-test composer release -- --package-source=saij/wp-app-framework=../wp-app-framework
 ```
 
 `.gitattributes` marks the development files (`export-ignore`) the ZIP leaves out. A tag `v<version>` (= `Version` in `style.css`) runs `.github/workflows/release.yml`: build, release test with all browser tests, then the ZIP is attached to the GitHub release of the tag.
 
 ## Tests
 
-All checks run in wp-dev-env and must pass without errors or warnings.
+All checks run with [wp-test-env](https://github.com/saijsaij/wp-test-env), checked out next to this repository, and must pass without errors or warnings. The tests never touch a development site: every run gets fresh WordPress instances.
 
 Build: `composer build-manifest` builds and checks the manifest (writes nothing) and must report
 
@@ -54,42 +54,42 @@ Templates use the public template callables of: plugin-dev-test.
 Assets: 6 static files, 6 image variants.
 ```
 
-Lint: PHP with PHPStan (level max, WordPress stubs) and PHP-CS-Fixer (PER Coding Style), JavaScript with ESLint (configuration of `@wordpress/scripts`):
+Lint: PHP with PHPStan (level max, WordPress stubs) and PHP-CS-Fixer (PER Coding Style), JavaScript with ESLint (configuration of `@wordpress/scripts`). From this directory:
 
 ```sh
-docker compose run --rm tools composer --working-dir=/workspace/theme-dev-test build-manifest
-docker compose run --rm tools composer --working-dir=/workspace/theme-dev-test lint   # fix: composer fix
-docker compose run --rm tools npm --prefix /workspace/theme-dev-test run lint          # fix: npm run format
+../wp-test-env/bin/tools -w theme-dev-test composer build-manifest
+../wp-test-env/bin/tools -w theme-dev-test composer lint   # fix: composer fix
+../wp-test-env/bin/tools -w theme-dev-test npm run lint    # fix: npm run format
 ```
 
-Browser tests (Playwright, `tests/e2e/`) run in the `e2e` service of wp-dev-env, which provides WordPress, the credentials and a writable results directory (`data/e2e/` there, with screenshots for review). Each test deletes exactly the posts, media and users it created.
+Browser tests (Playwright, `tests/e2e/`), WP-CLI tests (`tests/cli/run`) and lifecycle tests (`tests/lifecycle/run`) run in pools of wp-test-env, described in `tests/dev.pools` (the checkouts, with the framework checkout linked into `vendor/`) and `tests/release.pools` (the release ZIP, built first with the framework checkout). From the wp-test-env directory:
 
 ```sh
-docker compose run --rm e2e npm --prefix /workspace/theme-dev-test run test:e2e
+bin/run ../theme-dev-test/tests/dev.pools
+bin/run ../theme-dev-test/tests/release.pools
+bin/run ../theme-dev-test/tests/dev.pools ../plugin-dev-test/tests/dev.pools ../theme-dev-test-child/tests/dev.pools   # all test projects at once
 ```
 
-The same suite runs against the release ZIP: install it with `scripts/release-test` of wp-dev-env, then run the tests with `E2E_TARGET=release` (only mode-specific expectations differ, e.g. prefixed class names, the versioned Twig cache, no development warnings):
+| Pool | Instances | Runs |
+|---|---|---|
+| `tdt-full` | 4 | browser tests with the child theme and plugin-dev-test active and a persistent object cache (Valkey) |
+| `tdt-bare` | 3 | browser tests with the theme alone |
+| `tdt-cli` | 1 | WP-CLI tests |
+| `tdt-lifecycle` | 1 | lifecycle tests |
+| `tdt-release`, `tdt-release-cli`, `tdt-release-lifecycle` | 3, 1, 1 | the same against the release ZIPs of the theme and the child theme |
+
+Every instance is a fresh WordPress; each Playwright worker has an instance of its own (`WP_BASE_URLS`, picked per worker in `tests/e2e/playwright.config.js`), so tests of different workers never share a site. The suite passes with and without the plugin and the child theme, which is why it runs in two constellations. Results and screenshots of failed tests land in `results/<pool>/` of wp-test-env, the output in `results/<pool>.log`. Each test deletes exactly the posts, media and users it created.
+
+Single specs against an instance of your own (the release ZIP: `bin/up tdt --theme-zip …`; the tests branch on `E2E_TARGET` only for mode-specific expectations such as prefixed class names, the versioned Twig cache and no development warnings):
 
 ```sh
-scripts/release-test --theme ../theme-dev-test/dist/theme-dev-test-<version>.zip [--plugin ../plugin-dev-test/dist/plugin-dev-test-0.1.0.zip]
-set -a; . ./.env; set +a
-docker compose run --rm --no-deps -e WP_BASE_URL="$WP_RELEASE_URL" -e E2E_BROWSER_HOST_RULES="MAP $WP_RELEASE_HOST traefik" \
-    -e E2E_TARGET=release -e E2E_OUTPUT_DIR=/results/release e2e npm --prefix /workspace/theme-dev-test run test:e2e
+bin/up tdt --theme theme-dev-test --activate theme-dev-test
+bin/e2e --instances tdt --project theme-dev-test --results tdt -- specs/twig.spec.js
+../theme-dev-test/tests/cli/run tdt
+bin/down tdt
 ```
 
-WP-CLI tests (`tests/cli/run`, Bash) run the commands of `src/Cli/` with `docker compose exec` and check their output and exit codes; call the script from the wp-dev-env directory with the Compose service of the site. Against the release ZIP installed by `scripts/release-test`, use `wordpress-release` (the release workflow does so with `cli-tests: true`):
-
-```sh
-../theme-dev-test/tests/cli/run wordpress
-../theme-dev-test/tests/cli/run wordpress-release
-```
-
-Lifecycle tests (`tests/lifecycle/run`, Bash) switch from the child theme [theme-dev-test-child](https://github.com/saijsaij/theme-dev-test-child) to this theme, to twentytwentyfive and back, and check when the lifecycle methods of both run, which cron events are removed and that the tables stay. They need this theme or the child theme active and restore the theme that was active; run them after the other suites:
-
-```sh
-../theme-dev-test/tests/lifecycle/run wordpress
-../theme-dev-test/tests/lifecycle/run wordpress-release
-```
+The WP-CLI tests run the commands of `src/Cli/` with `bin/wp` of wp-test-env and check their output and exit codes; the release workflow runs them with `cli-tests: true`. The lifecycle tests switch from the child theme [theme-dev-test-child](https://github.com/saijsaij/theme-dev-test-child) to this theme, to twentytwentyfive and back, and check when the lifecycle methods of both run, which cron events are removed and that the tables stay; they need both themes in the instance and restore the theme that was active.
 
 The fixtures in `tests/e2e/fixtures.js` fail every test that causes a console warning, console error or uncaught page error. A test that checks a warning declares it with `expectConsole`; it must then appear. The only general exception is a warning WordPress causes itself with every theme (documented in `ALLOWED`); if it stops appearing while the editor was opened, the run fails so the entry gets removed.
 

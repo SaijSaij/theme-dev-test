@@ -1,22 +1,24 @@
 #!/usr/bin/env bash
-# WP-CLI tests of the theme: runs the commands of src/Cli/ in a WordPress of
-# wp-dev-env and checks their output and exit codes. Run it from the wp-dev-env
-# directory with the Compose service of the site:
+# WP-CLI tests of the theme: runs the commands of src/Cli/ in an instance of
+# wp-test-env (https://github.com/saijsaij/wp-test-env, checked out next to this
+# repository) and checks their output and exit codes. The instance runs the theme
+# in development mode (checkout) or release mode (release ZIP):
 #
-#   ../theme-dev-test/tests/cli/run wordpress           # development mode (checkout)
-#   ../theme-dev-test/tests/cli/run wordpress-release   # release ZIP of scripts/release-test
+#   theme-dev-test/tests/cli/run <instance>
 #
-# Both services define WP_DEBUG from WORDPRESS_DEBUG ("1"); the tests of the
+# Every instance defines WP_DEBUG from WORDPRESS_DEBUG ("1"); the tests of the
 # error path without WP_DEBUG clear it for one command.
 set -euo pipefail
 
-if [[ $# -ne 1 || ( "$1" != wordpress && "$1" != wordpress-release ) ]]; then
-    echo "usage: $0 wordpress|wordpress-release (run from the wp-dev-env directory)" >&2
+if [[ $# -ne 1 ]]; then
+    echo "usage: $0 <instance of wp-test-env>" >&2
     exit 2
 fi
-service="$1"
-if [[ ! -f compose.yaml ]]; then
-    echo "ERROR: run $0 from the wp-dev-env directory (no compose.yaml in $(pwd))." >&2
+instance="$1"
+# wp-test-env is checked out next to this repository.
+test_env="$(cd "$(dirname "${BASH_SOURCE[0]}")/../../.." && pwd)/wp-test-env"
+if [[ ! -x "${test_env}/bin/wp" ]]; then
+    echo "ERROR: ${test_env}/bin/wp not found; check out wp-test-env (https://github.com/saijsaij/wp-test-env) next to this repository." >&2
     exit 2
 fi
 
@@ -27,7 +29,7 @@ stdout=''
 stderr=''
 status=0
 
-# Runs wp in the service as the web server user: wp_cli [-e NAME=value]... <wp arguments>...
+# Runs wp in the instance as the web server user: wp_cli [-e NAME=value]... <wp arguments>...
 # Sets stdout, stderr and status.
 wp_cli() {
     local environment=(-e PAGER=cat)
@@ -36,7 +38,7 @@ wp_cli() {
         shift 2
     done
     set +e
-    stdout="$(docker compose exec -T -u www-data "${environment[@]}" "${service}" wp "$@" 2>"${stderr_file}")"
+    stdout="$("${test_env}/bin/wp" "${environment[@]}" "${instance}" "$@" 2>"${stderr_file}")"
     status=$?
     set -e
     stderr="$(cat "${stderr_file}")"
@@ -154,7 +156,7 @@ expect_output 'unexpected exception with WP_DEBUG' 1 'Uncaught RuntimeException:
 
 # The framework's list of WP-CLI commands (rejected as namespace by the build) must match the installed WP-CLI.
 # Development mode only: the release prefixes the framework classes.
-if [[ "${service}" == wordpress ]]; then
+if [[ "$("${test_env}/bin/mode" "${instance}")" == dev ]]; then
     # shellcheck disable=SC2016 # PHP code, not shell expansions
     wp_cli eval '
         $dump = WP_CLI::runcommand("cli cmd-dump --skip-plugins --skip-themes", ["return" => true, "parse" => "json", "launch" => true]);
@@ -168,7 +170,7 @@ if [[ "${service}" == wordpress ]]; then
 fi
 
 if [[ "${failures}" -ne 0 ]]; then
-    echo "${failures} WP-CLI test(s) failed against ${service}." >&2
+    echo "${failures} WP-CLI test(s) failed against ${instance}." >&2
     exit 1
 fi
-echo "All WP-CLI tests passed against ${service}."
+echo "All WP-CLI tests passed against ${instance}."

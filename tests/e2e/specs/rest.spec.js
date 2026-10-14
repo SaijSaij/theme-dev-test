@@ -158,7 +158,7 @@ test.describe( 'REST routes', () => {
 			} )
 		).toMatchObject( { status: 204, body: null } );
 
-		// WP_DEBUG is on in wp-dev-env, so the details are included.
+		// WP_DEBUG is on in every instance of wp-test-env, so the details are included.
 		const failure = await restResponse( requestUtils, {
 			path: `${ ITEMS }/fail`,
 		} );

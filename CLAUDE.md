@@ -16,24 +16,29 @@ Test theme of [wp-app-framework](https://github.com/saijsaij/wp-app-framework) (
 
 ## Commands
 
-Run from a [wp-dev-env](https://github.com/saijsaij/wp-dev-env) checkout next to this repository. Every check must pass without errors or warnings.
+Run from this directory, with [wp-test-env](https://github.com/saijsaij/wp-test-env) checked out next to it (its tools image provides PHP, Composer and Node). Every check must pass without errors or warnings.
 
 ```sh
-docker compose run --rm tools composer --working-dir=/workspace/theme-dev-test build-manifest   # output must match the README
-docker compose run --rm tools composer --working-dir=/workspace/theme-dev-test lint             # fix: composer fix
-docker compose run --rm tools npm --prefix /workspace/theme-dev-test run lint                    # fix: npm run format
-docker compose run --rm tools npm --prefix /workspace/theme-dev-test run build                   # or run start (watch)
-docker compose run --rm e2e npm --prefix /workspace/theme-dev-test run test:e2e
-../theme-dev-test/tests/cli/run wordpress                                                       # WP-CLI tests (src/Cli/)
-../theme-dev-test/tests/lifecycle/run wordpress                                                 # lifecycle tests (src/Lifecycle/ of theme and child theme); run last, switches themes
+../wp-test-env/bin/tools -w theme-dev-test composer build-manifest   # output must match the README
+../wp-test-env/bin/tools -w theme-dev-test composer lint             # fix: composer fix
+../wp-test-env/bin/tools -w theme-dev-test npm run lint              # fix: npm run format
+../wp-test-env/bin/tools -w theme-dev-test npm run build
 ```
 
-Release build with the local framework checkout, and the browser tests against it: see "Release" and "Tests" in the README (`composer release -- --package-source=saij/wp-app-framework=../wp-app-framework`, `scripts/release-test --theme …`, `E2E_TARGET=release`).
+Browser, WP-CLI and lifecycle tests run in fresh WordPress instances of wp-test-env, from its directory (`tests/dev.pools`, `tests/release.pools`; the README lists the pools):
+
+```sh
+bin/run ../theme-dev-test/tests/dev.pools                  # before a push: with ../plugin-dev-test/tests/dev.pools ../theme-dev-test-child/tests/dev.pools
+bin/run ../theme-dev-test/tests/release.pools              # at a release: builds the ZIP with the framework checkout
+bin/up tdt --theme theme-dev-test --activate theme-dev-test && bin/e2e --instances tdt --project theme-dev-test --results tdt -- specs/<file>   # one spec
+```
+
+Every Playwright worker has a WordPress instance of its own (`WP_BASE_URLS`, chosen per worker in `tests/e2e/playwright.config.js` by `TEST_PARALLEL_INDEX`, login per worker in `fixtures.js`); a spec must not depend on another spec file. The test timeout is 30 s; a test that waits longer sets its own timeout with the reason.
 
 ## Keep in sync
 
 - `composer build-manifest` prints counts of services, hooks, routes, template callables and blocks; when they change, update the expected output in the README.
-- The framework is required as `dev-main` from GitHub; after a framework change is pushed, `composer update saij/wp-app-framework` moves the lock file to it (locally, `WP_PACKAGE_LINKS` of wp-dev-env links the checkout instead).
+- The framework is required as `dev-main` from GitHub; after a framework change is pushed, `composer update saij/wp-app-framework` moves the lock file to it (locally, the package links of wp-dev-env and wp-test-env link the checkout instead).
 - A release tag `v<version>` must equal `Version:` in `style.css`; the release workflow fails otherwise.
 - Every GitHub release gets short release notes instead of the generated compare link alone: what the theme tests anew, the framework version it is built with, and the compare link last. The release workflow creates the release with `--generate-notes`; once it has passed, replace the text with `gh release edit <tag> --notes-file <file>` (a rerun only uploads the ZIP and keeps the text).
 - New development files that must not ship go to `.gitattributes` as `export-ignore` (directories as `dir/**`).

@@ -6,21 +6,23 @@
 # switching away removes its cron events and keeps its data (tables, settings).
 # WordPress fires `after_switch_theme` on the request after the switch, so each
 # switch is followed by another request before the activation is checked. At the
-# end the theme that was active before is active again. Run it from the
-# wp-dev-env directory with the Compose service of the site, after the other
-# suites:
+# end the theme that was active before is active again. Run it against its own
+# instance of wp-test-env (https://github.com/saijsaij/wp-test-env, checked out
+# next to this repository) with both themes, in development mode (checkouts) or
+# release mode (release ZIPs):
 #
-#   ../theme-dev-test/tests/lifecycle/run wordpress           # development mode (checkouts)
-#   ../theme-dev-test/tests/lifecycle/run wordpress-release   # release ZIPs of scripts/release-test
+#   theme-dev-test/tests/lifecycle/run <instance>
 set -euo pipefail
 
-if [[ $# -ne 1 || ( "$1" != wordpress && "$1" != wordpress-release ) ]]; then
-    echo "usage: $0 wordpress|wordpress-release (run from the wp-dev-env directory)" >&2
+if [[ $# -ne 1 ]]; then
+    echo "usage: $0 <instance of wp-test-env>" >&2
     exit 2
 fi
-service="$1"
-if [[ ! -f compose.yaml ]]; then
-    echo "ERROR: run $0 from the wp-dev-env directory (no compose.yaml in $(pwd))." >&2
+instance="$1"
+# wp-test-env is checked out next to this repository.
+test_env="$(cd "$(dirname "${BASH_SOURCE[0]}")/../../.." && pwd)/wp-test-env"
+if [[ ! -x "${test_env}/bin/wp" ]]; then
+    echo "ERROR: ${test_env}/bin/wp not found; check out wp-test-env (https://github.com/saijsaij/wp-test-env) next to this repository." >&2
     exit 2
 fi
 
@@ -37,10 +39,10 @@ stderr=''
 status=0
 original=''
 
-# Runs wp in the service as the web server user; sets stdout, stderr and status.
+# Runs wp in the instance as the web server user; sets stdout, stderr and status.
 wp_cli() {
     set +e
-    stdout="$(docker compose exec -T -u www-data -e PAGER=cat "${service}" wp "$@" 2>"${stderr_file}")"
+    stdout="$("${test_env}/bin/wp" "${instance}" "$@" 2>"${stderr_file}")"
     status=$?
     set -e
     stderr="$(cat "${stderr_file}")"
@@ -141,7 +143,7 @@ scheduled 'wp_app_framework/cache/clean_up/theme-dev-test-child'
 expect_stdout 'the cron events of the child theme are scheduled again' 0 'yes'
 
 if [[ "${failures}" -ne 0 ]]; then
-    echo "${failures} lifecycle test(s) failed against ${service}." >&2
+    echo "${failures} lifecycle test(s) failed against ${instance}." >&2
     exit 1
 fi
-echo "All lifecycle tests passed against ${service}."
+echo "All lifecycle tests passed against ${instance}."

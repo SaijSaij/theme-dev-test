@@ -41,6 +41,19 @@ function allowed( type, text ) {
 
 const test = base.test.extend( {
 	/*
+	 * Logs in to the worker's WordPress instance once, before its first test, and
+	 * stores the session in STORAGE_STATE_PATH (one file per worker, set in
+	 * playwright.config.js), which the browser contexts of its tests load.
+	 */
+	login: [
+		async ( { requestUtils }, provide ) => {
+			await requestUtils.setupRest();
+			await provide();
+		},
+		{ scope: 'worker', auto: true },
+	],
+
+	/*
 	 * Counts per worker which allowed messages appeared. If the block editor
 	 * was opened but an allowed message never appeared, WordPress changed and
 	 * the entry must be removed. (Playwright reads the fixtures a fixture needs

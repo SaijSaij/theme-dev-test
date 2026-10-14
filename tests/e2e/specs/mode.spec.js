@@ -1,6 +1,6 @@
 /**
- * Step 6: development mode in wp-dev-env, release mode with the release ZIP
- * (E2E_TARGET=release, wp-dev-env scripts/release-test).
+ * Step 6: development mode with the checkout, release mode with the release ZIP
+ * (E2E_TARGET=release, an instance of wp-test-env in release mode).
  */
 const { test, expect } = require( '../fixtures' );
 

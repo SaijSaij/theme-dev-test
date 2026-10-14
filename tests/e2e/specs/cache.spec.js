@@ -4,8 +4,8 @@
  * settings and a tag of the theme, fresh renders in the editor and its preview,
  * cached REST routes and CacheStore::remember() (src/Cache/).
  *
- * The object cache is tested only if the site has one (wp-dev-env with
- * WP_OBJECT_CACHE=valkey); entries of earlier runs are no problem, because
+ * The object cache is tested only if the site has one (wp-test-env with
+ * --object-cache valkey, pool tdt-full); entries of earlier runs are no problem, because
  * every test compares counts before and after.
  */
 const { test, expect } = require( '../fixtures' );
@@ -52,7 +52,7 @@ for ( const backend of [ 'file', 'transient', 'object' ] ) {
 			const state = await cacheRoute( requestUtils, '/state' );
 			test.skip(
 				backend === 'object' && ! state.body.objectCache,
-				'The site has no persistent object cache (wp-dev-env: WP_OBJECT_CACHE=valkey).'
+				'The site has no persistent object cache (wp-test-env: bin/up --object-cache valkey).'
 			);
 			const forced = await cacheRoute( requestUtils, '/backends', {
 				method: 'PUT',

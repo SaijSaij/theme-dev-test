@@ -212,8 +212,8 @@ async function restResponse(
 
 /**
  * The active theme: its directory name (stylesheet) and that of its parent
- * (template; the same without a child theme). In wp-dev-env the test child theme
- * (https://github.com/saijsaij/theme-dev-test-child) may be active; the theme's
+ * (template; the same without a child theme). The test child theme
+ * (https://github.com/saijsaij/theme-dev-test-child) may be active (pool tdt-full); the theme's
  * tests must pass with and without it.
  *
  * @param {Object} requestUtils

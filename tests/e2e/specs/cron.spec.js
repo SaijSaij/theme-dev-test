@@ -58,6 +58,8 @@ const taskId = Date.now() % 1_000_000_000;
 
 test.describe( 'Cron events and tasks', () => {
 	test.describe.configure( { mode: 'serial' } );
+	// The polls below wait up to 75 s for WP-Cron (longer than WP_CRON_LOCK_TIMEOUT).
+	test.setTimeout( 90_000 );
 
 	test.afterAll( async ( { requestUtils } ) => {
 		for ( const [ id, kind ] of [

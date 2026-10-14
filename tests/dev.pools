@@ -1,0 +1,37 @@
+# Test pools of the theme in development mode, for bin/run of wp-test-env
+# (https://github.com/saijsaij/wp-test-env), e.g. from its directory:
+#
+#   bin/run ../theme-dev-test/tests/dev.pools ../plugin-dev-test/tests/dev.pools ../theme-dev-test-child/tests/dev.pools
+#
+# Every instance runs the checkouts with the framework checkout linked into vendor/.
+prepare theme-dev-test theme-dev-test-child plugin-dev-test
+link saij/wp-app-framework=wp-app-framework
+link saij/plugin-dev-test=plugin-dev-test
+link saij/theme-dev-test=theme-dev-test
+
+# The browser tests with the child theme and the test plugin active and a persistent object cache.
+pool tdt-full
+instances 4
+themes theme-dev-test theme-dev-test-child
+plugins plugin-dev-test
+activate theme-dev-test-child
+object-cache valkey
+e2e theme-dev-test
+
+# The browser tests with the theme alone.
+pool tdt-bare
+instances 3
+themes theme-dev-test
+activate theme-dev-test
+e2e theme-dev-test
+
+pool tdt-cli
+themes theme-dev-test
+activate theme-dev-test
+run theme-dev-test/tests/cli/run {instance}
+
+# Switches between the theme, its child theme and twentytwentyfive.
+pool tdt-lifecycle
+themes theme-dev-test theme-dev-test-child
+activate theme-dev-test
+run theme-dev-test/tests/lifecycle/run {instance}
