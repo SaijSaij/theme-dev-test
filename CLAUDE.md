@@ -25,6 +25,7 @@ docker compose run --rm tools npm --prefix /workspace/theme-dev-test run lint   
 docker compose run --rm tools npm --prefix /workspace/theme-dev-test run build                   # or run start (watch)
 docker compose run --rm e2e npm --prefix /workspace/theme-dev-test run test:e2e
 ../theme-dev-test/tests/cli/run wordpress                                                       # WP-CLI tests (src/Cli/)
+../theme-dev-test/tests/lifecycle/run wordpress                                                 # lifecycle tests (src/Lifecycle/ of theme and child theme); run last, switches themes
 ```
 
 Release build with the local framework checkout, and the browser tests against it: see "Release" and "Tests" in the README (`composer release -- --package-source=saij/wp-app-framework=../wp-app-framework`, `scripts/release-test --theme …`, `E2E_TARGET=release`).

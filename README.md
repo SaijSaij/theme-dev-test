@@ -47,7 +47,7 @@ All checks run in wp-dev-env and must pass without errors or warnings.
 Build: `composer build-manifest` builds and checks the manifest (writes nothing) and must report
 
 ```
-Manifest OK (theme theme-dev-test): 89 service candidates, 58 services, 3 hooks, 63 routes, 35 template functions, 1 template filters, 22 blocks, 6 CLI commands, 3 cron events, 1 cron tasks, 2 tables. Nothing written (no --output).
+Manifest OK (theme theme-dev-test): 90 service candidates, 59 services, 3 hooks, 63 routes, 35 template functions, 1 template filters, 22 blocks, 6 CLI commands, 3 cron events, 1 cron tasks, 2 tables, 2 lifecycle methods. Nothing written (no --output).
 Block markup OK: 9 templates, template parts and patterns checked.
 Public: 1 APIs, 2 template functions and filters.
 Templates use the public template callables of: plugin-dev-test.
@@ -83,6 +83,13 @@ WP-CLI tests (`tests/cli/run`, Bash) run the commands of `src/Cli/` with `docker
 ../theme-dev-test/tests/cli/run wordpress-release
 ```
 
+Lifecycle tests (`tests/lifecycle/run`, Bash) switch from the child theme [theme-dev-test-child](https://github.com/saijsaij/theme-dev-test-child) to this theme, to twentytwentyfive and back, and check when the lifecycle methods of both run, which cron events are removed and that the tables stay. They need this theme or the child theme active and restore the theme that was active; run them after the other suites:
+
+```sh
+../theme-dev-test/tests/lifecycle/run wordpress
+../theme-dev-test/tests/lifecycle/run wordpress-release
+```
+
 The fixtures in `tests/e2e/fixtures.js` fail every test that causes a console warning, console error or uncaught page error. A test that checks a warning declares it with `expectConsole`; it must then appear. The only general exception is a warning WordPress causes itself with every theme (documented in `ALLOWED`); if it stops appearing while the editor was opened, the run fails so the entry gets removed.
 
 | Spec | Covers | Code under test |
@@ -109,6 +116,7 @@ The fixtures in `tests/e2e/fixtures.js` fail every test that causes a console wa
 | `wordpress-functions.spec.js` | The WordPress template functions of the framework (`wp_…`) against the REST API: attachments (image, URLs, caption as HTML, alternative text), posts (URL, title, manual and automatic excerpt as plain text, date, thumbnail), users (name, author archive, avatar), site values decoded and escaped once, login and logout URL, login status with and without a session, formatting; `''` for a draft and missing objects | `src/Block/WordPressFunctions/` |
 | `plugin.spec.js` | The theme as consumer of plugin-dev-test: `#[PluginApi]` (data with the plugin, `null` without), public template functions and filters with `has_plugin()`, templates with the same path in theme and plugin in one request, override of a plugin template, `@plugin` | `src/Plugin/`, `overrides/plugin-dev-test/` |
 | `patterns.spec.js` | Block template, template part and pattern of the theme, which the build checks against its blocks: front end of `single-post-e2e-patterns.html` with the header part, the pattern (PHP output in a block of the theme and a core block) and a plugin block (rendered only with the plugin), a link to a free URL; the pattern inserted as a contentOnly section, editable, with `contentRole` for inserting | `templates/`, `parts/`, `patterns/` |
+| `tests/lifecycle/run` | Theme switches: `#[OnActivation]` on the request after the switch (`after_switch_theme`), `#[OnDeactivation]` on the switch (`switch_theme`), no switch between the theme and its child theme for the theme, cron events removed and scheduled again, tables and their state kept | `src/Lifecycle/` (also of the child theme) |
 | `tests/cli/run` | WP-CLI commands `wp dev-test check …`: typed arguments, options and flags (`int`, `float`, enum, `--no-…`), defaults, variadic arguments, errors for a wrong type, an enum value outside the list (also `a,b`), a missing required option, an unknown option and too many arguments, injected service, `CliOutput` (log, warning, table, success), `CliException` with exit code 3, unexpected exceptions with and without `WP_DEBUG`, help with synopsis and enum options; in development mode also the framework's list of WP-CLI commands against the installed WP-CLI | `src/Cli/` |
 | `cache.spec.js` | The cache with each backend (files, transients, the object cache only if the site has one): a cached block renders once per input, context and variant (`QueryParamVary`), its view script runs also from the cache, invalidation by a saved post (`PostTypeTag`), saved settings (`SettingsTag`) and a tag of the theme; fresh renders in the editor and its preview; cached REST routes (arguments, `UserVary`, the permission check on every request, a `WP_REST_Response` with status and headers, not stored with status 404) and `CacheStore::remember()` | `src/Cache/` |
 | `cron.spec.js` | Cron events and tasks: an event with an interval in seconds and its schedule, daily and weekly events at their local start time (03:00, Monday 08:00), an event moved off its phase back to its start time on the next request, a due event run by `wp-cron.php` and scheduled an interval later, a task of the `CronScheduler` with an ID and an enum (duplicate, `isScheduled()`, run with its values) and an unscheduled task | `src/Cron/` |

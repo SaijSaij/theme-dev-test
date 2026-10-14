@@ -1,0 +1,147 @@
+#!/usr/bin/env bash
+# Lifecycle tests of the theme and the child theme theme-dev-test-child: switches
+# between them and to twentytwentyfive with WP-CLI and checks when their
+# lifecycle methods (src/Lifecycle/ of both) run and what the framework does.
+# Switching between the theme and its child theme is no switch for the theme;
+# switching away removes its cron events and keeps its data (tables, settings).
+# WordPress fires `after_switch_theme` on the request after the switch, so each
+# switch is followed by another request before the activation is checked. At the
+# end the theme that was active before is active again. Run it from the
+# wp-dev-env directory with the Compose service of the site, after the other
+# suites:
+#
+#   ../theme-dev-test/tests/lifecycle/run wordpress           # development mode (checkouts)
+#   ../theme-dev-test/tests/lifecycle/run wordpress-release   # release ZIPs of scripts/release-test
+set -euo pipefail
+
+if [[ $# -ne 1 || ( "$1" != wordpress && "$1" != wordpress-release ) ]]; then
+    echo "usage: $0 wordpress|wordpress-release (run from the wp-dev-env directory)" >&2
+    exit 2
+fi
+service="$1"
+if [[ ! -f compose.yaml ]]; then
+    echo "ERROR: run $0 from the wp-dev-env directory (no compose.yaml in $(pwd))." >&2
+    exit 2
+fi
+
+theme=theme-dev-test
+child=theme-dev-test-child
+other=twentytwentyfive
+theme_probe=theme_dev_test_lifecycle_probe
+child_probe=theme_dev_test_child_lifecycle_probe
+
+stderr_file="$(mktemp)"
+failures=0
+stdout=''
+stderr=''
+status=0
+original=''
+
+# Runs wp in the service as the web server user; sets stdout, stderr and status.
+wp_cli() {
+    set +e
+    stdout="$(docker compose exec -T -u www-data -e PAGER=cat "${service}" wp "$@" 2>"${stderr_file}")"
+    status=$?
+    set -e
+    stderr="$(cat "${stderr_file}")"
+}
+
+fail() {
+    echo "FAIL: $1" >&2
+    echo "  exit code: ${status}" >&2
+    echo "  stdout: ${stdout}" >&2
+    echo "  stderr: ${stderr}" >&2
+    failures=$((failures + 1))
+}
+
+# expect_stdout <test> <exit code> <exact stdout>
+expect_stdout() {
+    if [[ "${status}" -ne "$2" || "${stdout}" != "$3" ]]; then
+        fail "$1 (expected exit code $2 and stdout: $3)"
+    else
+        echo "ok: $1"
+    fi
+}
+
+# Switches to a theme and runs a request with it, which fires `after_switch_theme`.
+switch_to() {
+    wp_cli theme activate "$1"
+    if [[ "${status}" -ne 0 ]]; then
+        fail "switch to $1"
+        return
+    fi
+    wp_cli eval 'echo get_stylesheet();'
+    expect_stdout "switched to $1" 0 "$1"
+}
+
+# Activations and deactivations of the theme and the child theme, counted by their LifecycleProbe:
+# "theme activations deactivations, child activations deactivations".
+probe_counts() {
+    wp_cli eval "foreach (['${theme_probe}', '${child_probe}'] as \$o) { \$c = get_option(\$o, []); \$r[] = sprintf('%d %d', \$c['activation'] ?? 0, \$c['deactivation'] ?? 0); } echo implode(', ', \$r);"
+}
+
+# Whether the cron event is scheduled: yes or no.
+scheduled() {
+    wp_cli eval "echo wp_next_scheduled('$1') === false ? 'no' : 'yes';"
+}
+
+# Restores the theme that was active before and deletes the counters, also after a failure.
+restore() {
+    set +e
+    if [[ -n "${original}" ]]; then
+        wp_cli theme activate "${original}"
+        # The request with the restored theme fires its after_switch_theme.
+        wp_cli eval 'echo get_stylesheet();'
+    fi
+    wp_cli option delete "${theme_probe}" "${child_probe}"
+    rm -f "${stderr_file}"
+}
+trap restore EXIT
+
+wp_cli eval 'echo get_stylesheet();'
+if [[ "${status}" -ne 0 || ( "${stdout}" != "${theme}" && "${stdout}" != "${child}" ) ]]; then
+    echo "ERROR: ${theme} or ${child} must be the active theme." >&2
+    exit 2
+fi
+original="${stdout}"
+if [[ "${original}" != "${child}" ]]; then
+    switch_to "${child}"
+fi
+wp_cli option delete "${theme_probe}" "${child_probe}"
+
+# Child theme → theme: the child theme is deactivated; for the theme it is no switch.
+switch_to "${theme}"
+probe_counts
+expect_stdout 'switching from the child theme to its parent deactivates the child theme only' 0 '0 0, 0 1'
+scheduled 'wp_app_framework/cron/theme-dev-test/heartbeat'
+expect_stdout 'the cron events of the theme stay' 0 'yes'
+scheduled 'wp_app_framework/cache/clean_up/theme-dev-test-child'
+expect_stdout 'the cron events of the child theme are removed' 0 'no'
+
+# Theme → another theme: the theme is deactivated, its cron events are removed, its data stays.
+switch_to "${other}"
+probe_counts
+expect_stdout 'switching to another theme deactivates the theme' 0 '0 1, 0 1'
+scheduled 'wp_app_framework/cron/theme-dev-test/heartbeat'
+expect_stdout 'the cron events of the theme are removed' 0 'no'
+wp_cli option get theme_dev_test_cron
+expect_stdout 'the cron state of the theme is removed' 1 ''
+wp_cli eval "global \$wpdb; echo implode(',', \$wpdb->get_col(\$wpdb->prepare('SHOW TABLES LIKE %s', \$wpdb->prefix . \$wpdb->esc_like('dev_test_') . '%')));"
+expect_stdout 'the tables of the theme stay' 0 'wp_dev_test_log,wp_dev_test_upgrade_probe'
+wp_cli eval "echo get_option('theme_dev_test_tables') === false ? 'no' : 'yes';"
+expect_stdout 'the state of the tables stays' 0 'yes'
+
+# Another theme → child theme: both are activated on the next request, the cron events are scheduled again.
+switch_to "${child}"
+probe_counts
+expect_stdout 'switching to the child theme activates the theme and the child theme' 0 '1 1, 1 1'
+scheduled 'wp_app_framework/cron/theme-dev-test/heartbeat'
+expect_stdout 'the cron events of the theme are scheduled again' 0 'yes'
+scheduled 'wp_app_framework/cache/clean_up/theme-dev-test-child'
+expect_stdout 'the cron events of the child theme are scheduled again' 0 'yes'
+
+if [[ "${failures}" -ne 0 ]]; then
+    echo "${failures} lifecycle test(s) failed against ${service}." >&2
+    exit 1
+fi
+echo "All lifecycle tests passed against ${service}."
