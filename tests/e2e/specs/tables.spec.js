@@ -156,6 +156,46 @@ test.describe( 'Tables', () => {
 		}
 	} );
 
+	test( 'inserts a new row object with the ID of a missing row', async ( {
+		requestUtils,
+	} ) => {
+		// A free ID: the row of this test, deleted again.
+		const { id } = await createEntry( requestUtils, { message: 'Gone' } );
+		await call( requestUtils, {
+			method: 'DELETE',
+			path: `/entries/${ id }`,
+		} );
+		const restore = ( message ) =>
+			call( requestUtils, {
+				method: 'PUT',
+				path: `/entries/${ id }`,
+				data: {
+					level: 'warning',
+					message,
+					created: '2026-04-01 00:00:00 UTC',
+				},
+			} );
+		try {
+			expect( await restore( 'Restored' ) ).toMatchObject( {
+				id,
+				level: 'warning',
+				message: 'Restored',
+				created: '2026-04-01T00:00:00+00:00',
+			} );
+			// The same values again: MariaDB reports no changed row, the row exists, nothing is inserted twice.
+			expect( await restore( 'Restored' ) ).toMatchObject( {
+				id,
+				message: 'Restored',
+			} );
+			expect( await restore( 'Changed' ) ).toMatchObject( {
+				id,
+				message: 'Changed',
+			} );
+		} finally {
+			await deleteEntries( requestUtils, [ id ] );
+		}
+	} );
+
 	test( 'queries rows with groups, null, order and limits', async ( {
 		requestUtils,
 	} ) => {

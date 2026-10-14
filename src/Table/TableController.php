@@ -20,7 +20,7 @@ use Saij\WpAppFramework\Rest\RestRoute;
 use wpdb;
 
 /**
- * Tables of the theme over REST: rows of LogEntry created, loaded, changed and deleted, queries on the rows a test
+ * Tables of the theme over REST: rows of LogEntry created, loaded, changed, restored with their ID and deleted, queries on the rows a test
  * created (`ids`, comma-separated), the structure of a table as the database reports it, and an older schema of
  * UpgradeProbe for the schema sync to bring up to date.
  */
@@ -87,6 +87,20 @@ final readonly class TableController
         $entry->setLevel($level);
         $entry->setMessage($message);
         $entry->save();
+
+        return LogEntry::get($id)->toArray();
+    }
+
+    /**
+     * Saves a new row object with the given primary key: it updates the row with that key or, if there is none,
+     * inserts it with that key.
+     *
+     * @return array<string, mixed>
+     */
+    #[RestRoute('/entries/{id}', HttpMethod::Put, new Capability('manage_options'))]
+    public function restore(int $id, Level $level, string $message, string $created): array
+    {
+        new LogEntry(id: $id, level: $level, message: $message, created: new DateTimeImmutable($created))->save();
 
         return LogEntry::get($id)->toArray();
     }
