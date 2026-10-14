@@ -82,10 +82,9 @@ test.describe( 'View scripts', () => {
 		await expect( page.locator( '.wp-block-dev-test-card' ) ).toHaveCount(
 			1
 		);
+		// The view runtime loads on every page for the theme's document view (document-views.spec.js).
 		await expect(
-			page.locator(
-				`${ VIEW_RUNTIME }, ${ FAQ_SCRIPT }, ${ REVEAL_SCRIPT }`
-			)
+			page.locator( `${ FAQ_SCRIPT }, ${ REVEAL_SCRIPT }` )
 		).toHaveCount( 0 );
 	} );
 
@@ -108,9 +107,7 @@ test.describe( 'View scripts', () => {
 			page.getByText( 'Excerpt question' ).first()
 		).toBeVisible();
 		await expect(
-			page.locator(
-				`${ VIEW_RUNTIME }, ${ FAQ_SCRIPT }, ${ REVEAL_SCRIPT }`
-			)
+			page.locator( `${ FAQ_SCRIPT }, ${ REVEAL_SCRIPT }` )
 		).toHaveCount( 0 );
 	} );
 
