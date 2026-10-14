@@ -312,18 +312,24 @@ test.describe( 'Tables', () => {
 				await call( requestUtils, { path: `/probe/${ id }` } )
 			).toEqual( { title: 'Kept title', code: 'c1', rank: 1 } );
 
-			// The schema is current: a later request does not compare the tables again.
-			await call( requestUtils, {
-				method: 'POST',
-				path: '/probe/stray',
-			} );
+			// The schema is current: a later request does not compare the tables again. Routes without a
+			// return value answer 204.
+			await call(
+				requestUtils,
+				{ method: 'POST', path: '/probe/stray' },
+				204
+			);
 			const unchanged = await call( requestUtils, {
 				path: '/schema/upgrade-probe',
 			} );
 			expect( Object.keys( unchanged.columns ) ).toContain( 'stray' );
 		} finally {
 			// The next sync drops the stray column.
-			await call( requestUtils, { method: 'POST', path: '/resync' } );
+			await call(
+				requestUtils,
+				{ method: 'POST', path: '/resync' },
+				204
+			);
 			await call( requestUtils, {
 				method: 'DELETE',
 				path: `/probe/${ id }`,
