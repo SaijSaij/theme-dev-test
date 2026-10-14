@@ -1,0 +1,174 @@
+#!/usr/bin/env bash
+# WP-CLI tests of the theme: runs the commands of src/Cli/ in a WordPress of
+# wp-dev-env and checks their output and exit codes. Run it from the wp-dev-env
+# directory with the Compose service of the site:
+#
+#   ../theme-dev-test/tests/cli/run wordpress           # development mode (checkout)
+#   ../theme-dev-test/tests/cli/run wordpress-release   # release ZIP of scripts/release-test
+#
+# Both services define WP_DEBUG from WORDPRESS_DEBUG ("1"); the tests of the
+# error path without WP_DEBUG clear it for one command.
+set -euo pipefail
+
+if [[ $# -ne 1 || ( "$1" != wordpress && "$1" != wordpress-release ) ]]; then
+    echo "usage: $0 wordpress|wordpress-release (run from the wp-dev-env directory)" >&2
+    exit 2
+fi
+service="$1"
+if [[ ! -f compose.yaml ]]; then
+    echo "ERROR: run $0 from the wp-dev-env directory (no compose.yaml in $(pwd))." >&2
+    exit 2
+fi
+
+stderr_file="$(mktemp)"
+trap 'rm -f "${stderr_file}"' EXIT
+failures=0
+stdout=''
+stderr=''
+status=0
+
+# Runs wp in the service as the web server user: wp_cli [-e NAME=value]... <wp arguments>...
+# Sets stdout, stderr and status.
+wp_cli() {
+    local environment=(-e PAGER=cat)
+    while [[ "${1-}" == -e ]]; do
+        environment+=("$1" "$2")
+        shift 2
+    done
+    set +e
+    stdout="$(docker compose exec -T -u www-data "${environment[@]}" "${service}" wp "$@" 2>"${stderr_file}")"
+    status=$?
+    set -e
+    stderr="$(cat "${stderr_file}")"
+}
+
+fail() {
+    echo "FAIL: $1" >&2
+    echo "  exit code: ${status}" >&2
+    echo "  stdout: ${stdout}" >&2
+    echo "  stderr: ${stderr}" >&2
+    failures=$((failures + 1))
+}
+
+# expect <test> <exit code> <exact stdout>
+expect_stdout() {
+    if [[ "${status}" -ne "$2" || "${stdout}" != "$3" ]]; then
+        fail "$1 (expected exit code $2 and stdout: $3)"
+    else
+        echo "ok: $1"
+    fi
+}
+
+# expect_output <test> <exit code> <text in stdout or stderr>...
+expect_output() {
+    local name="$1" code="$2" text
+    shift 2
+    if [[ "${status}" -ne "${code}" ]]; then
+        fail "${name} (expected exit code ${code})"
+        return
+    fi
+    for text in "$@"; do
+        if [[ "${stdout}${stderr}" != *"${text}"* ]]; then
+            fail "${name} (expected output: ${text})"
+            return
+        fi
+    done
+    echo "ok: ${name}"
+}
+
+defaults='{"text":["hello","string"],"count":[1,"int"],"ratio":[null,"null"],"mode":["full","CheckMode::Full"],"upper":[false,"bool"]}'
+
+wp_cli dev-test
+expect_output 'wp dev-test lists the group check' 0 'usage: wp dev-test check <command>'
+
+wp_cli help dev-test
+expect_output 'help of the namespace' 0 'Commands of the theme theme-dev-test.'
+
+wp_cli help dev-test check values
+expect_output 'help with synopsis, descriptions, default and enum options' 0 \
+    'wp dev-test check values <text> [<count>] --mode=<mode> [--ratio=<ratio>]' \
+    'Print the converted values with their PHP types as JSON.' \
+    'How to check.' 'default: 1' '- fast' '- full' \
+    'wp dev-test check values hello 3 --mode=full --ratio=0.5 --upper'
+
+wp_cli dev-test check values hello 3 --mode=fast --ratio=0.5 --upper
+expect_stdout 'typed values' 0 '{"text":["HELLO","string"],"count":[3,"int"],"ratio":[0.5,"float"],"mode":["fast","CheckMode::Fast"],"upper":[true,"bool"]}'
+
+wp_cli dev-test check values hello --mode=full
+expect_stdout 'defaults of optional values' 0 "${defaults}"
+
+wp_cli dev-test check values hello --mode=full --no-upper
+expect_stdout '--no-upper' 0 "${defaults}"
+
+wp_cli dev-test check values hello two --mode=full
+expect_output 'argument of the wrong type' 1 'Error: Invalid value for <count>: count is not of type integer.'
+
+wp_cli dev-test check values hello --mode=full --ratio=abc
+expect_output 'option of the wrong type' 1 'Error: Invalid value for --ratio: '
+
+wp_cli dev-test check values hello --mode=full --upper=yes
+expect_output 'flag with a value' 1 'Error: Invalid value for --upper: '
+
+wp_cli dev-test check values hello --mode=slow
+expect_output 'enum value outside the list' 1 "Invalid value specified for 'mode'"
+
+wp_cli dev-test check values hello --mode=fast,full
+expect_output 'several enum values' 1 'Error: Invalid value for --mode: mode is not one of fast and full.'
+
+wp_cli dev-test check values hello
+expect_output 'missing required option' 1 'missing --mode parameter'
+
+wp_cli dev-test check values hello --mode=full --unknown=1
+expect_output 'unknown option' 1 'unknown --unknown parameter'
+
+wp_cli dev-test check values a 1 2 --mode=full
+expect_output 'too many arguments' 1 'Too many positional arguments: 2'
+
+wp_cli dev-test check ids 1 2 3
+expect_stdout 'variadic argument' 0 '[[1,"int"],[2,"int"],[3,"int"]]'
+
+wp_cli dev-test check ids 1 x
+expect_output 'variadic argument of the wrong type' 1 'Error: Invalid value for <ids>: ids is not of type integer.'
+
+wp_cli dev-test check ids
+expect_output 'variadic argument without values' 1 'wp dev-test check ids <ids>...'
+
+wp_cli dev-test check service
+expect_stdout 'injected service' 0 'Hello from a service'
+
+wp_cli dev-test check output
+expect_stdout 'log, table and success on stdout' 0 $'A log line.\nname\tcount\nfirst\t1\nsecond\t2\nSuccess: Done.'
+expect_output 'warning on stderr' 0 'Warning: A warning.'
+
+wp_cli dev-test check fail
+expect_output 'CliException with its exit code' 3 'Error: Failed on purpose.'
+
+wp_cli -e WORDPRESS_DEBUG= dev-test check crash
+expect_output 'unexpected exception without WP_DEBUG' 1 'Error: Command failed: RuntimeException: Crashed on purpose.'
+
+# Rethrown: PHP logs the uncaught exception (WP_DEBUG_LOG is stderr in wp-dev-env), the fatal error
+# handler of WordPress ends the command through wp_die(), which WP-CLI turns into an error with exit code 1.
+wp_cli dev-test check crash
+expect_output 'unexpected exception with WP_DEBUG' 1 'Uncaught RuntimeException: Crashed on purpose.' \
+    'wp-app-framework: WP-CLI command "wp dev-test check crash"'
+
+# The framework's list of WP-CLI commands (rejected as namespace by the build) must match the installed WP-CLI.
+# Development mode only: the release prefixes the framework classes.
+if [[ "${service}" == wordpress ]]; then
+    # shellcheck disable=SC2016 # PHP code, not shell expansions
+    wp_cli eval '
+        $dump = WP_CLI::runcommand("cli cmd-dump --skip-plugins --skip-themes", ["return" => true, "parse" => "json", "launch" => true]);
+        $installed = array_column($dump["subcommands"], "name");
+        $listed = \Saij\WpAppFramework\WpCli\CliCommandCollector::WP_CLI_COMMANDS;
+        sort($installed);
+        sort($listed);
+        echo json_encode(["missing" => array_values(array_diff($installed, $listed)), "obsolete" => array_values(array_diff($listed, $installed))]);
+    '
+    expect_stdout 'CliCommandCollector::WP_CLI_COMMANDS matches the commands of WP-CLI' 0 '{"missing":[],"obsolete":[]}'
+fi
+
+if [[ "${failures}" -ne 0 ]]; then
+    echo "${failures} WP-CLI test(s) failed against ${service}." >&2
+    exit 1
+fi
+echo "All WP-CLI tests passed against ${service}."

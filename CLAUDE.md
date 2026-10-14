@@ -6,7 +6,7 @@ Test theme of [wp-app-framework](https://github.com/saijsaij/wp-app-framework) (
 
 ## Rules
 
-- Code written to check a framework feature stays here as a **permanent test**: PHP under `src/<Feature>/` (with its Twig templates and editor scripts next to it), specs in `tests/e2e/specs/`. Add every new spec to the spec table in the README.
+- Code written to check a framework feature stays here as a **permanent test**: PHP under `src/<Feature>/` (with its Twig templates and editor scripts next to it), specs in `tests/e2e/specs/`, WP-CLI checks in `tests/cli/run`. Add every new spec to the spec table in the README.
 - Build errors are not tested here (a broken class would break the theme's build); they belong to the framework's PHPUnit fixtures.
 - Each test deletes exactly the posts, media and users it created – never "delete all". Never store `dev-test/wrong-field`, `dev-test/unmarked` or `dev-test/support-unwrapped` in a post; they fail on purpose.
 - The console guard (`tests/e2e/fixtures.js`) fails a test on every console warning, console error or page error. Declare expected messages with `expectConsole`; add to `ALLOWED` only a warning WordPress causes with every theme, with the reason.
@@ -24,6 +24,7 @@ docker compose run --rm tools composer --working-dir=/workspace/theme-dev-test l
 docker compose run --rm tools npm --prefix /workspace/theme-dev-test run lint                    # fix: npm run format
 docker compose run --rm tools npm --prefix /workspace/theme-dev-test run build                   # or run start (watch)
 docker compose run --rm e2e npm --prefix /workspace/theme-dev-test run test:e2e
+../theme-dev-test/tests/cli/run wordpress                                                       # WP-CLI tests (src/Cli/)
 ```
 
 Release build with the local framework checkout, and the browser tests against it: see "Release" and "Tests" in the README (`composer release -- --package-source=saij/wp-app-framework=../wp-app-framework`, `scripts/release-test --theme …`, `E2E_TARGET=release`).
