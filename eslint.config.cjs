@@ -9,7 +9,9 @@
 const defaults = require( '@wordpress/scripts/config/eslint.config.cjs' );
 
 const PROVIDED_AT_RUNTIME = [
+	'@wordpress/block-editor',
 	'@wordpress/components',
+	'@wordpress/rich-text',
 	'@saij/wp-app-framework',
 	'@saij/wp-app-framework/view',
 ];

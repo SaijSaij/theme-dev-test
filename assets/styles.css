@@ -36,6 +36,22 @@
 	}
 }
 
+/* A font and a background image referenced by URL: the build copies them to build/fonts/ and build/images/ (assets.spec.js). */
+@font-face {
+	/* wp-app-framework: preload */
+	font-family: "Dev Test Icons";
+	src: url("./fonts/dev-test-icons.woff2") format("woff2");
+	font-display: block;
+}
+
+.asset-showcase {
+	background-image: url("./images/swatch.png");
+}
+
+.asset-showcase__font {
+	font-family: "Dev Test Icons", sans-serif;
+}
+
 @theme inline {
 	--color-primary: var(--wp--preset--color--primary);
 	--color-contrast: var(--wp--preset--color--contrast);

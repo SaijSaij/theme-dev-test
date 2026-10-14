@@ -1,0 +1,9 @@
+<div {{ block_wrapper_attributes({class: 'asset-showcase'}) }}>
+	<a class="asset-showcase__link" href="{{ asset_url('docs/readme.txt') }}">Readme</a>
+	{{ asset_image('images/swatch.png', 'Swatch', {class: 'asset-showcase__image', loading: 'lazy'}) }}
+	{{ asset_image('images/logo.svg', 'Logo', {class: 'asset-showcase__logo'}) }}
+	{{ asset_image('images/hero.jpg', 'Hero', {widths: [400, 800], sizes: '(min-width: 800px) 50vw, 100vw', formats: ['avif', 'webp'], class: 'asset-showcase__hero'}) }}
+	{{ asset_svg('icons/star.svg', {class: 'asset-showcase__icon', 'aria-hidden': 'true'}) }}
+	<span class="asset-showcase__font">&#xf155;</span>
+	{% include 'Block/AssetShowcase/AssetShowcaseChild.twig' %}
+</div>

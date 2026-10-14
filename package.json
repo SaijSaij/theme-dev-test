@@ -5,11 +5,14 @@
 	"engines": {
 		"node": ">=24"
 	},
+	"imports": {
+		"#shared/*": "./assets/shared/*.js"
+	},
 	"scripts": {
 		"build": "wp-scripts build",
 		"start": "wp-scripts start",
-		"lint": "wp-scripts lint-js src tests webpack.config.js eslint.config.cjs",
-		"format": "wp-scripts format src tests webpack.config.js eslint.config.cjs",
+		"lint": "wp-scripts lint-js src assets tests webpack.config.js eslint.config.cjs",
+		"format": "wp-scripts format src assets tests webpack.config.js eslint.config.cjs",
 		"test:e2e": "playwright test --config tests/e2e/playwright.config.js"
 	},
 	"devDependencies": {
