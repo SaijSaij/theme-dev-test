@@ -9,6 +9,10 @@
         <figcaption{{ field('meta.caption') }}>{{ attrs.meta.caption }}</figcaption>
         <a class="check__source" href="{{ attrs.meta.source }}">Source</a>
     </figure>
+    <p class="check__address"{{ field('address') }}>{{ attrs.address|nl2br }}</p>
+    {% if attrs.cta.url %}
+        <a class="check__cta" {{ link_attributes(attrs.cta) }}>Call to action</a>
+    {% endif %}
     <p class="check__name">{{ block_name }}</p>
     <div class="check__inner"{{ inner_blocks() }}>{{ content|raw }}</div>
 </div>

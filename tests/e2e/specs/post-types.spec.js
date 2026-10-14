@@ -282,6 +282,103 @@ test.describe( 'Post types and meta', () => {
 		} );
 	} );
 
+	test( 'edits links in the meta panel and the classic meta box, stored by ID and resolved', async ( {
+		admin,
+		editor,
+		page,
+		requestUtils,
+	} ) => {
+		const target = await create( requestUtils, 'pages', {
+			title: 'Registration page',
+			status: 'publish',
+		} );
+		const event = await create( requestUtils, 'dev_test_event', {
+			title: 'E2E link',
+			status: 'draft',
+		} );
+
+		// The panel in the block editor: LinkControl with its search.
+		await admin.visitAdminPage(
+			'post.php',
+			`post=${ event.id }&action=edit`
+		);
+		await editor.setPreferences( 'core/edit-post', {
+			welcomeGuide: false,
+			fullscreenMode: false,
+		} );
+		await editor.openDocumentSettingsSidebar();
+		const toggle = page.getByRole( 'button', { name: 'Event details' } );
+		if ( ( await toggle.getAttribute( 'aria-expanded' ) ) === 'false' ) {
+			await toggle.click();
+		}
+		await page
+			.locator( '.wp-app-framework-meta-panel' )
+			.getByRole( 'group', { name: 'Registration' } )
+			.getByRole( 'button' )
+			.click();
+		const control = page.locator( '.block-editor-link-control' );
+		await control.getByRole( 'combobox' ).fill( 'Registration page' );
+		await page
+			.getByRole( 'option', { name: /Registration page/ } )
+			.first()
+			.click();
+		await editor.saveDraft();
+
+		const linked = {
+			url: target.link,
+			opensInNewTab: false,
+			kind: 'post',
+			id: target.id,
+		};
+		const stored = await restResponse( requestUtils, {
+			path: `/wp/v2/dev_test_event/${ event.id }`,
+			params: { context: 'edit' },
+		} );
+		expect( stored.body.meta.dev_test_registration ).toEqual( linked );
+
+		// The meta object gets the current URL of the page.
+		const moved = await requestUtils.rest( {
+			method: 'POST',
+			path: `/wp/v2/pages/${ target.id }`,
+			data: { slug: 'registration-moved' },
+		} );
+		const read = await restResponse( requestUtils, {
+			path: `/dev-test/v1/posts/events/${ event.id }`,
+		} );
+		expect( read.body.registration ).toEqual( {
+			...linked,
+			url: moved.link,
+		} );
+
+		// The meta box of the classic edit screen: a search of posts.
+		const venue = await create( requestUtils, 'dev_test_venue', {
+			title: 'E2E link hall',
+			status: 'publish',
+		} );
+		await admin.visitAdminPage(
+			'post.php',
+			`post=${ venue.id }&action=edit`
+		);
+		const booking = page
+			.locator( '#theme-dev-test-meta-place' )
+			.getByRole( 'group', { name: 'Booking' } );
+		await booking
+			.getByRole( 'combobox', { name: 'Search content' } )
+			.fill( 'Registration' );
+		await page.getByRole( 'option', { name: 'Registration page' } ).click();
+		await expect( booking.getByText( 'Registration page' ) ).toBeVisible();
+		await page.locator( '#publish' ).click();
+		await expect( page.locator( '#message' ) ).toBeVisible();
+		const venueMeta = await restResponse( requestUtils, {
+			path: `/wp/v2/dev_test_venue/${ venue.id }`,
+			params: { context: 'edit' },
+		} );
+		expect( venueMeta.body.meta.dev_test_booking ).toEqual( {
+			...linked,
+			url: moved.link,
+		} );
+	} );
+
 	test( 'loads, changes and creates posts with post objects in PHP', async ( {
 		requestUtils,
 	} ) => {

@@ -8,6 +8,7 @@ use Saij\WpAppFramework\Block\Image;
 use Saij\WpAppFramework\Block\Label;
 use Saij\WpAppFramework\Block\RichText;
 use Saij\WpAppFramework\Post\PostMeta;
+use Saij\WpAppFramework\Value\Link;
 use Saij\WpAppFramework\Value\ListOf;
 use Saij\WpAppFramework\Value\Url;
 
@@ -34,6 +35,7 @@ final class EventDetails
         private ?int $photo = null,
         #[Url]
         private string $website = '',
+        private Link $registration = new Link(),
     ) {}
 
     public function getStart(): string
@@ -115,5 +117,15 @@ final class EventDetails
     public function setWebsite(string $website): void
     {
         $this->website = $website;
+    }
+
+    public function getRegistration(): Link
+    {
+        return $this->registration;
+    }
+
+    public function setRegistration(Link $registration): void
+    {
+        $this->registration = $registration;
     }
 }

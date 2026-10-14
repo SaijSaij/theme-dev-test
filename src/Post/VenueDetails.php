@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Saij\ThemeDevTest\Post;
 
 use Saij\WpAppFramework\Post\PostMeta;
+use Saij\WpAppFramework\Value\Link;
 
 /**
  * Meta of the data type, edited in a meta box on the classic edit screen.
@@ -15,6 +16,7 @@ final class VenueDetails
     public function __construct(
         private string $address = '',
         private int $seats = 0,
+        private Link $booking = new Link(),
     ) {}
 
     public function getAddress(): string
@@ -25,5 +27,10 @@ final class VenueDetails
     public function getSeats(): int
     {
         return $this->seats;
+    }
+
+    public function getBooking(): Link
+    {
+        return $this->booking;
     }
 }

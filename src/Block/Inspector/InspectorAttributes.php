@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Saij\ThemeDevTest\Block\Inspector;
 
 use Saij\WpAppFramework\Block\Label;
+use Saij\WpAppFramework\Block\PlainText;
 use Saij\WpAppFramework\Block\RichText;
 use Saij\WpAppFramework\Value\ListOf;
 
@@ -19,5 +20,8 @@ final readonly class InspectorAttributes
         public string $summary = '',
         #[ListOf(Slide::class)]
         public array $slides = [],
+        #[PlainText(inspector: true, multiline: true)]
+        #[Label('Note')]
+        public string $note = '',
     ) {}
 }

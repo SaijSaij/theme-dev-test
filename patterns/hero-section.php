@@ -4,7 +4,7 @@
  * Title: Hero section
  * Slug: dev-test/hero-section
  * Categories: featured
- * Description: A section with a hero and text in a group. The build checks it against the blocks of the theme.
+ * Description: A section with a hero, text and a check block with a link to a free URL in a group. The build checks it against the blocks of the theme.
  */
 
 ?>
@@ -19,5 +19,6 @@
 <!-- wp:heading {"className":"<?php echo esc_attr('is-pattern-heading'); ?>"} -->
 <h2 class="wp-block-heading is-pattern-heading"><?php esc_html_e('Core heading from a pattern', 'theme-dev-test'); ?></h2>
 <!-- /wp:heading -->
+<!-- wp:dev-test/check {"text":"Pattern check","cta":{"url":"https://example.org/pattern/","opensInNewTab":true,"kind":"url","id":0}} /-->
 </div>
 <!-- /wp:group -->

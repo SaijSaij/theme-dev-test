@@ -44,6 +44,12 @@ final readonly class PostController
             'note' => $details->getNote(),
             'photo' => $details->getPhoto(),
             'website' => $details->getWebsite(),
+            'registration' => [
+                'url' => $details->getRegistration()->url,
+                'opensInNewTab' => $details->getRegistration()->opensInNewTab,
+                'kind' => $details->getRegistration()->kind->value,
+                'id' => $details->getRegistration()->id,
+            ],
             'soldOut' => $event->isSoldOut(100),
         ];
     }

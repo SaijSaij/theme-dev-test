@@ -70,6 +70,70 @@ test.describe( 'Inspector fields', () => {
 		expect( attributes.summary ).toBe( 'Hi <strong>bold</strong>' );
 	} );
 
+	test( 'edits multiline plain text in a text area and re-renders once', async ( {
+		admin,
+		editor,
+		page,
+		requestUtils,
+	} ) => {
+		const renders = trackRenderRequests( page );
+		const id = await openPostWith(
+			{ admin, editor, requestUtils },
+			block( 'dev-test/inspector' )
+		);
+		const check = editor.canvas.locator(
+			'[data-type="dev-test/inspector"]'
+		);
+		await expect.poll( () => renders.length ).toBe( 1 );
+
+		await editor.selectBlocks( check );
+		await editor.openDocumentSettingsSidebar();
+		const note = page
+			.getByRole( 'region', { name: 'Editor settings' } )
+			.getByRole( 'textbox', { name: 'Note' } );
+		// #[PlainText(inspector: true, multiline: true)]: a text area.
+		await expect( note ).toHaveJSProperty( 'tagName', 'TEXTAREA' );
+		await note.click();
+		await page.keyboard.type( 'First line' );
+		await page.keyboard.press( 'Enter' );
+		await page.keyboard.type( 'Second <line>' );
+
+		await expect(
+			check.locator( '.inspector-check__note br' )
+		).toHaveCount( 1 );
+		await expect( check.locator( '.inspector-check__note' ) ).toHaveText(
+			'First lineSecond <line>'
+		);
+		await page.waitForTimeout( 1000 );
+		expect( renders ).toHaveLength( 2 );
+
+		await editor.saveDraft();
+		const attributes = JSON.parse(
+			( await storedContent( requestUtils, id ) ).match(
+				/^<!-- wp:dev-test\/inspector (\{.*\}) \/-->$/
+			)[ 1 ]
+		);
+		expect( attributes.note ).toBe( 'First line\nSecond <line>' );
+
+		await page.goto( `/?p=${ id }&preview=true` );
+		const front = page.locator( '.inspector-check__note' );
+		await expect( front.locator( 'br' ) ).toHaveCount( 1 );
+		expect( await front.innerHTML() ).toBe(
+			'First line<br>\nSecond &lt;line&gt;'
+		);
+
+		await admin.visitAdminPage( 'post.php', `post=${ id }&action=edit` );
+		await editor.selectBlocks(
+			editor.canvas.locator( '[data-type="dev-test/inspector"]' )
+		);
+		await editor.openDocumentSettingsSidebar();
+		await expect(
+			page
+				.getByRole( 'region', { name: 'Editor settings' } )
+				.getByRole( 'textbox', { name: 'Note' } )
+		).toHaveValue( 'First line\nSecond <line>' );
+	} );
+
 	test( 'selects and removes the image of a list item in the inspector', async ( {
 		admin,
 		editor,

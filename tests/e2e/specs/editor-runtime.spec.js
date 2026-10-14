@@ -100,6 +100,80 @@ test.describe( 'Editor runtime', () => {
 		await screenshot( front, 'hero-front' );
 	} );
 
+	test( 'edits multiline plain text in the canvas', async ( {
+		admin,
+		editor,
+		page,
+		pageUtils,
+		requestUtils,
+	} ) => {
+		const renders = trackRenderRequests( page );
+		const id = await openPostWith(
+			{ admin, editor, requestUtils },
+			block( 'dev-test/check', { text: 'Check' } )
+		);
+		const check = editor.canvas.locator( '[data-type="dev-test/check"]' );
+		const address = check.locator( '.check__address' );
+		await expect( address ).toHaveAttribute( 'contenteditable', 'true' );
+		await expect.poll( () => renders.length ).toBe( 1 );
+
+		// Enter and Shift+Enter insert line breaks (#[PlainText(multiline: true)]).
+		await address.click();
+		await page.keyboard.type( 'Main street 1' );
+		await page.keyboard.press( 'Enter' );
+		await page.keyboard.type( '12345 Town' );
+		await page.keyboard.press( 'Shift+Enter' );
+		await page.keyboard.type( 'Tom & <b>Jerry</b>' );
+		await expect( address.locator( 'br' ) ).toHaveCount( 2 );
+		// One block, no split.
+		await expect( check ).toHaveCount( 1 );
+
+		// Pasted plain text with line breaks.
+		await page.keyboard.press( 'Enter' );
+		await pageUtils.setClipboardData( {
+			plainText: 'Pasted one\nPasted two',
+		} );
+		await pageUtils.pressKeys( 'primary+v' );
+		const expected =
+			'Main street 1\n12345 Town\nTom & <b>Jerry</b>\nPasted one\nPasted two';
+		await expect
+			.poll( () =>
+				page.evaluate(
+					() =>
+						window.wp.data
+							.select( 'core/block-editor' )
+							.getBlocks()[ 0 ].attributes.address
+				)
+			)
+			.toBe( expected );
+		// Inline typing never re-renders.
+		expect( renders ).toHaveLength( 1 );
+
+		await editor.saveDraft();
+		const attributes = JSON.parse(
+			( await storedContent( requestUtils, id ) ).match(
+				/^<!-- wp:dev-test\/check (\{.*\}) \/-->$/
+			)[ 1 ]
+		);
+		expect( attributes.address ).toBe( expected );
+
+		// The same lines in the canvas after reloading and on the front end.
+		await page.reload();
+		await expect(
+			editor.canvas.locator(
+				'[data-type="dev-test/check"] .check__address br'
+			)
+		).toHaveCount( 4 );
+		await page.goto( `/?p=${ id }&preview=true` );
+		const front = page.locator(
+			'.wp-block-dev-test-check .check__address'
+		);
+		await expect( front.locator( 'br' ) ).toHaveCount( 4 );
+		expect( await front.innerHTML() ).toBe(
+			'Main street 1<br>\n12345 Town<br>\nTom &amp; &lt;b&gt;Jerry&lt;/b&gt;<br>\nPasted one<br>\nPasted two'
+		);
+	} );
+
 	test( 'refetches on non-inline changes only and reuses cached markup', async ( {
 		admin,
 		editor,

@@ -1,5 +1,6 @@
 <div {{ block_wrapper_attributes({class: 'inspector-check'}) }}>
     <div class="inspector-check__summary">{{ attrs.summary|raw }}</div>
+    <p class="inspector-check__note">{{ attrs.note|nl2br }}</p>
     {% for slide in attrs.slides %}
         <figure class="inspector-check__slide">
             {{ wp_attachment_image(slide.imageId, 'thumbnail') }}

@@ -10,6 +10,7 @@ use Saij\WpAppFramework\Block\Image;
 use Saij\WpAppFramework\Block\Label;
 use Saij\WpAppFramework\Block\PlainText;
 use Saij\WpAppFramework\Block\RichText;
+use Saij\WpAppFramework\Value\Link;
 use Saij\WpAppFramework\Value\Url;
 
 /**
@@ -36,5 +37,9 @@ final readonly class CheckAttributes
         public Meta $meta = new Meta(),
         #[Hidden]
         public string $secret = 'hidden',
+        #[Label('Call to action')]
+        public Link $cta = new Link(),
+        #[PlainText(multiline: true)]
+        public string $address = '',
     ) {}
 }

@@ -35,6 +35,8 @@ const DEFAULTS = {
 		notice: '',
 		privacyPage: null,
 		featured: [],
+		imprint: { url: '', opensInNewTab: false, kind: 'url', id: 0 },
+		address: '',
 	},
 	[ LAYOUT ]: { wide: false, columns: 2 },
 };
@@ -185,7 +187,7 @@ test.describe( 'Settings', () => {
 			as: 'anonymous',
 		} );
 		expect( twig.body.html ).toBe(
-			'<p class="settings">Hello &amp; &lt;b&gt;|compact|wide|Docs,Home||||</p>\n'
+			'<p class="settings">Hello &amp; &lt;b&gt;|compact|wide|Docs,Home||||||</p>\n'
 		);
 	} );
 
@@ -446,7 +448,7 @@ test.describe( 'Settings', () => {
 				as: 'anonymous',
 			} );
 			expect( twig.body.html ).toContain(
-				'|Footer &amp; text|<strong>Important</strong>|Privacy policy</p>'
+				'|Footer &amp; text|<strong>Important</strong>|Privacy policy||</p>'
 			);
 
 			// The stored values show again after reloading.
@@ -465,6 +467,136 @@ test.describe( 'Settings', () => {
 				params: { force: true },
 			} );
 		}
+	} );
+
+	test( 'edit a link and multiline text on the settings page', async ( {
+		page,
+		requestUtils,
+	} ) => {
+		const target = await requestUtils.createPage( {
+			title: 'Imprint page',
+			status: 'publish',
+		} );
+		try {
+			await page.goto( PAGE );
+			await page.getByRole( 'tab', { name: 'General' } ).click();
+			const imprint = page.getByRole( 'group', { name: 'Imprint' } );
+			// The form searches posts and links the chosen one by ID.
+			await imprint
+				.getByRole( 'combobox', { name: 'Search content' } )
+				.fill( 'Imprint' );
+			await page.getByRole( 'option', { name: 'Imprint page' } ).click();
+			await expect( imprint.getByText( 'Imprint page' ) ).toBeVisible();
+			await expect(
+				imprint.getByRole( 'textbox', { name: 'URL' } )
+			).toHaveCount( 0 );
+			await imprint
+				.getByRole( 'checkbox', { name: 'Open in new tab' } )
+				.check();
+			// #[PlainText(multiline: true)]: a text area.
+			const address = page.getByRole( 'textbox', { name: 'Address' } );
+			await address.click();
+			await page.keyboard.type( 'Main street 1' );
+			await page.keyboard.press( 'Enter' );
+			await page.keyboard.type( '12345 Town' );
+			await address.press( 'Tab' );
+			await screenshot( page, 'settings-link' );
+
+			const saves = [];
+			page.on( 'request', ( request ) => {
+				if (
+					request.method() === 'POST' &&
+					request.url().includes( '/wp/v2/settings' )
+				) {
+					saves.push( request.postDataJSON() );
+				}
+			} );
+			await page.getByRole( 'button', { name: 'Save' } ).click();
+			await expect( page.getByTestId( 'snackbar' ) ).toHaveText(
+				'Settings saved.'
+			);
+			expect( saves ).toHaveLength( 1 );
+			const linked = {
+				url: target.link,
+				opensInNewTab: true,
+				kind: 'post',
+				id: target.id,
+			};
+			expect( saves[ 0 ][ GENERAL ] ).toEqual(
+				expect.objectContaining( {
+					imprint: linked,
+					address: 'Main street 1\n12345 Town',
+				} )
+			);
+			expect( ( await restSettings( requestUtils ) )[ GENERAL ] ).toEqual(
+				expect.objectContaining( { imprint: linked } )
+			);
+
+			// The template gets the current URL of the page.
+			const moved = await requestUtils.rest( {
+				method: 'POST',
+				path: `/wp/v2/pages/${ target.id }`,
+				data: { slug: 'imprint-moved' },
+			} );
+			const values = ( await injectedValues( requestUtils ) ).general;
+			expect( values.imprint ).toEqual( { ...linked, url: moved.link } );
+			expect( values.address ).toBe( 'Main street 1\n12345 Town' );
+			const twig = await restResponse( requestUtils, {
+				path: '/dev-test/v1/settings/twig',
+				as: 'anonymous',
+			} );
+			expect( twig.body.html ).toContain(
+				`|<a class="settings__imprint" href="${ moved.link }" target="_blank" rel="noopener">Imprint</a>|Main street 1<br />\n12345 Town</p>`
+			);
+
+			// The title of the linked page after reloading; "Unlink" keeps the URL as a free URL.
+			await page.reload();
+			await page.getByRole( 'tab', { name: 'General' } ).click();
+			await expect( imprint.getByText( 'Imprint page' ) ).toBeVisible();
+			await imprint.getByRole( 'button', { name: 'Unlink' } ).click();
+			await expect(
+				imprint.getByRole( 'textbox', { name: 'URL' } )
+			).toHaveValue( moved.link );
+			await page.getByRole( 'button', { name: 'Save' } ).click();
+			await expect( page.getByTestId( 'snackbar' ).last() ).toHaveText(
+				'Settings saved.'
+			);
+			await expect
+				.poll(
+					async () =>
+						( await injectedValues( requestUtils ) ).general.imprint
+				)
+				.toEqual( {
+					url: moved.link,
+					opensInNewTab: true,
+					kind: 'url',
+					id: 0,
+				} );
+		} finally {
+			await requestUtils.rest( {
+				method: 'DELETE',
+				path: `/wp/v2/pages/${ target.id }`,
+				params: { force: true },
+			} );
+		}
+
+		// Free URLs are sanitized like #[Url].
+		const saved = await restResponse( requestUtils, {
+			path: '/wp/v2/settings',
+			method: 'POST',
+			data: {
+				[ GENERAL ]: {
+					imprint: {
+						url: 'javascript:alert(1)',
+						opensInNewTab: false,
+						kind: 'url',
+						id: 0,
+					},
+				},
+			},
+		} );
+		expect( saved.status ).toBe( 200 );
+		expect( saved.body[ GENERAL ].imprint.url ).toBe( '' );
 	} );
 
 	test( 'name the group and the setting of an invalid value', async ( {

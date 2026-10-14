@@ -60,6 +60,13 @@ final readonly class SettingsController
                 'notice' => $this->general->notice,
                 'privacyPage' => $this->general->privacyPage,
                 'featured' => $this->general->featured,
+                'imprint' => [
+                    'url' => $this->general->imprint->url,
+                    'opensInNewTab' => $this->general->imprint->opensInNewTab,
+                    'kind' => $this->general->imprint->kind->value,
+                    'id' => $this->general->imprint->id,
+                ],
+                'address' => $this->general->address,
             ],
             'layout' => [
                 'wide' => $this->layout->wide,

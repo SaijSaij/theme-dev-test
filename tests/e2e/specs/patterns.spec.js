@@ -10,7 +10,7 @@ const {
 /**
  * Block templates, template parts and patterns of the theme, which the build
  * checks against its blocks (templates/single-post-e2e-patterns.html,
- * parts/header.html, patterns/hero-section.php). The template also holds a
+ * parts/header.html, patterns/hero-section.php with a link to a free URL). The template also holds a
  * block of the test plugin, which the build of the theme does not check.
  */
 test.describe( 'Templates, parts and patterns', () => {
@@ -44,6 +44,13 @@ test.describe( 'Templates, parts and patterns', () => {
 			'Core heading from a pattern'
 		);
 		await expect( page.getByText( 'Post content' ) ).toBeVisible();
+		// A link to a free URL in a pattern (the build checks its kind and ID against the schema).
+		const cta = page.locator( '.check__cta' );
+		await expect( cta ).toHaveAttribute(
+			'href',
+			'https://example.org/pattern/'
+		);
+		await expect( cta ).toHaveAttribute( 'target', '_blank' );
 
 		// Without the plugin, WordPress renders nothing for its block.
 		await expect( page.getByText( 'Note from the plugin' ) ).toHaveCount(
