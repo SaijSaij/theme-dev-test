@@ -35,4 +35,5 @@ Release build with the local framework checkout, and the browser tests against i
 - `composer build-manifest` prints counts of services, hooks, routes, template callables and blocks; when they change, update the expected output in the README.
 - The framework is required as `dev-main` from GitHub; after a framework change is pushed, `composer update saij/wp-app-framework` moves the lock file to it (locally, `WP_PACKAGE_LINKS` of wp-dev-env links the checkout instead).
 - A release tag `v<version>` must equal `Version:` in `style.css`; the release workflow fails otherwise.
+- Every GitHub release gets short release notes instead of the generated compare link alone: what the theme tests anew, the framework version it is built with, and the compare link last. The release workflow creates the release with `--generate-notes`; once it has passed, replace the text with `gh release edit <tag> --notes-file <file>` (a rerun only uploads the ZIP and keeps the text).
 - New development files that must not ship go to `.gitattributes` as `export-ignore` (directories as `dir/**`).
