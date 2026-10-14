@@ -101,8 +101,9 @@ test.describe( 'Inspector fields', () => {
 		await expect(
 			check.locator( '.inspector-check__note br' )
 		).toHaveCount( 1 );
+		// nl2br() writes "<br />\n".
 		await expect( check.locator( '.inspector-check__note' ) ).toHaveText(
-			'First lineSecond <line>'
+			'First line\nSecond <line>'
 		);
 		await page.waitForTimeout( 1000 );
 		expect( renders ).toHaveLength( 2 );
