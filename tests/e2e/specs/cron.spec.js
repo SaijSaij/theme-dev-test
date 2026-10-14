@@ -46,6 +46,8 @@ async function state( requestUtils ) {
  * @param {Object}                                       requestUtils
  * @return {Promise<Object>} State.
  */
+// Polls wait longer than WP_CRON_LOCK_TIMEOUT (60 s): while a WP-Cron run spawned by WordPress holds the lock,
+// wp-cron.php returns without running anything.
 async function runCron( request, requestUtils ) {
 	await request.get( '/wp-cron.php' );
 	return state( requestUtils );
@@ -117,7 +119,7 @@ test.describe( 'Cron events and tasks', () => {
 				async () =>
 					( await runCron( request, requestUtils ) ).counts
 						.heartbeat ?? 0,
-				{ timeout: 45_000, intervals: [ 1_000, 2_000, 5_000 ] }
+				{ timeout: 75_000, intervals: [ 1_000, 2_000, 5_000 ] }
 			)
 			.toBeGreaterThan( before );
 		const { now, events } = await state( requestUtils );
@@ -156,7 +158,7 @@ test.describe( 'Cron events and tasks', () => {
 				async () =>
 					( await runCron( request, requestUtils ) ).counts.task ??
 					null,
-				{ timeout: 45_000, intervals: [ 1_000, 2_000, 5_000 ] }
+				{ timeout: 75_000, intervals: [ 1_000, 2_000, 5_000 ] }
 			)
 			.toEqual( task );
 		expect(
