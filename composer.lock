@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "a6928dc9bd3fac29401de0081fa545eb",
+    "content-hash": "92e244a526f901f39610cf8e5a2a0e4a",
     "packages": [
         {
             "name": "saij/wp-app-framework",
@@ -12,12 +12,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/SaijSaij/wp-app-framework.git",
-                "reference": "80ca4a6fa609e4804d4dcb3d12eb5447d16f5544"
+                "reference": "4a4fdf8291f1b7779d1260e436252495964d1acb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/SaijSaij/wp-app-framework/zipball/80ca4a6fa609e4804d4dcb3d12eb5447d16f5544",
-                "reference": "80ca4a6fa609e4804d4dcb3d12eb5447d16f5544",
+                "url": "https://api.github.com/repos/SaijSaij/wp-app-framework/zipball/4a4fdf8291f1b7779d1260e436252495964d1acb",
+                "reference": "4a4fdf8291f1b7779d1260e436252495964d1acb",
                 "shasum": ""
             },
             "require": {
@@ -41,32 +41,26 @@
                     "Saij\\WpAppFramework\\": "src/"
                 }
             },
-            "autoload-dev": {
-                "psr-4": {
-                    "Saij\\WpAppFramework\\Tests\\": "tests/"
-                }
-            },
-            "scripts": {
-                "test": [
-                    "phpunit"
-                ],
-                "lint": [
-                    "phpstan analyse --no-progress --memory-limit=1G",
-                    "php-cs-fixer check --diff"
-                ],
-                "fix": [
-                    "php-cs-fixer fix"
-                ]
-            },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
-                "proprietary"
+                "GPL-2.0-or-later"
             ],
             "description": "Framework for standalone full site editing themes for WordPress.",
+            "homepage": "https://saijsaij.github.io/wp-app-framework/",
+            "keywords": [
+                "block-theme",
+                "full-site-editing",
+                "gutenberg",
+                "tailwindcss",
+                "twig",
+                "wordpress"
+            ],
             "support": {
-                "source": "https://github.com/SaijSaij/wp-app-framework/tree/main",
-                "issues": "https://github.com/SaijSaij/wp-app-framework/issues"
+                "docs": "https://saijsaij.github.io/wp-app-framework/",
+                "issues": "https://github.com/saijsaij/wp-app-framework/issues",
+                "source": "https://github.com/saijsaij/wp-app-framework"
             },
-            "time": "2026-10-14T18:42:16+00:00"
+            "time": "2026-10-15T12:12:10+00:00"
         },
         {
             "name": "symfony/deprecation-contracts",

@@ -2,12 +2,8 @@
     "name": "saij/theme-dev-test",
     "description": "Test theme for wp-app-framework: its build and browser tests run against this theme.",
     "type": "wordpress-theme",
-    "license": "proprietary",
+    "license": "GPL-2.0-or-later",
     "repositories": [
-        {
-            "type": "vcs",
-            "url": "https://github.com/saijsaij/wp-app-framework"
-        },
         {
             "type": "vcs",
             "url": "https://github.com/saijsaij/plugin-dev-test"

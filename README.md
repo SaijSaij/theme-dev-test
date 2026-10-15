@@ -141,3 +141,7 @@ Expected log entries of a test run (WP_DEBUG): the failures of `dev-test/v1/item
 - `build/` (not versioned) is the output of the script and stylesheet build.
 
 In a source checkout the framework runs in development mode and caches the manifest in `wp-content/cache/theme-dev-test/manifest/`. The release ZIP contains `generated/manifest.php` (release mode) and caches compiled templates in `wp-content/cache/theme-dev-test/twig/<template version>/`.
+
+## License
+
+[GPL-2.0-or-later](LICENSE), like WordPress.
