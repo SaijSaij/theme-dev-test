@@ -12,12 +12,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/SaijSaij/wp-app-framework.git",
-                "reference": "4a4fdf8291f1b7779d1260e436252495964d1acb"
+                "reference": "2405639e8ffd3b1af127814bf40b4957778380fd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/SaijSaij/wp-app-framework/zipball/4a4fdf8291f1b7779d1260e436252495964d1acb",
-                "reference": "4a4fdf8291f1b7779d1260e436252495964d1acb",
+                "url": "https://api.github.com/repos/SaijSaij/wp-app-framework/zipball/2405639e8ffd3b1af127814bf40b4957778380fd",
+                "reference": "2405639e8ffd3b1af127814bf40b4957778380fd",
                 "shasum": ""
             },
             "require": {
@@ -27,6 +27,7 @@
             "require-dev": {
                 "friendsofphp/php-cs-fixer": "^3.95",
                 "php-stubs/wordpress-stubs": "^7.1",
+                "phpstan/phpdoc-parser": "^2.3",
                 "phpstan/phpstan": "^2.3",
                 "phpunit/phpunit": "^13.4",
                 "szepeviktor/phpstan-wordpress": "^2.0"
@@ -60,7 +61,7 @@
                 "issues": "https://github.com/saijsaij/wp-app-framework/issues",
                 "source": "https://github.com/saijsaij/wp-app-framework"
             },
-            "time": "2026-10-15T12:12:10+00:00"
+            "time": "2026-10-15T20:47:45+00:00"
         },
         {
             "name": "symfony/deprecation-contracts",
