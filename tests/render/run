@@ -1,0 +1,56 @@
+#!/usr/bin/env bash
+# Render and escaping tests of the theme: renders its blocks with fixed attribute
+# sets in an instance of wp-test-env (https://github.com/saijsaij/wp-test-env,
+# checked out next to this repository) and compares the HTML (tests/render/cases.php).
+# The instance runs the theme in development mode (checkout) or release mode
+# (release ZIP):
+#
+#   theme-dev-test/tests/render/run <instance>
+#
+# Every instance defines WP_DEBUG from WORDPRESS_DEBUG ("1"); the error path
+# without WP_DEBUG runs in a second pass with it cleared. In release mode the
+# script also checks the clean-up of the Twig cache of older releases.
+set -euo pipefail
+
+if [[ $# -ne 1 ]]; then
+    echo "usage: $0 <instance of wp-test-env>" >&2
+    exit 2
+fi
+instance="$1"
+# wp-test-env is checked out next to this repository.
+test_env="$(cd "$(dirname "${BASH_SOURCE[0]}")/../../.." && pwd)/wp-test-env"
+if [[ ! -x "${test_env}/bin/wp" ]]; then
+    echo "ERROR: ${test_env}/bin/wp not found; check out wp-test-env (https://github.com/saijsaij/wp-test-env) next to this repository." >&2
+    exit 2
+fi
+
+# The release ZIP does not contain tests/, and release instances do not mount the workspace: copy the cases in.
+cases=/tmp/theme-dev-test-render-cases.php
+docker cp "$(dirname "${BASH_SOURCE[0]}")/cases.php" "$("${test_env}/bin/container" "${instance}"):${cases}"
+
+status=0
+"${test_env}/bin/wp" -e PAGER=cat "${instance}" eval-file "${cases}" || status=1
+"${test_env}/bin/wp" -e PAGER=cat -e WORDPRESS_DEBUG= "${instance}" eval-file "${cases}" || status=1
+
+# Release mode compiles into twig/{templateVersion}/ of the cache directory; the daily clean-up event of the
+# framework removes what older releases and development mode left there. The render tests above compiled the
+# templates of this release.
+if [[ "$("${test_env}/bin/mode" "${instance}")" == release ]]; then
+    twig=/var/www/html/wp-content/cache/theme-dev-test/twig
+    current="$("${test_env}/bin/exec" "${instance}" ls "${twig}")"
+    "${test_env}/bin/exec" "${instance}" sh -c "mkdir -p ${twig}/0000000000000000/ab ${twig}/ab && touch ${twig}/0000000000000000/ab/old.php ${twig}/ab/dev.php"
+    "${test_env}/bin/wp" -e PAGER=cat "${instance}" cron event run wp_app_framework/cache/clean_up/theme-dev-test >/dev/null
+    remaining="$("${test_env}/bin/exec" "${instance}" ls "${twig}")"
+    if [[ "${remaining}" == "${current}" && "$(wc -w <<<"${current}")" -eq 1 ]]; then
+        echo "ok: the clean-up event removes the Twig cache of older releases and keeps ${current}"
+    else
+        echo "FAIL: the clean-up event removes the Twig cache of older releases (before: ${current}; after: ${remaining})"
+        status=1
+    fi
+fi
+
+if [[ "${status}" -ne 0 ]]; then
+    echo "Render tests failed against ${instance}." >&2
+    exit 1
+fi
+echo "All render tests passed against ${instance}."

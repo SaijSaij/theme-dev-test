@@ -62,7 +62,7 @@ Lint: PHP with PHPStan (level max, WordPress stubs) and PHP-CS-Fixer (PER Coding
 ../wp-test-env/bin/tools -w theme-dev-test npm run lint    # fix: npm run format
 ```
 
-Browser tests (Playwright, `tests/e2e/`), WP-CLI tests (`tests/cli/run`) and lifecycle tests (`tests/lifecycle/run`) run in pools of wp-test-env, described in `tests/dev.pools` (the checkouts, with the framework checkout linked into `vendor/`) and `tests/release.pools` (the release ZIP, built first with the framework checkout). From the wp-test-env directory:
+Browser tests (Playwright, `tests/e2e/`), render tests (`tests/render/run`), WP-CLI tests (`tests/cli/run`) and lifecycle tests (`tests/lifecycle/run`) run in pools of wp-test-env, described in `tests/dev.pools` (the checkouts, with the framework checkout linked into `vendor/`) and `tests/release.pools` (the release ZIP, built first with the framework checkout). From the wp-test-env directory:
 
 ```sh
 bin/run ../theme-dev-test/tests/dev.pools
@@ -74,9 +74,10 @@ bin/run ../theme-dev-test/tests/dev.pools ../plugin-dev-test/tests/dev.pools ../
 |---|---|---|
 | `tdt-full` | 4 | browser tests with the child theme and plugin-dev-test active and a persistent object cache (Valkey) |
 | `tdt-bare` | 3 | browser tests with the theme alone |
+| `tdt-render` | 1 | render tests |
 | `tdt-cli` | 1 | WP-CLI tests |
 | `tdt-lifecycle` | 1 | lifecycle tests |
-| `tdt-release`, `tdt-release-cli`, `tdt-release-lifecycle` | 3, 1, 1 | the same against the release ZIPs of the theme and the child theme |
+| `tdt-release`, `tdt-release-render`, `tdt-release-cli`, `tdt-release-lifecycle` | 3, 1, 1, 1 | the same against the release ZIPs of the theme and the child theme |
 
 Every instance is a fresh WordPress; each Playwright worker has an instance of its own (`WP_BASE_URLS`, picked per worker in `tests/e2e/playwright.config.js`), so tests of different workers never share a site. The suite passes with and without the plugin and the child theme, which is why it runs in two constellations. Results and screenshots of failed tests land in `results/<pool>/` of wp-test-env, the output in `results/<pool>.log`. Each test deletes exactly the posts, media and users it created.
 
@@ -85,11 +86,12 @@ Single specs against an instance of your own (the release ZIP: `bin/up tdt --the
 ```sh
 bin/up tdt --theme theme-dev-test --activate theme-dev-test
 bin/e2e --instances tdt --project theme-dev-test --results tdt -- specs/twig.spec.js
+../theme-dev-test/tests/render/run tdt
 ../theme-dev-test/tests/cli/run tdt
 bin/down tdt
 ```
 
-The WP-CLI tests run the commands of `src/Cli/` with `bin/wp` of wp-test-env and check their output and exit codes; the release workflow runs them with `cli-tests: true`. The lifecycle tests switch from the child theme [theme-dev-test-child](https://github.com/saijsaij/theme-dev-test-child) to this theme, to twentytwentyfive and back, and check when the lifecycle methods of both run, which cron events are removed and that the tables stay; they need both themes in the instance and restore the theme that was active.
+The render tests render blocks of the theme with fixed attribute sets through `do_blocks()` in the instance, as the front end does, and compare the HTML line by line (`tests/render/cases.php`, copied into the instance by `tests/render/run`); without a browser they cover many attribute sets in a few seconds. The WP-CLI tests run the commands of `src/Cli/` with `bin/wp` of wp-test-env and check their output and exit codes; the release workflow runs them with `cli-tests: true`. The lifecycle tests switch from the child theme [theme-dev-test-child](https://github.com/saijsaij/theme-dev-test-child) to this theme, to twentytwentyfive and back, and check when the lifecycle methods of both run, which cron events are removed and that the tables stay; they need both themes in the instance and restore the theme that was active.
 
 The fixtures in `tests/e2e/fixtures.js` fail every test that causes a console warning, console error or uncaught page error. A test that checks a warning declares it with `expectConsole`; it must then appear. The only general exception is a warning WordPress causes itself with every theme (documented in `ALLOWED`); if it stops appearing while the editor was opened, the run fails so the entry gets removed.
 
@@ -120,6 +122,7 @@ The fixtures in `tests/e2e/fixtures.js` fail every test that causes a console wa
 | `wordpress-functions.spec.js` | The WordPress template functions of the framework (`wp_…`) against the REST API: attachments (image, URLs, caption as HTML, alternative text), posts (URL, title, manual and automatic excerpt as plain text, date, thumbnail), users (name, author archive, avatar), site values decoded and escaped once, login and logout URL, login status with and without a session, formatting; `''` for a draft and missing objects | `src/Block/WordPressFunctions/` |
 | `plugin.spec.js` | The theme as consumer of plugin-dev-test: `#[PluginApi]` (data with the plugin, `null` without), public template functions and filters with `has_plugin()`, templates with the same path in theme and plugin in one request, override of a plugin template, `@plugin` | `src/Plugin/`, `overrides/plugin-dev-test/` |
 | `patterns.spec.js` | Block template, template part and pattern of the theme, which the build checks against its blocks: front end of `single-post-e2e-patterns.html` with the header part, the pattern (PHP output in a block of the theme and a core block) and a plugin block (rendered only with the plugin), a link to a free URL; the pattern inserted as a contentOnly section, editable, with `contentRole` for inserting | `templates/`, `parts/`, `patterns/` |
+| `tests/render/run` | Fixed attribute sets rendered as on the front end: defaults, every value type, hostile values (HTML, quotes and `javascript:` URLs in plain text, rich text, URLs, links, multiline text, nested value classes, list items), quotes breaking out of URL attributes, invalid values of every type falling back to the default (WordPress drops the whole attribute, also a list with one invalid item), links to a published page, a draft and a missing post, missing images, render errors with and without `WP_DEBUG`, automatic excerpts; in release mode the daily clean-up event removing the Twig cache of older releases and of development mode | `src/Block/Check/`, `src/Block/Hero/`, `src/Block/Inspector/`, `src/Block/Faq/`, `src/Block/SupportUnwrapped/` |
 | `tests/lifecycle/run` | Theme switches: `#[OnActivation]` on the request after the switch (`after_switch_theme`), `#[OnDeactivation]` on the switch (`switch_theme`), no switch between the theme and its child theme for the theme, cron events removed and scheduled again, tables and their state kept | `src/Lifecycle/` (also of the child theme) |
 | `tests/cli/run` | WP-CLI commands `wp dev-test check …`: typed arguments, options and flags (`int`, `float`, enum, `--no-…`), defaults, variadic arguments, errors for a wrong type, an enum value outside the list (also `a,b`), a missing required option, an unknown option and too many arguments, injected service, `CliOutput` (log, warning, table, success), `CliException` with exit code 3, unexpected exceptions with and without `WP_DEBUG`, help with synopsis and enum options; in development mode also the framework's list of WP-CLI commands against the installed WP-CLI | `src/Cli/` |
 | `cache.spec.js` | The cache with each backend (files, transients, the object cache only if the site has one): a cached block renders once per input, context and variant (`QueryParamVary`), its view script runs also from the cache, invalidation by a saved post (`PostTypeTag`), saved settings (`SettingsTag`) and a tag of the theme; fresh renders in the editor and its preview; cached REST routes (arguments, `UserVary`, the permission check on every request, a `WP_REST_Response` with status and headers, not stored with status 404) and `CacheStore::remember()` | `src/Cache/` |

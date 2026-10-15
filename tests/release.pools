@@ -16,6 +16,10 @@ instances 3
 theme-zip theme-dev-test/dist/theme-dev-test-*.zip
 e2e theme-dev-test
 
+pool tdt-release-render
+theme-zip theme-dev-test/dist/theme-dev-test-*.zip
+run theme-dev-test/tests/render/run {instance}
+
 pool tdt-release-cli
 theme-zip theme-dev-test/dist/theme-dev-test-*.zip
 run theme-dev-test/tests/cli/run {instance}

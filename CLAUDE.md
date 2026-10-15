@@ -6,7 +6,7 @@ Test theme of [wp-app-framework](https://github.com/saijsaij/wp-app-framework) (
 
 ## Rules
 
-- Code written to check a framework feature stays here as a **permanent test**: PHP under `src/<Feature>/` (with its Twig templates and editor scripts next to it), specs in `tests/e2e/specs/`, WP-CLI checks in `tests/cli/run`. Add every new spec to the spec table in the README.
+- Code written to check a framework feature stays here as a **permanent test**: PHP under `src/<Feature>/` (with its Twig templates and editor scripts next to it), specs in `tests/e2e/specs/`, render checks with fixed attribute sets in `tests/render/cases.php` (run by `tests/render/run`), WP-CLI checks in `tests/cli/run`. Add every new spec to the spec table in the README.
 - Build errors are not tested here (a broken class would break the theme's build); they belong to the framework's PHPUnit fixtures.
 - Each test deletes exactly the posts, media and users it created – never "delete all". Never store `dev-test/wrong-field`, `dev-test/unmarked` or `dev-test/support-unwrapped` in a post; they fail on purpose.
 - The console guard (`tests/e2e/fixtures.js`) fails a test on every console warning, console error or page error. Declare expected messages with `expectConsole`; add to `ALLOWED` only a warning WordPress causes with every theme, with the reason.

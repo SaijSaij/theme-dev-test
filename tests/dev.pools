@@ -25,6 +25,12 @@ themes theme-dev-test
 activate theme-dev-test
 e2e theme-dev-test
 
+# Blocks rendered with fixed attribute sets, without a browser.
+pool tdt-render
+themes theme-dev-test
+activate theme-dev-test
+run theme-dev-test/tests/render/run {instance}
+
 pool tdt-cli
 themes theme-dev-test
 activate theme-dev-test
