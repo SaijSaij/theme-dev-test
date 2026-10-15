@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Saij\ThemeDevTest\Post;
 
-use Saij\WpAppFramework\Block\PlainText;
 use Saij\WpAppFramework\Post\Page;
 use Saij\WpAppFramework\Post\Post;
 use Saij\WpAppFramework\Post\PostMeta;
+use Saij\WpAppFramework\Value\PlainText;
 
 /**
  * Meta of WordPress' own post types.

@@ -23,7 +23,7 @@ final readonly class ModeController
     /**
      * Class names as the theme code sees them: prefixed in a release (Strauss rewrites the call sites).
      *
-     * @return array{release: bool, devCache: bool, frameworkClass: string, twigClass: string}
+     * @return array{release: bool, devCache: bool, slug: string, frameworkClass: string, twigClass: string}
      */
     #[RestRoute('/mode', HttpMethod::Get, new PublicAccess())]
     public function mode(): array
@@ -31,6 +31,7 @@ final readonly class ModeController
         return [
             'release' => is_file($this->theme->getTemplateDirectory() . '/' . Theme::RELEASE_MANIFEST),
             'devCache' => is_dir(WP_CONTENT_DIR . '/cache/' . get_template() . '/manifest'),
+            'slug' => $this->theme->getSlug(),
             'frameworkClass' => Theme::class,
             'twigClass' => Environment::class,
         ];

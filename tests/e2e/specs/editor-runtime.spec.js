@@ -414,6 +414,17 @@ test.describe( 'Editor runtime', () => {
 		await expect( page.locator( '.dev-test-hero-summary' ) ).toHaveText(
 			'2 button(s)'
 		);
+		// Panels receive the same props as toolbar buttons.
+		const clientId = await editor.canvas
+			.locator( '[data-type="dev-test/hero"]' )
+			.getAttribute( 'data-block' );
+		await expect( page.locator( '.dev-test-hero-props' ) ).toHaveAttribute(
+			'data-client-id',
+			clientId
+		);
+		await expect( page.locator( '.dev-test-hero-props' ) ).toHaveText(
+			'editing'
+		);
 	} );
 
 	test( 'shows only content controls in contentOnly mode', async ( {

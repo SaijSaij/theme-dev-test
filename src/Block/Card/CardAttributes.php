@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Saij\ThemeDevTest\Block\Card;
 
-use Saij\WpAppFramework\Block\Image;
-use Saij\WpAppFramework\Block\Label;
-use Saij\WpAppFramework\Block\RichText;
+use Saij\WpAppFramework\Value\Image;
+use Saij\WpAppFramework\Value\Label;
 use Saij\WpAppFramework\Value\ListOf;
+use Saij\WpAppFramework\Value\RichText;
 
 final readonly class CardAttributes
 {

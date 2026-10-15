@@ -47,10 +47,11 @@ All checks run with [wp-test-env](https://github.com/saijsaij/wp-test-env), chec
 Build: `composer build-manifest` builds and checks the manifest (writes nothing) and must report
 
 ```
-Manifest OK (theme theme-dev-test): 97 service candidates, 63 services, 5 hooks, 64 routes, 38 template functions, 1 template filters, 23 blocks, 6 CLI commands, 3 cron events, 1 cron tasks, 2 tables, 2 lifecycle methods. Nothing written (no --output).
+Manifest OK (theme theme-dev-test): 98 service candidates, 64 services, 6 hooks, 64 routes, 38 template functions, 1 template filters, 23 blocks, 6 CLI commands, 3 cron events, 1 cron tasks, 2 tables, 2 lifecycle methods. Nothing written (no --output).
 Block markup OK: 9 templates, template parts and patterns checked.
 Public: 1 APIs, 2 template functions and filters.
 Templates use the public template callables of: plugin-dev-test.
+Not loaded by the build (building on a class outside the project, its Composer dependencies and PHP): Saij\ThemeDevTest\Widget\NoteWidget (WP_Widget).
 Assets: 6 static files, 6 image variants.
 ```
 
@@ -91,7 +92,7 @@ bin/e2e --instances tdt --project theme-dev-test --results tdt -- specs/twig.spe
 bin/down tdt
 ```
 
-The render tests render blocks of the theme with fixed attribute sets through `do_blocks()` in the instance, as the front end does, and compare the HTML line by line (`tests/render/cases.php`, copied into the instance by `tests/render/run`); without a browser they cover many attribute sets in a few seconds. The WP-CLI tests run the commands of `src/Cli/` with `bin/wp` of wp-test-env and check their output and exit codes; the release workflow runs them with `cli-tests: true`. The lifecycle tests switch from the child theme [theme-dev-test-child](https://github.com/saijsaij/theme-dev-test-child) to this theme, to twentytwentyfive and back, and check when the lifecycle methods of both run, which cron events are removed and that the tables stay; they need both themes in the instance and restore the theme that was active.
+The render tests render blocks of the theme with fixed attribute sets through `do_blocks()` in the instance, as the front end does, and compare the HTML line by line (`tests/render/cases.php`, copied into the instance by `tests/render/run`); without a browser they cover many attribute sets in a few seconds. The WP-CLI tests run the commands of `src/Cli/` with `bin/wp` of wp-test-env and check their output and exit codes; the release workflow runs them with `cli: true`. The lifecycle tests switch from the child theme [theme-dev-test-child](https://github.com/saijsaij/theme-dev-test-child) to this theme, to twentytwentyfive and back, and check when the lifecycle methods of both run, which cron events are removed and that the tables stay; they need both themes in the instance and restore the theme that was active.
 
 The fixtures in `tests/e2e/fixtures.js` fail every test that causes a console warning, console error or uncaught page error. A test that checks a warning declares it with `expectConsole`; it must then appear. The only general exception is a warning WordPress causes itself with every theme (documented in `ALLOWED`); if it stops appearing while the editor was opened, the run fails so the entry gets removed.
 

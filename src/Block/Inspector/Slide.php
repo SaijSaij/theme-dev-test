@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Saij\ThemeDevTest\Block\Inspector;
 
-use Saij\WpAppFramework\Block\Image;
-use Saij\WpAppFramework\Block\Label;
-use Saij\WpAppFramework\Block\PlainText;
+use Saij\WpAppFramework\Value\Image;
+use Saij\WpAppFramework\Value\Label;
+use Saij\WpAppFramework\Value\PlainText;
 
 final readonly class Slide
 {

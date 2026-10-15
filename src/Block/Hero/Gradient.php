@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Saij\ThemeDevTest\Block\Hero;
 
-use Saij\WpAppFramework\Block\Labeled;
+use Saij\WpAppFramework\Value\Labeled;
 
 enum Gradient: string implements Labeled
 {

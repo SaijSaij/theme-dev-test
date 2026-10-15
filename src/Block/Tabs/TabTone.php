@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Saij\ThemeDevTest\Block\Tabs;
 
-use Saij\WpAppFramework\Block\Labeled;
+use Saij\WpAppFramework\Value\Labeled;
 
 enum TabTone: string implements Labeled
 {

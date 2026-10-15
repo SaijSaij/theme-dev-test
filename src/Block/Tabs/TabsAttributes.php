@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Saij\ThemeDevTest\Block\Tabs;
 
-use Saij\WpAppFramework\Block\Label;
 use Saij\WpAppFramework\Block\ProvidesContext;
+use Saij\WpAppFramework\Value\Label;
 
 final readonly class TabsAttributes
 {

@@ -14,4 +14,4 @@ jobs:
   release:
     uses: SaijSaij/wp-app-framework/.github/workflows/consumer-release.yml@main
     with:
-      cli-tests: true
+      cli: true

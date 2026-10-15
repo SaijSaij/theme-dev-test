@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Saij\ThemeDevTest\Post;
 
-use Saij\WpAppFramework\Block\Image;
-use Saij\WpAppFramework\Block\Label;
-use Saij\WpAppFramework\Block\RichText;
 use Saij\WpAppFramework\Post\PostMeta;
+use Saij\WpAppFramework\Value\Image;
+use Saij\WpAppFramework\Value\Label;
 use Saij\WpAppFramework\Value\Link;
 use Saij\WpAppFramework\Value\ListOf;
+use Saij\WpAppFramework\Value\RichText;
 use Saij\WpAppFramework\Value\Url;
 
 /**

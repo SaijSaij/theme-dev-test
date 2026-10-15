@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Saij\ThemeDevTest\Block\Check;
 
-use Saij\WpAppFramework\Block\Labeled;
+use Saij\WpAppFramework\Value\Labeled;
 
 enum Variant: string implements Labeled
 {

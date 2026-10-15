@@ -22,6 +22,7 @@ test.describe( 'Mode', () => {
 			expect( response.body ).toEqual( {
 				release: IS_RELEASE,
 				devCache: ! IS_RELEASE,
+				slug: 'theme-dev-test',
 				frameworkClass: `${ VENDOR_PREFIX }Saij\\WpAppFramework\\Theme`,
 				twigClass: `${ VENDOR_PREFIX }Twig\\Environment`,
 			} );

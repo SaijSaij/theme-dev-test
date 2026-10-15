@@ -130,11 +130,27 @@ test.describe( 'Inspector controls', () => {
 			}
 		);
 		await openPostWith( { admin, editor, requestUtils }, '' );
-		await page.evaluate( () => {
-			const instance = window.wpAppFramework[ 'theme-dev-test' ];
+		const api = await page.evaluate( () => {
+			// The import @saij/wp-app-framework resolves to this object; the rest of the global is internal.
+			const instance = window.wpAppFramework[ 'theme-dev-test' ].api;
 			instance.registerPanel( 'unknown', () => null );
 			instance.registerControl( 'check', 'unknown', () => null );
 			instance.registerToolbarButton( 'dev-test/faq', () => null );
+			return {
+				names: Object.keys( instance ).sort(),
+				frozen: Object.isFrozen( instance ),
+			};
+		} );
+		expect( api ).toEqual( {
+			names: [
+				'getData',
+				'loadScript',
+				'registerControl',
+				'registerPanel',
+				'registerSupportControl',
+				'registerToolbarButton',
+			],
+			frozen: true,
 		} );
 	} );
 

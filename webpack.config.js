@@ -1,10 +1,8 @@
 /**
  * Builds the editor runtime of the framework and the editor scripts in src/
- * into build/ (see vendor/saij/wp-app-framework/webpack.config.js).
+ * into build/ (see the webpack helper of the framework, `@saij/wp-app-framework/webpack`).
  */
-module.exports = require( './vendor/saij/wp-app-framework/webpack.config.js' )(
-	{
-		slug: 'theme-dev-test',
-		root: __dirname,
-	}
-);
+module.exports = require( '@saij/wp-app-framework/webpack' )( {
+	slug: 'theme-dev-test',
+	root: __dirname,
+} );
