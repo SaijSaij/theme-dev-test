@@ -86,6 +86,28 @@ const test = base.test.extend( {
 		await provide( [] );
 	},
 
+	/*
+	 * The mouse of every page starts at the bottom right. At its default position
+	 * (0, 0) it rests on the WordPress logo of the admin bar: when Chromium
+	 * dispatches an event there (e.g. after scrolling an element into view), the
+	 * logo's menu opens and covers the top left of the page, where a theme
+	 * without styles – old releases of theme-dev-test in the release tests of the
+	 * plugin – shows the content, and intercepts clicks.
+	 */
+	mouseAway: [
+		async ( { page }, provide ) => {
+			const viewport = page.viewportSize();
+			if ( viewport === null ) {
+				throw new Error(
+					'tests/e2e/fixtures.js needs a viewport to move the mouse away from the admin bar.'
+				);
+			}
+			await page.mouse.move( viewport.width - 1, viewport.height - 1 );
+			await provide();
+		},
+		{ auto: true },
+	],
+
 	consoleGuard: [
 		async ( { page, allowedMessages, expectConsole }, provide ) => {
 			const unexpected = [];

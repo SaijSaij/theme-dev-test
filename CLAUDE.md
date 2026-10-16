@@ -29,7 +29,7 @@ Browser, WP-CLI and lifecycle tests run in fresh WordPress instances of wp-test-
 
 ```sh
 bin/run ../theme-dev-test/tests/dev.pools                  # before a push: with ../plugin-dev-test/tests/dev.pools ../theme-dev-test-child/tests/dev.pools
-bin/run ../theme-dev-test/tests/release.pools              # at a release: builds the ZIP with the framework checkout
+bin/run ../theme-dev-test/tests/release.pools              # to reproduce a failed release workflow: builds the ZIP with the framework checkout
 bin/up tdt --theme theme-dev-test --activate theme-dev-test && bin/e2e --instances tdt --project theme-dev-test --results tdt -- specs/<file>   # one spec
 ```
 
