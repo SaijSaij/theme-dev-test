@@ -156,6 +156,35 @@ test.describe( 'Identifiers', () => {
 		expectDistinctIdentifiers( regions );
 	} );
 
+	test( 'show the controls of a settings script with the generated ones, and the item titles', async ( {
+		page,
+	} ) => {
+		await page.goto( PAGE );
+		await page.getByRole( 'tab', { name: 'Regions' } ).click();
+		const titles = page.locator( '.wp-app-framework-list__title' );
+		// Items are titled with their first plain text on the settings page too.
+		await expect( titles ).toHaveText( [ 'Main', 'Side' ] );
+
+		await titles.first().click();
+		const name = page.getByLabel( 'Name', { exact: true } );
+		await expect( name ).toHaveValue( 'Main' );
+		const preview = page.locator( '.dev-test-region-preview' );
+		await expect( preview ).toHaveText( 'Main (0a1b2c3d), 1 of 2' );
+
+		// The registered control gets the changed value, also through the generated control it renders.
+		await name.fill( 'Center' );
+		await expect( preview ).toHaveText( 'Center (0a1b2c3d), 1 of 2' );
+		await expect( titles.first() ).toHaveText( 'Center' );
+
+		await page
+			.getByRole( 'button', { name: 'Add item to Regions' } )
+			.click();
+		await expect( preview ).toHaveCount( 2 );
+		await expect( preview.nth( 1 ) ).toHaveText(
+			/^ \([0-9a-f]{8}\), 3 of 3$/
+		);
+	} );
+
 	test( 'generate identifiers for items added in the inspector and in the canvas', async ( {
 		admin,
 		editor,
