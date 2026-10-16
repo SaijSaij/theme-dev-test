@@ -4,7 +4,8 @@
 {% endif %}
 <section {{ block_wrapper_attributes(wrapper) }}>
     {% if attrs.backgroundImageId %}
-        <figure class="hero__image absolute inset-0 -z-10 m-0">{{ wp_attachment_image(attrs.backgroundImageId, 'full', {class: 'size-full object-cover'}) }}</figure>
+        {# A div, not a figure: the margin WordPress gives figures would shorten the image. #}
+        <div class="hero__image absolute inset-0 -z-10">{{ wp_attachment_image(attrs.backgroundImageId, 'full', {class: 'size-full object-cover'}) }}</div>
     {% endif %}
     <div class="hero__content mx-auto flex max-w-content flex-col items-center gap-6 text-center">
         {% if attrs.headline or is_editor() %}

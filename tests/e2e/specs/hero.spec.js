@@ -360,4 +360,42 @@ test.describe( 'Hero', () => {
 			[ 'A', 'B', 'C' ]
 		);
 	} );
+
+	test( 'fills the whole block with the background image on the front end and in the canvas', async ( {
+		admin,
+		editor,
+		page,
+		requestUtils,
+	} ) => {
+		const imageId = await uploadImage( requestUtils, IMAGE );
+		const content = block( 'dev-test/hero', {
+			headline: 'Cover',
+			backgroundColor: '#edce5e',
+			backgroundImageId: imageId,
+			badges: [ { text: 'One', icon: 'star' } ],
+			buttons: [ { label: 'Go', url: '' } ],
+		} );
+		const covers = ( hero ) =>
+			hero.evaluate( ( root ) => {
+				const box = root.getBoundingClientRect();
+				const image = root
+					.querySelector( '.hero__image img' )
+					.getBoundingClientRect();
+				return [ 'top', 'right', 'bottom', 'left' ].every(
+					( side ) => Math.abs( box[ side ] - image[ side ] ) < 1
+				);
+			} );
+
+		const id = await createDraft( requestUtils, content );
+		await page.goto( `/?p=${ id }&preview=true` );
+		const front = page.locator( '.wp-block-dev-test-hero' );
+		await expect( front.locator( '.hero__image img' ) ).toBeVisible();
+		expect( await covers( front ) ).toBe( true );
+
+		await openPostWith( { admin, editor, requestUtils }, content );
+		const hero = editor.canvas.locator( '[data-type="dev-test/hero"]' );
+		await expect( hero.locator( '.hero__image img' ) ).toBeVisible();
+		expect( await covers( hero ) ).toBe( true );
+		await screenshot( hero, 'hero-cover' );
+	} );
 } );
