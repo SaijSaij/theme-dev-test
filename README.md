@@ -47,7 +47,7 @@ All checks run with [wp-test-env](https://github.com/saijsaij/wp-test-env), chec
 Build: `composer build-manifest` builds and checks the manifest (writes nothing) and must report
 
 ```
-Manifest OK (theme theme-dev-test): 109 service candidates, 69 services, 6 hooks, 64 routes, 40 template functions, 1 template filters, 27 blocks, 6 CLI commands, 3 cron events, 1 cron tasks, 2 tables, 2 lifecycle methods. Nothing written (no --output).
+Manifest OK (theme theme-dev-test): 111 service candidates, 70 services, 6 hooks, 64 routes, 40 template functions, 1 template filters, 28 blocks, 6 CLI commands, 3 cron events, 1 cron tasks, 2 tables, 2 lifecycle methods. Nothing written (no --output).
 Block markup OK: 10 templates, template parts and patterns checked.
 Public: 1 APIs, 2 template functions and filters.
 Templates use the public template callables of: plugin-dev-test.
