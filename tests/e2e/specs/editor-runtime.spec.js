@@ -543,10 +543,21 @@ test.describe( 'Editor runtime', () => {
 			.locator( '.wp-app-framework-list' )
 			.filter( { has: add } );
 		const titles = list.locator( '.wp-app-framework-list__title' );
+		const urls = list.getByRole( 'textbox', { name: 'URL' } );
+		const toggle = ( name ) =>
+			list.getByRole( 'button', { name, exact: true } );
+		// Items are collapsed: only their titles show.
 		await expect( titles ).toHaveText( [ 'First', 'Second' ] );
+		await expect( urls ).toHaveCount( 0 );
 
+		// A new item is expanded; without text its title is the item label (the class name) with its number.
 		await add.click();
-		await expect( titles ).toHaveText( [ 'First', 'Second', 'Item 3' ] );
+		await expect( titles ).toHaveText( [ 'First', 'Second', 'Button 3' ] );
+		await expect( toggle( 'Button 3' ) ).toHaveAttribute(
+			'aria-expanded',
+			'true'
+		);
+		await expect( urls ).toHaveCount( 1 );
 		// #[ListOf(Button::class, max: 3)]: no fourth button.
 		await expect( add ).toBeDisabled();
 		const third = hero.locator( '.hero__button' ).nth( 2 );
@@ -554,10 +565,20 @@ test.describe( 'Editor runtime', () => {
 		await third.click();
 		await page.keyboard.type( 'Third' );
 		await expect( titles ).toHaveText( [ 'First', 'Second', 'Third' ] );
+
+		// Several items can be expanded at once.
+		await toggle( 'First' ).click();
+		await expect( toggle( 'First' ) ).toHaveAttribute(
+			'aria-expanded',
+			'true'
+		);
+		await expect( urls ).toHaveCount( 2 );
 		await screenshot(
 			page.getByRole( 'region', { name: 'Editor settings' } ),
 			'inspector-hero-buttons'
 		);
+		await toggle( 'First' ).click();
+		await expect( urls ).toHaveCount( 1 );
 
 		await page
 			.getByRole( 'button', { name: 'Actions for item 1' } )
@@ -569,13 +590,30 @@ test.describe( 'Editor runtime', () => {
 			'Third',
 		] );
 
+		// Drag and drop onto the upper half of the first item; the item stays expanded.
+		await list
+			.getByRole( 'button', { name: 'Drag Third' } )
+			.dragTo( list.locator( '.wp-app-framework-list__item' ).first(), {
+				targetPosition: { x: 40, y: 4 },
+			} );
+		await expect( titles ).toHaveText( [ 'Third', 'Second', 'First' ] );
+		await expect( hero.locator( '.hero__button' ) ).toHaveText( [
+			'Third',
+			'Second',
+			'First',
+		] );
+		await expect( toggle( 'Third' ) ).toHaveAttribute(
+			'aria-expanded',
+			'true'
+		);
+
 		await page
 			.getByRole( 'button', { name: 'Actions for item 3' } )
 			.click();
 		await page.getByRole( 'menuitem', { name: 'Remove' } ).click();
 		await expect( hero.locator( '.hero__button' ) ).toHaveText( [
+			'Third',
 			'Second',
-			'First',
 		] );
 		await expect( add ).toBeEnabled();
 
@@ -586,7 +624,7 @@ test.describe( 'Editor runtime', () => {
 			)[ 1 ]
 		);
 		expect( attributes.buttons.map( ( button ) => button.label ) ).toEqual(
-			[ 'Second', 'First' ]
+			[ 'Third', 'Second' ]
 		);
 	} );
 

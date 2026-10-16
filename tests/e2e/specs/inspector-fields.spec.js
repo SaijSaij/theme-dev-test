@@ -157,6 +157,8 @@ test.describe( 'Inspector fields', () => {
 
 		await check.locator( 'figcaption' ).click();
 		await editor.openDocumentSettingsSidebar();
+		// List items are collapsed: expand the slide.
+		await page.getByRole( 'button', { name: 'One', exact: true } ).click();
 		await page.getByRole( 'button', { name: 'Select Picture' } ).click();
 		const library = page.getByRole( 'dialog' );
 		await library.getByRole( 'tab', { name: 'Media Library' } ).click();
