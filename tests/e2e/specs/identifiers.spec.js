@@ -142,9 +142,9 @@ test.describe( 'Identifiers', () => {
 		);
 		await name.fill( 'Footer' );
 		await page.getByRole( 'button', { name: 'Save' } ).click();
-		await expect(
-			page.getByRole( 'button', { name: 'Save' } )
-		).toHaveAttribute( 'aria-disabled', 'true' );
+		await expect( page.getByTestId( 'snackbar' ) ).toHaveText(
+			'Settings saved.'
+		);
 
 		const regions = ( await storedRegions( requestUtils ) ).regions;
 		expect( regions.map( ( region ) => region.name ) ).toEqual( [
