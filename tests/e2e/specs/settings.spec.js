@@ -655,6 +655,9 @@ test.describe( 'Settings', () => {
 		try {
 			const page = await context.newPage();
 			await page.goto( '/wp-login.php' );
+			// wp-login.php focuses #user_login 200 ms after loading (wp_attempt_focus()); fill() types into the
+			// focused field, so wait for the focus, or the password may end up in the user name.
+			await expect( page.locator( '#user_login' ) ).toBeFocused();
 			await page.locator( '#user_login' ).fill( author.username );
 			await page.locator( '#user_pass' ).fill( 'e2e-password' );
 			await page.locator( '#wp-submit' ).click();
