@@ -1,0 +1,7 @@
+<ul {{ block_wrapper_attributes({class: 'repeat-list'}) }}{% if render is defined %} data-render="{{ render }}"{% endif %}>
+    {% for item in items %}
+        <li{{ repeater_item(item) }} class="repeat-list__item">{{ item.content|raw }}</li>
+    {% else %}
+        <li class="repeat-list__empty">No items</li>
+    {% endfor %}
+</ul>
