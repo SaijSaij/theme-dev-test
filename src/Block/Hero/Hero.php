@@ -13,7 +13,7 @@ use Saij\WpAppFramework\Twig\TemplateRenderer;
 
 /**
  * Full-width intro: headline, subline, up to three badges and three buttons on a background color and image
- * (#[Color], #[ListOf] with max, #[Image] in the inspector).
+ * (#[Color], #[ListOf] with max and appender, #[Image] in the inspector).
  */
 #[Block('hero', title: 'Hero', category: BlockCategory::Design, icon: 'cover-image', description: 'Full-width intro with headline, subline, badges and buttons on a background color or image.')]
 #[UseSupport(Surface::class)]

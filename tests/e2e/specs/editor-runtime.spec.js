@@ -22,6 +22,9 @@ const IMAGE = path.join( __dirname, '../assets/image.png' );
 const CONTRAST = 'rgb(250, 250, 250)';
 const PRIMARY = 'rgb(30, 77, 140)';
 
+/** The stored buttons of the hero in the canvas, without the new item of the appender. */
+const BUTTONS = '.hero__button:not(.wp-app-framework-ghost)';
+
 test.describe( 'Editor runtime', () => {
 	test.afterEach( async ( { requestUtils } ) => {
 		await cleanUp( requestUtils );
@@ -68,7 +71,7 @@ test.describe( 'Editor runtime', () => {
 				.getByRole( 'button', { name: 'Link' } )
 		).toHaveCount( 0 );
 
-		const button = hero.locator( '.hero__button' );
+		const button = hero.locator( BUTTONS );
 		await button.click();
 		await page.keyboard.press( 'End' );
 		await page.keyboard.type( ' now' );
@@ -560,7 +563,7 @@ test.describe( 'Editor runtime', () => {
 		await expect( urls ).toHaveCount( 1 );
 		// #[ListOf(Button::class, max: 3)]: no fourth button.
 		await expect( add ).toBeDisabled();
-		const third = hero.locator( '.hero__button' ).nth( 2 );
+		const third = hero.locator( BUTTONS ).nth( 2 );
 		await expect( third ).toHaveAttribute( 'contenteditable', 'true' );
 		await third.click();
 		await page.keyboard.type( 'Third' );
@@ -584,7 +587,7 @@ test.describe( 'Editor runtime', () => {
 			.getByRole( 'button', { name: 'Actions for item 1' } )
 			.click();
 		await page.getByRole( 'menuitem', { name: 'Move down' } ).click();
-		await expect( hero.locator( '.hero__button' ) ).toHaveText( [
+		await expect( hero.locator( BUTTONS ) ).toHaveText( [
 			'Second',
 			'First',
 			'Third',
@@ -597,7 +600,7 @@ test.describe( 'Editor runtime', () => {
 				targetPosition: { x: 40, y: 4 },
 			} );
 		await expect( titles ).toHaveText( [ 'Third', 'Second', 'First' ] );
-		await expect( hero.locator( '.hero__button' ) ).toHaveText( [
+		await expect( hero.locator( BUTTONS ) ).toHaveText( [
 			'Third',
 			'Second',
 			'First',
@@ -611,7 +614,7 @@ test.describe( 'Editor runtime', () => {
 			.getByRole( 'button', { name: 'Actions for item 3' } )
 			.click();
 		await page.getByRole( 'menuitem', { name: 'Remove' } ).click();
-		await expect( hero.locator( '.hero__button' ) ).toHaveText( [
+		await expect( hero.locator( BUTTONS ) ).toHaveText( [
 			'Third',
 			'Second',
 		] );

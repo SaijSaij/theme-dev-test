@@ -29,9 +29,9 @@ final readonly class HeroAttributes
         #[Image(inspector: true)]
         #[Label('Background image')]
         public ?int $backgroundImageId = null,
-        #[ListOf(Badge::class, max: 3)]
+        #[ListOf(Badge::class, max: 3, appender: true)]
         public array $badges = [],
-        #[ListOf(Button::class, max: 3)]
+        #[ListOf(Button::class, max: 3, appender: true)]
         public array $buttons = [],
     ) {}
 }

@@ -16,7 +16,7 @@
         {% if attrs.badges %}
             <ul class="hero__badges m-0 flex list-none flex-wrap justify-center gap-3 p-0">
                 {% for badge in attrs.badges %}
-                    <li class="hero__badge hero__badge--{{ badge.icon.value }} inline-flex items-center gap-2 rounded-full border border-current px-3 py-1 text-sm">
+                    <li{{ list_item(['badges', loop.index0]) }} class="hero__badge hero__badge--{{ badge.icon.value }} inline-flex items-center gap-2 rounded-full border border-current px-3 py-1 text-sm">
                         <svg class="size-4" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="{{ badge.icon.path() }}"/></svg>
                         <span class="hero__badge-text"{{ field(['badges', loop.index0, 'text']) }}>{{ badge.text }}</span>
                     </li>
@@ -26,7 +26,7 @@
         {% if attrs.buttons %}
             <div class="hero__buttons flex flex-wrap justify-center gap-4">
                 {% for button in attrs.buttons %}
-                    <a class="hero__button rounded bg-primary px-5 py-3 text-contrast no-underline" href="{{ button.url }}"{{ field(['buttons', loop.index0, 'label']) }}>{{ button.label }}</a>
+                    <a{{ list_item(['buttons', loop.index0]) }} class="hero__button rounded bg-primary px-5 py-3 text-contrast no-underline" href="{{ button.url }}"{{ field(['buttons', loop.index0, 'label']) }}>{{ button.label }}</a>
                 {% endfor %}
             </div>
         {% endif %}

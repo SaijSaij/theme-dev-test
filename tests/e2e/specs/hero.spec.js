@@ -25,6 +25,12 @@ const IMAGE = path.join( __dirname, '../assets/image.png' );
 const CONTRAST = 'rgb(250, 250, 250)';
 const PRIMARY = 'rgb(30, 77, 140)';
 
+/** Stored badges and buttons, in the canvas without the new item of the appender. */
+const BADGES = '.hero__badge:not(.wp-app-framework-ghost)';
+const BADGE_TEXTS = `${ BADGES } .hero__badge-text`;
+const BUTTONS = '.hero__button:not(.wp-app-framework-ghost)';
+const GHOST = '.wp-app-framework-ghost';
+
 /** Four badges and buttons: one more than #[ListOf(max: 3)] allows. */
 const OVERFULL = {
 	headline: 'Overfull',
@@ -90,7 +96,7 @@ test.describe( 'Hero', () => {
 			/^rgba\(30, 77, 140, 0\.50?2?\)$/
 		);
 		// Only the first three items of each list reach the template.
-		await expect( hero.locator( '.hero__badge' ) ).toHaveText( [
+		await expect( hero.locator( BADGES ) ).toHaveText( [
 			'One',
 			'Two',
 			'Three',
@@ -98,11 +104,7 @@ test.describe( 'Hero', () => {
 		await expect( hero.locator( '.hero__badge--check svg' ) ).toHaveCount(
 			1
 		);
-		await expect( hero.locator( '.hero__button' ) ).toHaveText( [
-			'A',
-			'B',
-			'C',
-		] );
+		await expect( hero.locator( BUTTONS ) ).toHaveText( [ 'A', 'B', 'C' ] );
 		await screenshot( hero, 'hero-front-badges' );
 	} );
 
@@ -117,8 +119,8 @@ test.describe( 'Hero', () => {
 			block( 'dev-test/hero', OVERFULL )
 		);
 		const hero = editor.canvas.locator( '[data-type="dev-test/hero"]' );
-		await expect( hero.locator( '.hero__badge' ) ).toHaveCount( 3 );
-		await expect( hero.locator( '.hero__button' ) ).toHaveCount( 3 );
+		await expect( hero.locator( BADGES ) ).toHaveCount( 3 );
+		await expect( hero.locator( BUTTONS ) ).toHaveCount( 3 );
 
 		await hero.locator( '.hero__headline' ).click();
 		await editor.openDocumentSettingsSidebar();
@@ -158,7 +160,7 @@ test.describe( 'Hero', () => {
 			badges.locator( '.wp-app-framework-list__notice' )
 		).toHaveCount( 0 );
 		await expect( badges.locator( '.is-unused' ) ).toHaveCount( 0 );
-		await expect( hero.locator( '.hero__badge' ) ).toHaveText( [
+		await expect( hero.locator( BADGES ) ).toHaveText( [
 			'One',
 			'Two',
 			'Three',
@@ -190,7 +192,7 @@ test.describe( 'Hero', () => {
 
 		const add = page.getByRole( 'button', { name: 'Add item to Badges' } );
 		await add.click();
-		const text = hero.locator( '.hero__badge-text' );
+		const text = hero.locator( BADGE_TEXTS );
 		await expect( text ).toHaveAttribute( 'contenteditable', 'true' );
 		await text.click();
 		await page.keyboard.type( 'Fast' );
@@ -209,7 +211,7 @@ test.describe( 'Hero', () => {
 
 		await add.click();
 		await add.click();
-		await expect( hero.locator( '.hero__badge' ) ).toHaveCount( 3 );
+		await expect( hero.locator( BADGES ) ).toHaveCount( 3 );
 		await expect( add ).toBeDisabled();
 
 		// The palette of theme.json; a click on the chosen color clears it.
@@ -281,5 +283,81 @@ test.describe( 'Hero', () => {
 			.getByRole( 'button', { name: 'Remove Background image' } )
 			.click();
 		await expect( hero.locator( '.hero__image' ) ).toHaveCount( 0 );
+	} );
+
+	test( 'adds badges and buttons in the canvas through their new item', async ( {
+		admin,
+		editor,
+		page,
+		requestUtils,
+	} ) => {
+		const id = await openPostWith(
+			{ admin, editor, requestUtils },
+			block( 'dev-test/hero', {
+				headline: 'Appender',
+				buttons: [
+					{ label: 'A', url: '' },
+					{ label: 'B', url: '' },
+				],
+			} )
+		);
+		const hero = editor.canvas.locator( '[data-type="dev-test/hero"]' );
+		const badgeGhost = hero.getByRole( 'button', {
+			name: 'Add item to Badges',
+		} );
+		const buttonGhost = hero.getByRole( 'button', {
+			name: 'Add item to Buttons',
+		} );
+		// Each list shows one new item, faded, with the labels of its fields as placeholders.
+		await expect( badgeGhost ).toHaveClass( /hero__badge/ );
+		await expect( badgeGhost ).toHaveText( 'Text' );
+		await expect( buttonGhost ).toHaveClass( /hero__button/ );
+		await expect( buttonGhost ).toHaveText( 'Label' );
+		await expect( buttonGhost ).toHaveCSS( 'opacity', '0.45' );
+		await screenshot( hero, 'hero-appender' );
+
+		// Nothing is stored until the new item is clicked.
+		const stored = () =>
+			page.evaluate(
+				() =>
+					window.wp.data
+						.select( 'core/block-editor' )
+						.getBlocks()[ 0 ].attributes
+			);
+		expect( ( await stored() ).badges ).toEqual( [] );
+		expect( ( await stored() ).buttons ).toHaveLength( 2 );
+
+		// A click adds the item and focuses its first field.
+		await badgeGhost.click();
+		const text = hero.locator( BADGE_TEXTS );
+		await expect( text ).toHaveCount( 1 );
+		await expect( text ).toBeFocused();
+		await page.keyboard.type( 'Fast' );
+		await expect( text ).toHaveText( 'Fast' );
+		// The inspector expands the added item.
+		await editor.openDocumentSettingsSidebar();
+		await expect(
+			page.getByRole( 'button', { name: 'Fast', exact: true } )
+		).toHaveAttribute( 'aria-expanded', 'true' );
+
+		// Enter adds the third button; at max the new item is gone.
+		await buttonGhost.focus();
+		await page.keyboard.press( 'Enter' );
+		await expect( hero.locator( BUTTONS ) ).toHaveCount( 3 );
+		await expect( hero.locator( BUTTONS ).nth( 2 ) ).toBeFocused();
+		await page.keyboard.type( 'C' );
+		await expect( buttonGhost ).toHaveCount( 0 );
+		await expect( hero.locator( `.hero__button${ GHOST }` ) ).toHaveCount(
+			0
+		);
+
+		await editor.saveDraft();
+		const attributes = await storedHero( requestUtils, id );
+		expect( attributes.badges ).toEqual( [
+			{ text: 'Fast', icon: 'star' },
+		] );
+		expect( attributes.buttons.map( ( button ) => button.label ) ).toEqual(
+			[ 'A', 'B', 'C' ]
+		);
 	} );
 } );
