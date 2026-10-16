@@ -3,8 +3,8 @@
     {% set wrapper = wrapper|merge({style: 'background-color: ' ~ attrs.backgroundColor}) %}
 {% endif %}
 <section {{ block_wrapper_attributes(wrapper) }}>
-    {% if attrs.backgroundImageId or is_editor() %}
-        <figure class="hero__image absolute inset-0 -z-10 m-0"{{ field('backgroundImageId') }}>{{ wp_attachment_image(attrs.backgroundImageId, 'full', {class: 'size-full object-cover'}) }}</figure>
+    {% if attrs.backgroundImageId %}
+        <figure class="hero__image absolute inset-0 -z-10 m-0">{{ wp_attachment_image(attrs.backgroundImageId, 'full', {class: 'size-full object-cover'}) }}</figure>
     {% endif %}
     <div class="hero__content mx-auto flex max-w-content flex-col items-center gap-6 text-center">
         {% if attrs.headline or is_editor() %}

@@ -25,7 +25,8 @@ final readonly class HeroAttributes
         #[Color]
         #[Label('Background color')]
         public string $backgroundColor = '',
-        #[Image]
+        // In the inspector: a placeholder in the canvas would cover the block it is the background of.
+        #[Image(inspector: true)]
         #[Label('Background image')]
         public ?int $backgroundImageId = null,
         #[ListOf(Badge::class, max: 3)]

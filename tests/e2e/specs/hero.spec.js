@@ -1,10 +1,12 @@
 /**
  * The hero (src/Block/Hero/): limits of lists (#[ListOf] with max) in the
  * inspector, a stored list beyond the limit in the canvas, the inspector and
- * on the front end, and colors (#[Color]) with the theme's palette and
- * transparency.
+ * on the front end, colors (#[Color]) with the theme's palette and
+ * transparency, and the background image chosen in the inspector.
  */
 const { test, expect } = require( '../fixtures' );
+
+const path = require( 'path' );
 
 const {
 	block,
@@ -14,7 +16,10 @@ const {
 	openPostWith,
 	screenshot,
 	storedContent,
+	uploadImage,
 } = require( '../helpers' );
+
+const IMAGE = path.join( __dirname, '../assets/image.png' );
 
 /** Background of the hero without color (surface-light: contrast of theme.json) and with the palette's "Primary". */
 const CONTRAST = 'rgb(250, 250, 250)';
@@ -230,5 +235,51 @@ test.describe( 'Hero', () => {
 		await editor.saveDraft();
 		attributes = await storedHero( requestUtils, id );
 		expect( attributes ).not.toHaveProperty( 'backgroundColor' );
+	} );
+
+	test( 'chooses the background image in the inspector and shows the block as it looks', async ( {
+		admin,
+		editor,
+		page,
+		requestUtils,
+	} ) => {
+		const imageId = await uploadImage( requestUtils, IMAGE );
+		await openPostWith(
+			{ admin, editor, requestUtils },
+			block( 'dev-test/hero', { headline: 'Image' } )
+		);
+		const hero = editor.canvas.locator( '[data-type="dev-test/hero"]' );
+		await expect( hero.locator( '.hero__headline' ) ).toHaveAttribute(
+			'contenteditable',
+			'true'
+		);
+		// #[Image(inspector: true)]: no media placeholder covers the block.
+		await expect( hero.locator( '.hero__image' ) ).toHaveCount( 0 );
+		await expect(
+			hero.getByRole( 'button', { name: 'Upload' } )
+		).toHaveCount( 0 );
+
+		await hero.locator( '.hero__headline' ).click();
+		await editor.openDocumentSettingsSidebar();
+		await page
+			.getByRole( 'button', { name: 'Select Background image' } )
+			.click();
+		const library = page.getByRole( 'dialog' );
+		await library.getByRole( 'tab', { name: 'Media Library' } ).click();
+		await library
+			.locator( `li.attachment[data-id="${ imageId }"]` )
+			.click();
+		await library
+			.getByRole( 'button', { name: 'Select', exact: true } )
+			.click();
+
+		await expect( hero.locator( '.hero__image img' ) ).toBeVisible();
+		await expect( hero.locator( '.hero__headline' ) ).toBeVisible();
+		await screenshot( hero, 'hero-background-image' );
+
+		await page
+			.getByRole( 'button', { name: 'Remove Background image' } )
+			.click();
+		await expect( hero.locator( '.hero__image' ) ).toHaveCount( 0 );
 	} );
 } );

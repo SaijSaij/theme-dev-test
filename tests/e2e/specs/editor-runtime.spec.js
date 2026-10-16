@@ -314,10 +314,10 @@ test.describe( 'Editor runtime', () => {
 		const renders = trackRenderRequests( page );
 		await openPostWith(
 			{ admin, editor, requestUtils },
-			block( 'dev-test/hero' )
+			block( 'dev-test/card' )
 		);
-		const hero = editor.canvas.locator( '[data-type="dev-test/hero"]' );
-		const figure = hero.locator( '.hero__image' );
+		const card = editor.canvas.locator( '[data-type="dev-test/card"]' );
+		const figure = card.locator( '.card__image' );
 		await expect(
 			figure.getByRole( 'button', { name: 'Upload' } )
 		).toBeVisible();
@@ -328,17 +328,17 @@ test.describe( 'Editor runtime', () => {
 		const id = await page.evaluate(
 			() =>
 				window.wp.data.select( 'core/block-editor' ).getBlocks()[ 0 ]
-					.attributes.backgroundImageId
+					.attributes.imageId
 		);
 		expect( Number.isInteger( id ) ).toBe( true );
 		trackMedia( id );
-		await screenshot( hero, 'hero-image' );
+		await screenshot( card, 'card-image' );
 
-		await editor.selectBlocks( hero );
+		await editor.selectBlocks( card );
 		await editor.showBlockToolbar();
 		await page
 			.getByRole( 'toolbar', { name: 'Block tools' } )
-			.getByRole( 'button', { name: 'Background image' } )
+			.getByRole( 'button', { name: 'Image' } )
 			.click();
 		await page.getByRole( 'menuitem', { name: 'Reset' } ).click();
 		await expect(
@@ -647,7 +647,7 @@ test.describe( 'Editor runtime', () => {
 			.poll( () => outline( outer.locator( '.hero__subline' ) ) )
 			.toBe( 'dashed' );
 		await expect
-			.poll( () => outline( outer.locator( '.hero__image' ) ) )
+			.poll( () => outline( outer.locator( '.hero__headline' ) ) )
 			.toBe( 'dashed' );
 		await screenshot( outer, 'canvas-outline-hovered' );
 
