@@ -208,17 +208,24 @@ if (!WP_DEBUG) {
     wp_delete_post($draft, true);
 
     $expect('hero: list items are escaped and sanitized', $block('dev-test/hero', [
-        'topline' => 'Top & <x>',
         'headline' => '<em>Head</em>',
+        'subline' => 'Sub & <x>',
+        'badges' => [['text' => 'Fast & <b>', 'icon' => 'clock']],
         'buttons' => [['label' => 'A & <b>', 'url' => 'https://example.test/?a=1&b=2'], ['label' => 'B', 'url' => 'javascript:alert(1)']],
     ]), <<<'HTML'
-        <section class="hero hero--black surface-light wp-block-dev-test-hero">
-        <div class="hero__content">
-        <p class="hero__topline">Top &amp; &lt;x&gt;</p>
-        <h1 class="hero__headline"><em>Head</em></h1>
-        <div class="hero__buttons">
-        <a class="hero__button" href="https://example.test/?a=1&amp;b=2">A &amp; &lt;b&gt;</a>
-        <a class="hero__button" href="">B</a>
+        <section class="hero alignfull relative isolate overflow-hidden px-6 py-20 surface-light wp-block-dev-test-hero">
+        <div class="hero__content mx-auto flex max-w-content flex-col items-center gap-6 text-center">
+        <h1 class="hero__headline m-0 text-5xl font-bold"><em>Head</em></h1>
+        <p class="hero__subline m-0 text-lead">Sub &amp; &lt;x&gt;</p>
+        <ul class="hero__badges m-0 flex list-none flex-wrap justify-center gap-3 p-0">
+        <li class="hero__badge hero__badge--clock inline-flex items-center gap-2 rounded-full border border-current px-3 py-1 text-sm">
+        <svg class="size-4" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm0 18a8 8 0 1 1 0-16 8 8 0 0 1 0 16zm.5-13H11v6l5.2 3.1.8-1.2-4.5-2.7z"/></svg>
+        <span class="hero__badge-text">Fast &amp; &lt;b&gt;</span>
+        </li>
+        </ul>
+        <div class="hero__buttons flex flex-wrap justify-center gap-4">
+        <a class="hero__button rounded bg-primary px-5 py-3 text-contrast no-underline" href="https://example.test/?a=1&amp;b=2">A &amp; &lt;b&gt;</a>
+        <a class="hero__button rounded bg-primary px-5 py-3 text-contrast no-underline" href="">B</a>
         </div>
         </div>
         </section>
@@ -227,11 +234,24 @@ if (!WP_DEBUG) {
     $expect('hero: a list with one invalid item renders the default list', $block('dev-test/hero', [
         'buttons' => [['label' => 'Valid', 'url' => 'https://example.test/'], ['url' => 'https://example.test/without-label']],
     ]), <<<'HTML'
-        <section class="hero hero--black surface-light wp-block-dev-test-hero">
-        <div class="hero__content">
+        <section class="hero alignfull relative isolate overflow-hidden px-6 py-20 surface-light wp-block-dev-test-hero">
+        <div class="hero__content mx-auto flex max-w-content flex-col items-center gap-6 text-center">
         </div>
         </section>
         HTML);
+
+    // #[ListOf(max: 3)] is no schema keyword: WordPress keeps the stored list, the template gets the first three items.
+    $expectLines('hero: a color with transparency and only the first three of four buttons', $block('dev-test/hero', [
+        'backgroundColor' => '#1e4d8c80',
+        'buttons' => [['label' => 'A'], ['label' => 'B'], ['label' => 'C'], ['label' => 'D']],
+    ]), '<section style="background-color: #1e4d8c80" class="hero alignfull relative isolate overflow-hidden px-6 py-20 surface-light wp-block-dev-test-hero">', '<a class="hero__button rounded bg-primary px-5 py-3 text-contrast no-underline" href="">C</a>');
+    $output = do_blocks($block('dev-test/hero', ['buttons' => [['label' => 'A'], ['label' => 'B'], ['label' => 'C'], ['label' => 'D']]]));
+    $report('hero: the fourth button is not rendered', substr_count($output, 'class="hero__button ') === 3, "--- actual\n{$output}");
+
+    // A value outside the pattern of #[Color] fails WordPress' validation: the attribute falls back to its default.
+    $expectLines('hero: a color that breaks out of the style attribute is dropped', $block('dev-test/hero', [
+        'backgroundColor' => 'red;background-image:url(https://example.test/x.png)',
+    ]), '<section class="hero alignfull relative isolate overflow-hidden px-6 py-20 surface-light wp-block-dev-test-hero">');
 
     $expect('inspector: inspector fields and list items without an image', $block('dev-test/inspector', [
         'summary' => '<b>Summary</b>',
@@ -260,7 +280,7 @@ if (!WP_DEBUG) {
     $post = wp_insert_post(wp_slash([
         'post_title' => 'Excerpt',
         'post_status' => 'publish',
-        'post_content' => $block('dev-test/hero', ['topline' => 'Top & <x>', 'headline' => '<em>Head</em>'])
+        'post_content' => $block('dev-test/hero', ['headline' => '<em>Head</em>', 'subline' => 'Sub & <x>'])
             . $block('dev-test/faq', ['question' => 'Question?', 'answer' => 'Not in the excerpt'])
             . $block('dev-test/check', ['text' => 'Not in the excerpt']),
     ]), true, false);
@@ -268,7 +288,7 @@ if (!WP_DEBUG) {
         WP_CLI::error('Cannot create the post of the excerpt test.');
     }
     $excerpt = get_the_excerpt($post);
-    $report('excerpt: only excerpt fields, plain text escaped', $excerpt === 'Top &amp; &lt;x&gt; Head Question?', "--- actual\n{$excerpt}");
+    $report('excerpt: only excerpt fields, plain text escaped', $excerpt === 'Head Sub &amp; &lt;x&gt; Question?', "--- actual\n{$excerpt}");
     wp_delete_post($post, true);
 }
 

@@ -34,8 +34,8 @@ test.describe( 'Templates, parts and patterns', () => {
 			'Framework test theme'
 		);
 		// Pattern: blocks of the theme, PHP output in a paragraph and in a core block.
-		await expect( page.locator( '.section .hero__topline' ) ).toHaveText(
-			'Pattern topline'
+		await expect( page.locator( '.section .hero__subline' ) ).toHaveText(
+			'Pattern subline'
 		);
 		await expect(
 			page.getByText( 'Paragraph from a pattern' )
@@ -69,8 +69,8 @@ test.describe( 'Templates, parts and patterns', () => {
 			'<!-- wp:pattern {"slug":"dev-test/hero-section"} /-->'
 		);
 		const hero = editor.canvas.locator( '[data-type="dev-test/hero"]' );
-		await expect( hero.locator( '.hero__topline' ) ).toHaveText(
-			'Pattern topline'
+		await expect( hero.locator( '.hero__subline' ) ).toHaveText(
+			'Pattern subline'
 		);
 
 		const state = await page.evaluate( () => {
@@ -97,11 +97,11 @@ test.describe( 'Templates, parts and patterns', () => {
 			insert: true,
 		} );
 
-		await hero.locator( '.hero__topline' ).click();
+		await hero.locator( '.hero__subline' ).click();
 		await page.keyboard.press( 'End' );
 		await page.keyboard.type( ' edited' );
-		await expect( hero.locator( '.hero__topline' ) ).toHaveText(
-			'Pattern topline edited'
+		await expect( hero.locator( '.hero__subline' ) ).toHaveText(
+			'Pattern subline edited'
 		);
 	} );
 } );

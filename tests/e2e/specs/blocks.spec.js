@@ -45,7 +45,7 @@ test.describe( 'Blocks', () => {
 					ratio: 1.25,
 					meta: { caption: 'Cap & <b>', source: 'javascript:x' },
 				},
-				block( 'dev-test/hero', { topline: 'Inner' } )
+				block( 'dev-test/hero', { subline: 'Inner' } )
 			),
 			block( 'dev-test/check', {
 				link: 'https://example.test/?a=1&b=2',
@@ -126,7 +126,7 @@ test.describe( 'Blocks', () => {
 		).toHaveAttribute( 'src', /\/wp-content\/uploads\// );
 		await expect(
 			first.locator(
-				'.check__inner .wp-block-dev-test-hero .hero__topline'
+				'.check__inner .wp-block-dev-test-hero .hero__subline'
 			)
 		).toHaveText( 'Inner' );
 	} );

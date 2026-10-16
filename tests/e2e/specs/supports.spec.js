@@ -91,9 +91,9 @@ test.describe( 'Block supports', () => {
 					title: 'Invalid',
 					surface: 'purple',
 				} ),
-				block( 'dev-test/hero', { topline: 'Teal', accent: 'teal' } ),
+				block( 'dev-test/hero', { subline: 'Teal', accent: 'teal' } ),
 				block( 'dev-test/hero', {
-					topline: 'Unknown',
+					subline: 'Unknown',
 					accent: 'lime',
 				} ),
 			].join( '\n\n' )
@@ -152,7 +152,7 @@ test.describe( 'Block supports', () => {
 			{ admin, editor, requestUtils },
 			[
 				block( 'dev-test/card', { title: 'Card' } ),
-				block( 'dev-test/hero', { topline: 'Hero' } ),
+				block( 'dev-test/hero', { subline: 'Hero' } ),
 			].join( '\n\n' )
 		);
 		const card = editor.canvas.locator( '[data-type="dev-test/card"]' );
@@ -179,7 +179,7 @@ test.describe( 'Block supports', () => {
 
 		// The control replaced by Accent.editor.js (registerSupportControl).
 		const hero = editor.canvas.locator( '[data-type="dev-test/hero"]' );
-		await hero.locator( '.hero__topline' ).click();
+		await hero.locator( '.hero__subline' ).click();
 		await openInspectorTab( page, 'Styles' );
 		await expect(
 			page.locator( '.dev-test-accent-control' )
@@ -196,7 +196,7 @@ test.describe( 'Block supports', () => {
 			'<!-- wp:dev-test/card {"title":"Card","surface":"light","framed":true} /-->'
 		);
 		expect( stored ).toContain(
-			'<!-- wp:dev-test/hero {"topline":"Hero","accent":"coral"} /-->'
+			'<!-- wp:dev-test/hero {"subline":"Hero","accent":"coral"} /-->'
 		);
 	} );
 

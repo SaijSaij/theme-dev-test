@@ -11,7 +11,7 @@
 <!-- wp:group {"layout":{"type":"constrained"}} -->
 <div class="wp-block-group">
 <!-- wp:dev-test/section {"align":"wide"} -->
-<!-- wp:dev-test/hero {"topline":"Pattern topline","headline":"Pattern <strong>headline</strong>","gradient":"blue","buttons":[{"label":"Read more","url":"https://example.org/"}]} /-->
+<!-- wp:dev-test/hero {"headline":"Pattern <strong>headline</strong>","subline":"Pattern subline","backgroundColor":"#1e4d8c","badges":[{"text":"Free","icon":"check"}],"buttons":[{"label":"Read more","url":"https://example.org/"}]} /-->
 <!-- /wp:dev-test/section -->
 <!-- wp:dev-test/paragraph -->
 <?php echo esc_html__('Paragraph from a pattern', 'theme-dev-test'); ?>

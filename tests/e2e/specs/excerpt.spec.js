@@ -3,8 +3,8 @@ const { test, expect } = require( '../fixtures' );
 const { block, cleanUp, createPost, restResponse } = require( '../helpers' );
 
 /**
- * Automatic excerpts: text fields with excerpt: true (dev-test/hero topline and
- * headline, dev-test/paragraph), dev-test/section as excerpt wrapper.
+ * Automatic excerpts: text fields with excerpt: true (dev-test/hero headline and
+ * subline, dev-test/paragraph), dev-test/section as excerpt wrapper.
  */
 test.describe( 'Excerpts', () => {
 	test.afterEach( async ( { requestUtils } ) => {
@@ -13,7 +13,7 @@ test.describe( 'Excerpts', () => {
 
 	const content = [
 		block( 'dev-test/hero', {
-			topline: 'Top & line',
+			subline: 'Top & line',
 			headline: 'Big <strong>news</strong>',
 			buttons: [ { label: 'Not in excerpt', url: '' } ],
 		} ),
@@ -22,13 +22,13 @@ test.describe( 'Excerpts', () => {
 		block(
 			'dev-test/section',
 			{},
-			block( 'dev-test/hero', { topline: 'Inside the section' } )
+			block( 'dev-test/hero', { subline: 'Inside the section' } )
 		),
 		block( 'dev-test/check', { text: 'Check has no excerpt fields' } ),
 	].join( '\n\n' );
 
 	const EXCERPT =
-		'<p>Top &amp; line Big news Hello world Core text Inside the section</p>';
+		'<p>Big news Top &amp; line Hello world Core text Inside the section</p>';
 
 	async function excerptOf( requestUtils, id ) {
 		const response = await restResponse( requestUtils, {
@@ -56,13 +56,13 @@ test.describe( 'Excerpts', () => {
 			.filter( { hasText: 'E2E excerpt' } )
 			.locator( '.wp-block-post-excerpt__excerpt' );
 		await expect( excerpt ).toHaveText(
-			'Top & line Big news Hello world Core text Inside the section'
+			'Big news Top & line Hello world Core text Inside the section'
 		);
 
 		// The feed uses the same excerpt (WordPress writes entities as numeric references there).
 		const feed = await ( await page.request.get( '/?feed=rss2' ) ).text();
 		expect( feed ).toContain(
-			'<description><![CDATA[Top &#38; line Big news Hello world Core text Inside the section]]></description>'
+			'<description><![CDATA[Big news Top &#38; line Hello world Core text Inside the section]]></description>'
 		);
 	} );
 

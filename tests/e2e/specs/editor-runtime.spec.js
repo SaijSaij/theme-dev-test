@@ -18,6 +18,10 @@ const {
 
 const IMAGE = path.join( __dirname, '../assets/image.png' );
 
+/** Background of the hero without color (surface-light: contrast of theme.json) and with the palette's "Primary". */
+const CONTRAST = 'rgb(250, 250, 250)';
+const PRIMARY = 'rgb(30, 77, 140)';
+
 test.describe( 'Editor runtime', () => {
 	test.afterEach( async ( { requestUtils } ) => {
 		await cleanUp( requestUtils );
@@ -38,11 +42,11 @@ test.describe( 'Editor runtime', () => {
 		);
 
 		const hero = editor.canvas.locator( '[data-type="dev-test/hero"]' );
-		const topline = hero.locator( '.hero__topline' );
-		await expect( topline ).toHaveAttribute( 'contenteditable', 'true' );
+		const subline = hero.locator( '.hero__subline' );
+		await expect( subline ).toHaveAttribute( 'contenteditable', 'true' );
 		await expect.poll( () => renders.length ).toBe( 1 );
 
-		await topline.click();
+		await subline.click();
 		await page.keyboard.type( 'Tom & <b>Jerry</b>' );
 
 		const headline = hero.locator( '.hero__headline' );
@@ -80,7 +84,7 @@ test.describe( 'Editor runtime', () => {
 		const attributes = JSON.parse(
 			content.match( /^<!-- wp:dev-test\/hero (\{.*\}) \/-->$/ )[ 1 ]
 		);
-		expect( attributes.topline ).toBe( 'Tom & <b>Jerry</b>' );
+		expect( attributes.subline ).toBe( 'Tom & <b>Jerry</b>' );
 		expect( attributes.headline ).toBe( 'Hello <strong>bold</strong>' );
 		expect( attributes.buttons ).toEqual( [
 			{ label: 'Go now', url: 'https://example.test/' },
@@ -88,7 +92,7 @@ test.describe( 'Editor runtime', () => {
 
 		await page.goto( `/?p=${ id }&preview=true` );
 		const front = page.locator( '.wp-block-dev-test-hero' );
-		await expect( front.locator( '.hero__topline' ) ).toHaveText(
+		await expect( front.locator( '.hero__subline' ) ).toHaveText(
 			'Tom & <b>Jerry</b>'
 		);
 		await expect( front.locator( '.hero__headline strong' ) ).toHaveText(
@@ -184,33 +188,31 @@ test.describe( 'Editor runtime', () => {
 		const renders = trackRenderRequests( page );
 		await openPostWith(
 			{ admin, editor, requestUtils },
-			block( 'dev-test/hero', { topline: 'Cached' } )
+			block( 'dev-test/hero', { subline: 'Cached' } )
 		);
 		const hero = editor.canvas.locator( '[data-type="dev-test/hero"]' );
-		await expect( hero ).toHaveClass( /hero--black/ );
+		await expect( hero ).toHaveCSS( 'background-color', CONTRAST );
 		await expect.poll( () => renders.length ).toBe( 1 );
 
-		await hero.locator( '.hero__topline' ).click();
+		await hero.locator( '.hero__subline' ).click();
 		await openBlockSettings( page, editor );
-		await page
-			.getByRole( 'combobox', { name: 'Gradient' } )
-			.selectOption( 'blue' );
-		await expect( hero ).toHaveClass( /hero--blue/ );
+		await page.getByRole( 'option', { name: 'Primary' } ).click();
+		await expect( hero ).toHaveCSS( 'background-color', PRIMARY );
 		await expect.poll( () => renders.length ).toBe( 2 );
 
 		await pageUtils.pressKeys( 'primary+z' );
-		await expect( hero ).toHaveClass( /hero--black/ );
+		await expect( hero ).toHaveCSS( 'background-color', CONTRAST );
 		await pageUtils.pressKeys( 'primaryShift+z' );
-		await expect( hero ).toHaveClass( /hero--blue/ );
+		await expect( hero ).toHaveCSS( 'background-color', PRIMARY );
 
-		await hero.locator( '.hero__topline' ).click();
+		await hero.locator( '.hero__subline' ).click();
 		await pageUtils.pressKeys( 'primaryShift+d' );
 		await expect(
 			editor.canvas.locator( '[data-type="dev-test/hero"]' )
 		).toHaveCount( 2 );
 		await expect(
 			editor.canvas.locator( '[data-type="dev-test/hero"]' ).nth( 1 )
-		).toHaveClass( /hero--blue/ );
+		).toHaveCSS( 'background-color', PRIMARY );
 
 		// Undo, redo and the duplicate came from the cache.
 		await page.waitForTimeout( 1000 );
@@ -227,8 +229,8 @@ test.describe( 'Editor runtime', () => {
 		await openPostWith(
 			{ admin, editor, requestUtils },
 			[
-				block( 'dev-test/hero', { topline: 'One' } ),
-				block( 'dev-test/hero', { gradient: 'blue' } ),
+				block( 'dev-test/hero', { subline: 'One' } ),
+				block( 'dev-test/hero', { backgroundColor: '#1e4d8c' } ),
 				block( 'dev-test/hero', {
 					buttons: [ { label: 'A', url: '' } ],
 				} ),
@@ -236,8 +238,8 @@ test.describe( 'Editor runtime', () => {
 					'dev-test/section',
 					{},
 					block( 'dev-test/hero', {
-						topline: 'Inner',
-						gradient: 'blue',
+						subline: 'Inner',
+						backgroundColor: '#1e4d8c80',
 						buttons: [
 							{ label: 'B', url: 'https://example.test/' },
 						],
@@ -247,7 +249,7 @@ test.describe( 'Editor runtime', () => {
 		);
 		await expect(
 			editor.canvas.locator(
-				'[data-type="dev-test/hero"] .hero__topline[contenteditable="true"]'
+				'[data-type="dev-test/hero"] .hero__subline[contenteditable="true"]'
 			)
 		).toHaveCount( 4 );
 
@@ -265,10 +267,10 @@ test.describe( 'Editor runtime', () => {
 	} ) => {
 		await openPostWith(
 			{ admin, editor, requestUtils },
-			block( 'dev-test/hero', { topline: 'Steady' } )
+			block( 'dev-test/hero', { subline: 'Steady' } )
 		);
 		const hero = editor.canvas.locator( '[data-type="dev-test/hero"]' );
-		await expect( hero.locator( '.hero__topline' ) ).toHaveAttribute(
+		await expect( hero.locator( '.hero__subline' ) ).toHaveAttribute(
 			'contenteditable',
 			'true'
 		);
@@ -287,20 +289,18 @@ test.describe( 'Editor runtime', () => {
 			await route.continue();
 		} );
 
-		await hero.locator( '.hero__topline' ).click();
+		await hero.locator( '.hero__subline' ).click();
 		await openBlockSettings( page, editor );
-		await page
-			.getByRole( 'combobox', { name: 'Gradient' } )
-			.selectOption( 'blue' );
+		await page.getByRole( 'option', { name: 'Primary' } ).click();
 
 		await expect( hero ).toHaveAttribute( 'aria-busy', 'true' );
-		await expect( hero ).toHaveClass( /hero--black/ );
-		await expect( hero.locator( '.hero__topline' ) ).toHaveText( 'Steady' );
+		await expect( hero ).toHaveCSS( 'background-color', CONTRAST );
+		await expect( hero.locator( '.hero__subline' ) ).toHaveText( 'Steady' );
 		expect( await hero.boundingBox() ).toEqual( before );
 		await screenshot( hero, 'hero-loading' );
 
 		release();
-		await expect( hero ).toHaveClass( /hero--blue/ );
+		await expect( hero ).toHaveCSS( 'background-color', PRIMARY );
 		await expect( hero ).not.toHaveAttribute( 'aria-busy', 'true' );
 		await page.unroute( '**/*' );
 	} );
@@ -328,7 +328,7 @@ test.describe( 'Editor runtime', () => {
 		const id = await page.evaluate(
 			() =>
 				window.wp.data.select( 'core/block-editor' ).getBlocks()[ 0 ]
-					.attributes.imageId
+					.attributes.backgroundImageId
 		);
 		expect( Number.isInteger( id ) ).toBe( true );
 		trackMedia( id );
@@ -338,7 +338,7 @@ test.describe( 'Editor runtime', () => {
 		await editor.showBlockToolbar();
 		await page
 			.getByRole( 'toolbar', { name: 'Block tools' } )
-			.getByRole( 'button', { name: 'Image' } )
+			.getByRole( 'button', { name: 'Background image' } )
 			.click();
 		await page.getByRole( 'menuitem', { name: 'Reset' } ).click();
 		await expect(
@@ -357,14 +357,14 @@ test.describe( 'Editor runtime', () => {
 			block(
 				'dev-test/section',
 				{},
-				block( 'dev-test/hero', { topline: 'Inside' } )
+				block( 'dev-test/hero', { subline: 'Inside' } )
 			)
 		);
 		const section = editor.canvas.locator(
 			'[data-type="dev-test/section"]'
 		);
 		await expect(
-			section.locator( '[data-type="dev-test/hero"] .hero__topline' )
+			section.locator( '[data-type="dev-test/hero"] .hero__subline' )
 		).toHaveText( 'Inside' );
 
 		const allowed = await page.evaluate( () => {
@@ -383,11 +383,13 @@ test.describe( 'Editor runtime', () => {
 		} );
 		expect( allowed ).toEqual( { hero: true, paragraph: false } );
 
-		await section.locator( '.hero__topline' ).click();
+		await section.locator( '.hero__subline' ).click();
+		// The subline is centered: the click lands in the middle of the text.
+		await page.keyboard.press( 'End' );
 		await page.keyboard.type( ' too' );
 		await editor.saveDraft();
 		expect( await storedContent( requestUtils, id ) ).toBe(
-			'<!-- wp:dev-test/section -->\n<!-- wp:dev-test/hero {"topline":"Inside too"} /-->\n<!-- /wp:dev-test/section -->'
+			'<!-- wp:dev-test/section -->\n<!-- wp:dev-test/hero {"subline":"Inside too"} /-->\n<!-- /wp:dev-test/section -->'
 		);
 	} );
 
@@ -407,12 +409,12 @@ test.describe( 'Editor runtime', () => {
 			} )
 		);
 		await editor.canvas
-			.locator( '[data-type="dev-test/hero"] .hero__topline' )
+			.locator( '[data-type="dev-test/hero"] .hero__subline' )
 			.click();
 		await openBlockSettings( page, editor );
 		await page.getByRole( 'button', { name: 'Hero summary' } ).click();
 		await expect( page.locator( '.dev-test-hero-summary' ) ).toHaveText(
-			'2 button(s)'
+			'0 badge(s), 2 button(s)'
 		);
 		// Panels receive the same props as toolbar buttons.
 		const clientId = await editor.canvas
@@ -437,15 +439,17 @@ test.describe( 'Editor runtime', () => {
 			{ admin, editor, requestUtils },
 			'<!-- wp:group {"templateLock":"contentOnly"} -->\n<div class="wp-block-group">' +
 				block( 'dev-test/hero', {
-					topline: 'Locked',
+					subline: 'Locked',
 					buttons: [ { label: 'A', url: '' } ],
 				} ) +
 				'</div>\n<!-- /wp:group -->'
 		);
 		const hero = editor.canvas.locator( '[data-type="dev-test/hero"]' );
-		await hero.locator( '.hero__topline' ).click();
+		await hero.locator( '.hero__subline' ).click();
+		// The subline is centered: the click lands in the middle of the text.
+		await page.keyboard.press( 'End' );
 		await page.keyboard.type( '!' );
-		await expect( hero.locator( '.hero__topline' ) ).toHaveText(
+		await expect( hero.locator( '.hero__subline' ) ).toHaveText(
 			'Locked!'
 		);
 
@@ -454,7 +458,7 @@ test.describe( 'Editor runtime', () => {
 			page.getByRole( 'button', { name: 'Add item to Buttons' } )
 		).toBeVisible();
 		await expect(
-			page.getByRole( 'combobox', { name: 'Gradient' } )
+			page.getByRole( 'option', { name: 'Primary' } )
 		).toHaveCount( 0 );
 		await screenshot( page, 'content-only-inspector' );
 	} );
@@ -469,7 +473,7 @@ test.describe( 'Editor runtime', () => {
 			{ admin, editor, requestUtils },
 			[
 				block( 'dev-test/hero', { buttons: [ { url: '' } ] } ),
-				block( 'dev-test/hero', { topline: 'Fine' } ),
+				block( 'dev-test/hero', { subline: 'Fine' } ),
 			].join( '\n\n' )
 		);
 		const heroes = editor.canvas.locator( '[data-type="dev-test/hero"]' );
@@ -480,7 +484,7 @@ test.describe( 'Editor runtime', () => {
 					'label is a required property of attributes[buttons][0].'
 				)
 		).toBeVisible();
-		await expect( heroes.nth( 1 ).locator( '.hero__topline' ) ).toHaveText(
+		await expect( heroes.nth( 1 ).locator( '.hero__subline' ) ).toHaveText(
 			'Fine'
 		);
 	} );
@@ -501,13 +505,13 @@ test.describe( 'Editor runtime', () => {
 		} );
 		await editor.insertBlock( {
 			name: 'dev-test/hero',
-			attributes: { topline: 'Template' },
+			attributes: { subline: 'Template' },
 		} );
-		const topline = editor.canvas.locator(
-			'[data-type="dev-test/hero"] .hero__topline'
+		const subline = editor.canvas.locator(
+			'[data-type="dev-test/hero"] .hero__subline'
 		);
-		await expect( topline ).toHaveAttribute( 'contenteditable', 'true' );
-		await expect( topline ).toHaveText( 'Template' );
+		await expect( subline ).toHaveAttribute( 'contenteditable', 'true' );
+		await expect( subline ).toHaveText( 'Template' );
 		// Templates have no numeric post ID; the request must not send one.
 		expect(
 			JSON.parse( renders[ 0 ].postData() ).blocks[ 0 ]
@@ -531,17 +535,20 @@ test.describe( 'Editor runtime', () => {
 			} )
 		);
 		const hero = editor.canvas.locator( '[data-type="dev-test/hero"]' );
-		await hero.locator( '.hero__topline' ).click();
+		await hero.locator( '.hero__subline' ).click();
 		await editor.openDocumentSettingsSidebar();
 
-		const list = page.locator( '.wp-app-framework-list' );
+		const add = page.getByRole( 'button', { name: 'Add item to Buttons' } );
+		const list = page
+			.locator( '.wp-app-framework-list' )
+			.filter( { has: add } );
 		const titles = list.locator( '.wp-app-framework-list__title' );
 		await expect( titles ).toHaveText( [ 'First', 'Second' ] );
 
-		await page
-			.getByRole( 'button', { name: 'Add item to Buttons' } )
-			.click();
+		await add.click();
 		await expect( titles ).toHaveText( [ 'First', 'Second', 'Item 3' ] );
+		// #[ListOf(Button::class, max: 3)]: no fourth button.
+		await expect( add ).toBeDisabled();
 		const third = hero.locator( '.hero__button' ).nth( 2 );
 		await expect( third ).toHaveAttribute( 'contenteditable', 'true' );
 		await third.click();
@@ -570,6 +577,7 @@ test.describe( 'Editor runtime', () => {
 			'Second',
 			'First',
 		] );
+		await expect( add ).toBeEnabled();
 
 		await editor.saveDraft();
 		const attributes = JSON.parse(
@@ -592,13 +600,13 @@ test.describe( 'Editor runtime', () => {
 			{ admin, editor, requestUtils },
 			[
 				block( 'dev-test/hero', {
-					topline: 'Outer',
+					subline: 'Outer',
 					headline: 'Head',
 				} ),
 				block(
 					'dev-test/section',
 					{},
-					block( 'dev-test/hero', { topline: 'Inner' } )
+					block( 'dev-test/hero', { subline: 'Inner' } )
 				),
 			].join( '\n\n' )
 		);
@@ -609,7 +617,7 @@ test.describe( 'Editor runtime', () => {
 		const heroes = editor.canvas.locator( '[data-type="dev-test/hero"]' );
 		const outer = heroes.nth( 0 );
 		const inner = heroes.nth( 1 );
-		await expect( outer.locator( '.hero__topline' ) ).toHaveAttribute(
+		await expect( outer.locator( '.hero__subline' ) ).toHaveAttribute(
 			'contenteditable',
 			'true'
 		);
@@ -631,12 +639,12 @@ test.describe( 'Editor runtime', () => {
 
 		await page.mouse.move( 0, 0 );
 		await expect
-			.poll( () => outline( outer.locator( '.hero__topline' ) ) )
+			.poll( () => outline( outer.locator( '.hero__subline' ) ) )
 			.toBe( 'none' );
 
 		await outer.locator( '.hero__content' ).hover();
 		await expect
-			.poll( () => outline( outer.locator( '.hero__topline' ) ) )
+			.poll( () => outline( outer.locator( '.hero__subline' ) ) )
 			.toBe( 'dashed' );
 		await expect
 			.poll( () => outline( outer.locator( '.hero__image' ) ) )
@@ -649,7 +657,7 @@ test.describe( 'Editor runtime', () => {
 			.poll( () => outline( outer.locator( '.hero__headline' ) ) )
 			.toBe( 'solid' );
 		await expect
-			.poll( () => outline( outer.locator( '.hero__topline' ) ) )
+			.poll( () => outline( outer.locator( '.hero__subline' ) ) )
 			.toBe( 'dashed' );
 		await screenshot( outer, 'canvas-outline-selected' );
 
@@ -659,10 +667,10 @@ test.describe( 'Editor runtime', () => {
 		);
 		await page.mouse.move( 0, 0 );
 		await expect
-			.poll( () => outline( inner.locator( '.hero__topline' ) ) )
+			.poll( () => outline( inner.locator( '.hero__subline' ) ) )
 			.toBe( 'none' );
 		await expect
-			.poll( () => outline( outer.locator( '.hero__topline' ) ) )
+			.poll( () => outline( outer.locator( '.hero__subline' ) ) )
 			.toBe( 'none' );
 
 		await page.goto( `/?p=${ id }&preview=true` );

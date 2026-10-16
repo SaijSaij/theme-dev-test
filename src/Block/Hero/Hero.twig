@@ -1,18 +1,32 @@
-<section {{ block_wrapper_attributes({class: 'hero hero--' ~ attrs.gradient.value}) }}>
-    {% if attrs.imageId or is_editor() %}
-        <figure class="hero__image"{{ field('imageId') }}>{{ wp_attachment_image(attrs.imageId, 'large') }}</figure>
+{% set wrapper = {class: 'hero alignfull relative isolate overflow-hidden px-6 py-20'} %}
+{% if attrs.backgroundColor %}
+    {% set wrapper = wrapper|merge({style: 'background-color: ' ~ attrs.backgroundColor}) %}
+{% endif %}
+<section {{ block_wrapper_attributes(wrapper) }}>
+    {% if attrs.backgroundImageId or is_editor() %}
+        <figure class="hero__image absolute inset-0 -z-10 m-0"{{ field('backgroundImageId') }}>{{ wp_attachment_image(attrs.backgroundImageId, 'full', {class: 'size-full object-cover'}) }}</figure>
     {% endif %}
-    <div class="hero__content">
-        {% if attrs.topline or is_editor() %}
-            <p class="hero__topline"{{ field('topline') }}>{{ attrs.topline }}</p>
-        {% endif %}
+    <div class="hero__content mx-auto flex max-w-content flex-col items-center gap-6 text-center">
         {% if attrs.headline or is_editor() %}
-            <h1 class="hero__headline"{{ field('headline') }}>{{ attrs.headline|raw }}</h1>
+            <h1 class="hero__headline m-0 text-5xl font-bold"{{ field('headline') }}>{{ attrs.headline|raw }}</h1>
+        {% endif %}
+        {% if attrs.subline or is_editor() %}
+            <p class="hero__subline m-0 text-lead"{{ field('subline') }}>{{ attrs.subline }}</p>
+        {% endif %}
+        {% if attrs.badges %}
+            <ul class="hero__badges m-0 flex list-none flex-wrap justify-center gap-3 p-0">
+                {% for badge in attrs.badges %}
+                    <li class="hero__badge hero__badge--{{ badge.icon.value }} inline-flex items-center gap-2 rounded-full border border-current px-3 py-1 text-sm">
+                        <svg class="size-4" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="{{ badge.icon.path() }}"/></svg>
+                        <span class="hero__badge-text"{{ field(['badges', loop.index0, 'text']) }}>{{ badge.text }}</span>
+                    </li>
+                {% endfor %}
+            </ul>
         {% endif %}
         {% if attrs.buttons %}
-            <div class="hero__buttons">
+            <div class="hero__buttons flex flex-wrap justify-center gap-4">
                 {% for button in attrs.buttons %}
-                    <a class="hero__button" href="{{ button.url }}"{{ field(['buttons', loop.index0, 'label']) }}>{{ button.label }}</a>
+                    <a class="hero__button rounded bg-primary px-5 py-3 text-contrast no-underline" href="{{ button.url }}"{{ field(['buttons', loop.index0, 'label']) }}>{{ button.label }}</a>
                 {% endfor %}
             </div>
         {% endif %}
