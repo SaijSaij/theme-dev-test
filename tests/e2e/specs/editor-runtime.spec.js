@@ -631,6 +631,29 @@ test.describe( 'Editor runtime', () => {
 		);
 	} );
 
+	test( 'renders a block whose root element is a void element', async ( {
+		admin,
+		editor,
+		requestUtils,
+		page,
+	} ) => {
+		await openPostWith(
+			{ admin, editor, requestUtils },
+			block( 'dev-test/rule', { thick: true } )
+		);
+		// React takes no children for <hr>, not even an empty list; the console guard reports an error.
+		const rule = editor.canvas.locator( '[data-type="dev-test/rule"]' );
+		await expect( rule ).toHaveJSProperty( 'tagName', 'HR' );
+		await expect( rule ).toHaveClass( /border-t-4/ );
+
+		// A rule is a line without height to click into.
+		await editor.selectBlocks( rule );
+		// Without supports in the Styles tab, the inspector has no tabs.
+		await editor.openDocumentSettingsSidebar();
+		await page.getByRole( 'checkbox', { name: 'Thick' } ).click();
+		await expect( rule ).toHaveClass( /border-t(?!-4)/ );
+	} );
+
 	test( 'outlines the fields edited in the canvas on hovered and selected blocks', async ( {
 		admin,
 		editor,
