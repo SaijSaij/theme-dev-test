@@ -77,6 +77,8 @@ test.describe( 'Stylesheet', () => {
 			'border-current',
 			'border-primary',
 			'border-solid',
+			'border-t',
+			'border-t-4',
 			'flex',
 			'flex-col',
 			'flex-wrap',
