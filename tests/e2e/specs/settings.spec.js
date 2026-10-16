@@ -243,7 +243,7 @@ test.describe( 'Settings', () => {
 			page.getByRole( 'heading', { level: 1, name: 'Dev Test' } )
 		).toBeVisible();
 		const tabs = page.getByRole( 'tab' );
-		await expect( tabs ).toHaveText( [ 'Layout', 'General' ] );
+		await expect( tabs ).toHaveText( [ 'Layout', 'General', 'Regions' ] );
 
 		await expect( page.getByLabel( 'Wide' ) ).not.toBeChecked();
 		await expect( page.getByLabel( 'Columns' ) ).toHaveValue( '2' );
@@ -315,6 +315,7 @@ test.describe( 'Settings', () => {
 		await expect( page.getByRole( 'tab' ) ).toHaveText( [
 			'Layout',
 			'General',
+			'Regions',
 		] );
 
 		const values = await injectedValues( requestUtils );

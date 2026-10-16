@@ -1,0 +1,5 @@
+<ul {{ block_wrapper_attributes({class: 'chips flex gap-2'}) }}>
+    {% for chip in attrs.chips %}
+        <li{{ list_item(['chips', loop.index0]) }} class="chips__chip" data-chip="{{ chip.id }}"{{ field(['chips', loop.index0, 'label']) }}>{{ chip.label }}</li>
+    {% endfor %}
+</ul>

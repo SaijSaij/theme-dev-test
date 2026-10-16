@@ -21,7 +21,7 @@ use WP_REST_Request;
 #[RestController(Api::VERSION, base: '/settings')]
 final readonly class SettingsController
 {
-    private const array OPTIONS = ['general' => 'dev_test_general', 'layout' => 'dev_test_layout'];
+    private const array OPTIONS = ['general' => 'dev_test_general', 'layout' => 'dev_test_layout', 'regions' => 'dev_test_regions'];
 
     public function __construct(
         private GeneralSettings $general,
