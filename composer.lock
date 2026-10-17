@@ -331,12 +331,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/webcodingcat/wp-app-framework.git",
-                "reference": "0062e36f5bdad3f4688c55dd0ede622f15860108"
+                "reference": "4c2366b7a4ca9452c1a78abda15ee83cfd7890ad"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/webcodingcat/wp-app-framework/zipball/0062e36f5bdad3f4688c55dd0ede622f15860108",
-                "reference": "0062e36f5bdad3f4688c55dd0ede622f15860108",
+                "url": "https://api.github.com/repos/webcodingcat/wp-app-framework/zipball/4c2366b7a4ca9452c1a78abda15ee83cfd7890ad",
+                "reference": "4c2366b7a4ca9452c1a78abda15ee83cfd7890ad",
                 "shasum": ""
             },
             "require": {
@@ -380,7 +380,7 @@
                 "issues": "https://github.com/webcodingcat/wp-app-framework/issues",
                 "source": "https://github.com/webcodingcat/wp-app-framework"
             },
-            "time": "2026-10-17T13:34:28+00:00"
+            "time": "2026-10-17T16:04:51+00:00"
         }
     ],
     "packages-dev": [
