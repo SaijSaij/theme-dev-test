@@ -199,6 +199,8 @@ test.describe( 'Editor runtime', () => {
 
 		await hero.locator( '.hero__subline' ).click();
 		await openBlockSettings( page, editor );
+		// The palette opens from the compact color button.
+		await page.locator( '.wp-app-framework-color__toggle' ).click();
 		await page.getByRole( 'option', { name: 'Primary' } ).click();
 		await expect( hero ).toHaveCSS( 'background-color', PRIMARY );
 		await expect.poll( () => renders.length ).toBe( 2 );
@@ -294,6 +296,8 @@ test.describe( 'Editor runtime', () => {
 
 		await hero.locator( '.hero__subline' ).click();
 		await openBlockSettings( page, editor );
+		// The palette opens from the compact color button.
+		await page.locator( '.wp-app-framework-color__toggle' ).click();
 		await page.getByRole( 'option', { name: 'Primary' } ).click();
 
 		await expect( hero ).toHaveAttribute( 'aria-busy', 'true' );
@@ -461,7 +465,7 @@ test.describe( 'Editor runtime', () => {
 			page.getByRole( 'button', { name: 'Add item to Buttons' } )
 		).toBeVisible();
 		await expect(
-			page.getByRole( 'option', { name: 'Primary' } )
+			page.locator( '.wp-app-framework-color__toggle' )
 		).toHaveCount( 0 );
 		await screenshot( page, 'content-only-inspector' );
 	} );
