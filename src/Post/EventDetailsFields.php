@@ -22,6 +22,11 @@ final class EventDetailsFields
         return new StringField(EventDetails::class, 'start');
     }
 
+    public static function end(): StringField
+    {
+        return new StringField(EventDetails::class, 'end');
+    }
+
     public static function capacity(): IntField
     {
         return new IntField(EventDetails::class, 'capacity');

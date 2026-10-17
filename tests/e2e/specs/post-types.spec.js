@@ -61,6 +61,7 @@ test.describe( 'Post types and meta', () => {
 		expect( Object.keys( meta ) ).toEqual(
 			expect.arrayContaining( [
 				'dev_test_start',
+				'dev_test_end',
 				'dev_test_capacity',
 				'dev_test_kind',
 				'dev_test_venue',
@@ -70,6 +71,22 @@ test.describe( 'Post types and meta', () => {
 				'dev_test_website',
 			] )
 		);
+		// A date (#[DateTime]): its pattern rejects other formats.
+		expect( meta.dev_test_end ).toMatchObject( {
+			type: 'string',
+			pattern: '^([0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2})?$',
+		} );
+		const wrongEnd = await restResponse( requestUtils, {
+			method: 'POST',
+			path: '/wp/v2/dev_test_event',
+			data: {
+				title: 'E2E wrong end',
+				status: 'draft',
+				meta: { dev_test_end: '2026-11-14 20:00' },
+			},
+		} );
+		expect( wrongEnd.status ).toBe( 400 );
+		expect( wrongEnd.body.code ).toBe( 'rest_invalid_pattern' );
 		expect( meta.dev_test_kind ).toMatchObject( {
 			type: 'string',
 			enum: [ 'concert', 'talk' ],
@@ -175,6 +192,27 @@ test.describe( 'Post types and meta', () => {
 		await panel.getByLabel( 'Capacity' ).fill( '42' );
 		await panel.getByLabel( 'Capacity' ).press( 'Tab' );
 		await panel.getByLabel( 'Kind' ).selectOption( 'talk' );
+		// The end (#[DateTime]): a button that opens the date picker, with a 12-hour clock for the
+		// default time format of WordPress (g:i a).
+		await panel.getByRole( 'button', { name: 'End: No date' } ).click();
+		const picker = page.locator( '.wp-app-framework-date__picker' );
+		for ( const [ label, value ] of [
+			[ 'Day', '16' ],
+			[ 'Year', '2026' ],
+			[ 'Hours', '10' ],
+			[ 'Minutes', '30' ],
+		] ) {
+			await picker.getByLabel( label, { exact: true } ).fill( value );
+			await picker.getByLabel( label, { exact: true } ).press( 'Tab' );
+		}
+		await picker
+			.getByLabel( 'Month', { exact: true } )
+			.selectOption( '08' );
+		await picker.getByRole( 'radio', { name: 'PM', exact: true } ).click();
+		await page.keyboard.press( 'Escape' );
+		await expect(
+			panel.getByRole( 'button', { name: /^End: .*2026/ } )
+		).toBeVisible();
 		await panel.locator( 'iframe[id$="_ifr"]' ).waitFor();
 		const note = page.frameLocator(
 			'.wp-app-framework-meta-panel iframe[id$="_ifr"]'
@@ -206,6 +244,7 @@ test.describe( 'Post types and meta', () => {
 		} );
 		expect( stored.body.meta ).toMatchObject( {
 			dev_test_start: '2026-08-15',
+			dev_test_end: '2026-08-16T22:30',
 			dev_test_capacity: 42,
 			dev_test_kind: 'talk',
 			dev_test_note: '<strong>Important</strong>',

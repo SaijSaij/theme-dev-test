@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Saij\ThemeDevTest\Post;
 
 use Saij\WpAppFramework\Post\PostMeta;
+use Saij\WpAppFramework\Value\DateTime;
 use Saij\WpAppFramework\Value\Image;
 use Saij\WpAppFramework\Value\Label;
 use Saij\WpAppFramework\Value\Link;
@@ -24,6 +25,9 @@ final class EventDetails
     public function __construct(
         #[Label('Start')]
         private string $start = '',
+        #[DateTime]
+        #[Label('End')]
+        private string $end = '',
         private int $capacity = 0,
         private EventKind $kind = EventKind::Concert,
         private ?Venue $venue = null,
@@ -46,6 +50,16 @@ final class EventDetails
     public function setStart(string $start): void
     {
         $this->start = $start;
+    }
+
+    public function getEnd(): string
+    {
+        return $this->end;
+    }
+
+    public function setEnd(string $end): void
+    {
+        $this->end = $end;
     }
 
     public function getCapacity(): int
