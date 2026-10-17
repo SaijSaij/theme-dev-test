@@ -1,6 +1,6 @@
 /**
  * Step 7: the theme as consumer of the test plugin
- * (https://github.com/saijsaij/plugin-dev-test) – its public API, its public
+ * (https://github.com/webcodingcat/plugin-dev-test) – its public API, its public
  * template functions and filters, and overrides of its templates. The
  * expectations depend on whether the plugin is active: in the pool tdt-full and
  * in the release test with both ZIPs it is, in the pool tdt-bare and the

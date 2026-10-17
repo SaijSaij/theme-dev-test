@@ -15,7 +15,7 @@ use Saij\WpAppFramework\Rest\RestRoute;
 use Saij\WpAppFramework\Twig\TemplateRenderer;
 
 /**
- * Uses the test plugin (https://github.com/saijsaij/plugin-dev-test) if it is
+ * Uses the test plugin (https://github.com/webcodingcat/plugin-dev-test) if it is
  * active: its public API and its public template functions and filters.
  */
 #[RestController(Api::VERSION, base: '/plugin')]

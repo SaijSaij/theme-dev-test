@@ -1,6 +1,6 @@
 # CLAUDE.md – theme-dev-test
 
-Test theme of [wp-app-framework](https://github.com/saijsaij/wp-app-framework) (slug `theme-dev-test`, namespace `dev-test`: blocks `dev-test/…`, REST `dev-test/v1`, options `dev_test_…`, PHP `Saij\ThemeDevTest\`). Not a product theme: everything here exists to exercise the framework, and the framework's build and browser tests run against it. Framework principles, conventions and testing rules: the [developer documentation](https://saijsaij.github.io/wp-app-framework/next/development/) (in the framework checkout `docs/content/development/`) and the framework's CLAUDE.md; this file covers the theme.
+Test theme of [wp-app-framework](https://github.com/webcodingcat/wp-app-framework) (slug `theme-dev-test`, namespace `dev-test`: blocks `dev-test/…`, REST `dev-test/v1`, options `dev_test_…`, PHP `Saij\ThemeDevTest\`). Not a product theme: everything here exists to exercise the framework, and the framework's build and browser tests run against it. Framework principles, conventions and testing rules: the [developer documentation](https://webcodingcat.github.io/wp-app-framework/next/development/) (in the framework checkout `docs/content/development/`) and the framework's CLAUDE.md; this file covers the theme.
 
 <!-- Maintainers: keep this file under 200 lines; the README holds commands in full and the spec table. -->
 
@@ -10,13 +10,13 @@ Test theme of [wp-app-framework](https://github.com/saijsaij/wp-app-framework) (
 - Build errors are not tested here (a broken class would break the theme's build); they belong to the framework's PHPUnit fixtures.
 - Each test deletes exactly the posts, media and users it created – never "delete all". Never store `dev-test/wrong-field`, `dev-test/unmarked` or `dev-test/support-unwrapped` in a post; they fail on purpose.
 - The console guard (`tests/e2e/fixtures.js`) fails a test on every console warning, console error or page error. Declare expected messages with `expectConsole`; add to `ALLOWED` only a warning WordPress causes with every theme, with the reason.
-- The suite must pass with and without the test plugin [plugin-dev-test](https://github.com/saijsaij/plugin-dev-test) (`plugin.spec.js` branches explicitly on the plugin status from `/wp/v2/plugins`) and with the test child theme [theme-dev-test-child](https://github.com/saijsaij/theme-dev-test-child) active or not (what the child theme does is tested in its own suite).
+- The suite must pass with and without the test plugin [plugin-dev-test](https://github.com/webcodingcat/plugin-dev-test) (`plugin.spec.js` branches explicitly on the plugin status from `/wp/v2/plugins`) and with the test child theme [theme-dev-test-child](https://github.com/webcodingcat/theme-dev-test-child) active or not (what the child theme does is tested in its own suite).
 - The same suite runs against the release ZIP (`E2E_TARGET=release`); only mode-specific expectations may branch.
 - Class properties are never `public` (exceptions: block attribute and value classes); everything in this repository is English; other repositories are linked by GitHub URL.
 
 ## Commands
 
-Run from this directory, with [wp-test-env](https://github.com/saijsaij/wp-test-env) checked out next to it (its tools image provides PHP, Composer and Node). Every check must pass without errors or warnings.
+Run from this directory, with [wp-test-env](https://github.com/webcodingcat/wp-test-env) checked out next to it (its tools image provides PHP, Composer and Node). Every check must pass without errors or warnings.
 
 ```sh
 ../wp-test-env/bin/tools -w theme-dev-test composer build-manifest   # output must match the README

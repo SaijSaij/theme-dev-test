@@ -1,5 +1,5 @@
 # Test pools of the theme in development mode, for bin/run of wp-test-env
-# (https://github.com/saijsaij/wp-test-env), e.g. from its directory:
+# (https://github.com/webcodingcat/wp-test-env), e.g. from its directory:
 #
 #   bin/run ../theme-dev-test/tests/dev.pools ../plugin-dev-test/tests/dev.pools ../theme-dev-test-child/tests/dev.pools
 #

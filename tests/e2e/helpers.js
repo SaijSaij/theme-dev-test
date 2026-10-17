@@ -213,7 +213,7 @@ async function restResponse(
 /**
  * The active theme: its directory name (stylesheet) and that of its parent
  * (template; the same without a child theme). The test child theme
- * (https://github.com/saijsaij/theme-dev-test-child) may be active (pool tdt-full); the theme's
+ * (https://github.com/webcodingcat/theme-dev-test-child) may be active (pool tdt-full); the theme's
  * tests must pass with and without it.
  *
  * @param {Object} requestUtils
@@ -409,7 +409,7 @@ async function cleanUp( requestUtils ) {
 }
 
 /**
- * Whether the test plugin (https://github.com/saijsaij/plugin-dev-test) is installed and active, from the plugins endpoint of WordPress.
+ * Whether the test plugin (https://github.com/webcodingcat/plugin-dev-test) is installed and active, from the plugins endpoint of WordPress.
  *
  * @param {Object} requestUtils
  * @return {Promise<boolean>} Active.

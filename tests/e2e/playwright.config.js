@@ -1,6 +1,6 @@
 /**
  * Browser tests of the theme. Run them with wp-test-env
- * (https://github.com/saijsaij/wp-test-env), which starts the WordPress
+ * (https://github.com/webcodingcat/wp-test-env), which starts the WordPress
  * instances and runs Playwright with the credentials and a writable results
  * directory, e.g. on two instances:
  *

@@ -7,7 +7,7 @@
 # WordPress fires `after_switch_theme` on the request after the switch, so each
 # switch is followed by another request before the activation is checked. At the
 # end the theme that was active before is active again. Run it against its own
-# instance of wp-test-env (https://github.com/saijsaij/wp-test-env, checked out
+# instance of wp-test-env (https://github.com/webcodingcat/wp-test-env, checked out
 # next to this repository) with both themes, in development mode (checkouts) or
 # release mode (release ZIPs):
 #
@@ -22,7 +22,7 @@ instance="$1"
 # wp-test-env is checked out next to this repository.
 test_env="$(cd "$(dirname "${BASH_SOURCE[0]}")/../../.." && pwd)/wp-test-env"
 if [[ ! -x "${test_env}/bin/wp" ]]; then
-    echo "ERROR: ${test_env}/bin/wp not found; check out wp-test-env (https://github.com/saijsaij/wp-test-env) next to this repository." >&2
+    echo "ERROR: ${test_env}/bin/wp not found; check out wp-test-env (https://github.com/webcodingcat/wp-test-env) next to this repository." >&2
     exit 2
 fi
 
