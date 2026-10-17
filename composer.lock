@@ -7,63 +7,6 @@
     "content-hash": "6c8213363ee63f2a2d1a4c32b131f672",
     "packages": [
         {
-            "name": "webcodingcat/wp-app-framework",
-            "version": "dev-main",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/webcodingcat/wp-app-framework.git",
-                "reference": "91a1074825b338d0f5d76be2d9b4785cb0ba1a48"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/webcodingcat/wp-app-framework/zipball/91a1074825b338d0f5d76be2d9b4785cb0ba1a48",
-                "reference": "91a1074825b338d0f5d76be2d9b4785cb0ba1a48",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=8.5",
-                "twig/twig": "^3.30"
-            },
-            "require-dev": {
-                "friendsofphp/php-cs-fixer": "^3.95",
-                "php-stubs/wordpress-stubs": "^7.1",
-                "phpstan/phpdoc-parser": "^2.3",
-                "phpstan/phpstan": "^2.3",
-                "phpunit/phpunit": "^13.4",
-                "szepeviktor/phpstan-wordpress": "^2.0"
-            },
-            "default-branch": true,
-            "bin": [
-                "bin/wp-app-framework"
-            ],
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "WebCodingCat\\WpAppFramework\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "GPL-2.0-or-later"
-            ],
-            "description": "Framework for standalone full site editing themes for WordPress.",
-            "homepage": "https://webcodingcat.github.io/wp-app-framework/",
-            "keywords": [
-                "block-theme",
-                "full-site-editing",
-                "gutenberg",
-                "tailwindcss",
-                "twig",
-                "wordpress"
-            ],
-            "support": {
-                "docs": "https://webcodingcat.github.io/wp-app-framework/",
-                "issues": "https://github.com/webcodingcat/wp-app-framework/issues",
-                "source": "https://github.com/webcodingcat/wp-app-framework"
-            },
-            "time": "2026-10-17T11:48:17+00:00"
-        },
-        {
             "name": "symfony/deprecation-contracts",
             "version": "v3.7.1",
             "source": {
@@ -381,6 +324,63 @@
                 }
             ],
             "time": "2026-09-25T13:20:01+00:00"
+        },
+        {
+            "name": "webcodingcat/wp-app-framework",
+            "version": "dev-main",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/webcodingcat/wp-app-framework.git",
+                "reference": "0062e36f5bdad3f4688c55dd0ede622f15860108"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/webcodingcat/wp-app-framework/zipball/0062e36f5bdad3f4688c55dd0ede622f15860108",
+                "reference": "0062e36f5bdad3f4688c55dd0ede622f15860108",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=8.5",
+                "twig/twig": "^3.30"
+            },
+            "require-dev": {
+                "friendsofphp/php-cs-fixer": "^3.95",
+                "php-stubs/wordpress-stubs": "^7.1",
+                "phpstan/phpdoc-parser": "^2.3",
+                "phpstan/phpstan": "^2.3",
+                "phpunit/phpunit": "^13.4",
+                "szepeviktor/phpstan-wordpress": "^2.0"
+            },
+            "default-branch": true,
+            "bin": [
+                "bin/wp-app-framework"
+            ],
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "WebCodingCat\\WpAppFramework\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "description": "Framework for standalone full site editing themes for WordPress.",
+            "homepage": "https://webcodingcat.github.io/wp-app-framework/",
+            "keywords": [
+                "block-theme",
+                "full-site-editing",
+                "gutenberg",
+                "tailwindcss",
+                "twig",
+                "wordpress"
+            ],
+            "support": {
+                "docs": "https://webcodingcat.github.io/wp-app-framework/",
+                "issues": "https://github.com/webcodingcat/wp-app-framework/issues",
+                "source": "https://github.com/webcodingcat/wp-app-framework"
+            },
+            "time": "2026-10-17T13:34:28+00:00"
         }
     ],
     "packages-dev": [
@@ -1743,75 +1743,6 @@
                 }
             ],
             "time": "2024-06-11T12:45:25+00:00"
-        },
-        {
-            "name": "webcodingcat/plugin-dev-test",
-            "version": "dev-main",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/webcodingcat/plugin-dev-test",
-                "reference": "cc1b1adda5fe06047b49267f2d55440bdde45b31"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/webcodingcat/plugin-dev-test/zipball/cc1b1adda5fe06047b49267f2d55440bdde45b31",
-                "reference": "cc1b1adda5fe06047b49267f2d55440bdde45b31",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=8.5",
-                "webcodingcat/wp-app-framework": "dev-main"
-            },
-            "require-dev": {
-                "friendsofphp/php-cs-fixer": "^3.95",
-                "php-stubs/wordpress-stubs": "^7.1",
-                "phpstan/phpstan": "^2.3",
-                "szepeviktor/phpstan-wordpress": "^2.0"
-            },
-            "default-branch": true,
-            "type": "wordpress-plugin",
-            "extra": {
-                "strauss": {
-                    "target_directory": "vendor-prefixed",
-                    "namespace_prefix": "WebCodingCat\\PluginDevTest\\Vendor\\",
-                    "classmap_prefix": "WebCodingCat_PluginDevTest_Vendor_",
-                    "include_root_autoload": true,
-                    "update_call_sites": [
-                        "src",
-                        "plugin-dev-test.php"
-                    ],
-                    "delete_vendor_packages": false
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "WebCodingCat\\PluginDevTest\\": "src/"
-                }
-            },
-            "scripts": {
-                "build-manifest": [
-                    "wp-app-framework build"
-                ],
-                "lint": [
-                    "phpstan analyse --no-progress --memory-limit=1G",
-                    "php-cs-fixer check --diff"
-                ],
-                "fix": [
-                    "php-cs-fixer fix"
-                ],
-                "release": [
-                    "wp-app-framework release"
-                ]
-            },
-            "license": [
-                "proprietary"
-            ],
-            "description": "Test plugin for wp-app-framework: its build and browser tests run against this plugin next to the test theme.",
-            "support": {
-                "source": "https://github.com/webcodingcat/plugin-dev-test/tree/main",
-                "issues": "https://github.com/webcodingcat/plugin-dev-test/issues"
-            },
-            "time": "2026-10-10T13:54:38+00:00"
         },
         {
             "name": "sebastian/diff",
@@ -3229,6 +3160,74 @@
                 "source": "https://github.com/szepeviktor/phpstan-wordpress/tree/v2.0.4"
             },
             "time": "2026-05-22T16:22:09+00:00"
+        },
+        {
+            "name": "webcodingcat/plugin-dev-test",
+            "version": "dev-main",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/webcodingcat/plugin-dev-test",
+                "reference": "0199d0bdc091bc62d4164e1dc689ba9ef6a07eec"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/webcodingcat/plugin-dev-test/zipball/0199d0bdc091bc62d4164e1dc689ba9ef6a07eec",
+                "reference": "0199d0bdc091bc62d4164e1dc689ba9ef6a07eec",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=8.5",
+                "webcodingcat/wp-app-framework": "dev-main"
+            },
+            "require-dev": {
+                "friendsofphp/php-cs-fixer": "^3.95",
+                "php-stubs/wordpress-stubs": "^7.1",
+                "phpstan/phpstan": "^2.3",
+                "szepeviktor/phpstan-wordpress": "^2.0"
+            },
+            "default-branch": true,
+            "type": "wordpress-plugin",
+            "extra": {
+                "wp-app-framework": {
+                    "namespace": "plugin-dev-test"
+                },
+                "strauss": {
+                    "target_directory": "vendor-prefixed",
+                    "namespace_prefix": "WebCodingCat\\PluginDevTest\\Vendor\\",
+                    "classmap_prefix": "WebCodingCat_PluginDevTest_Vendor_",
+                    "include_root_autoload": true,
+                    "update_call_sites": [
+                        "src",
+                        "plugin-dev-test.php"
+                    ],
+                    "delete_vendor_packages": false
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "WebCodingCat\\PluginDevTest\\": "src/"
+                }
+            },
+            "scripts": {
+                "build-manifest": [
+                    "wp-app-framework build"
+                ],
+                "lint": [
+                    "phpstan analyse --no-progress --memory-limit=1G",
+                    "php-cs-fixer check --diff"
+                ],
+                "fix": [
+                    "php-cs-fixer fix"
+                ],
+                "release": [
+                    "wp-app-framework release"
+                ]
+            },
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "description": "Test plugin for wp-app-framework: its build and browser tests run against this plugin next to the test theme.",
+            "time": "2026-10-17T13:41:31+00:00"
         }
     ],
     "aliases": [],
