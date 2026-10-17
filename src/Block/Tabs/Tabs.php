@@ -2,19 +2,19 @@
 
 declare(strict_types=1);
 
-namespace Saij\ThemeDevTest\Block\Tabs;
+namespace WebCodingCat\ThemeDevTest\Block\Tabs;
 
-use Saij\ThemeDevTest\Block\Category;
-use Saij\WpAppFramework\Block\Block;
-use Saij\WpAppFramework\Block\Example;
-use Saij\WpAppFramework\Block\InnerBlocks;
-use Saij\WpAppFramework\Block\Orientation;
-use Saij\WpAppFramework\Block\Supports;
-use Saij\WpAppFramework\Block\TemplateBlock;
-use Saij\WpAppFramework\Block\TemplateLock;
-use Saij\WpAppFramework\Block\Variation;
-use Saij\WpAppFramework\Block\VariationScope;
-use Saij\WpAppFramework\Twig\TemplateRenderer;
+use WebCodingCat\ThemeDevTest\Block\Category;
+use WebCodingCat\WpAppFramework\Block\Block;
+use WebCodingCat\WpAppFramework\Block\Example;
+use WebCodingCat\WpAppFramework\Block\InnerBlocks;
+use WebCodingCat\WpAppFramework\Block\Orientation;
+use WebCodingCat\WpAppFramework\Block\Supports;
+use WebCodingCat\WpAppFramework\Block\TemplateBlock;
+use WebCodingCat\WpAppFramework\Block\TemplateLock;
+use WebCodingCat\WpAppFramework\Block\Variation;
+use WebCodingCat\WpAppFramework\Block\VariationScope;
+use WebCodingCat\WpAppFramework\Twig\TemplateRenderer;
 
 /**
  * A container with a template of two tabs, which editors may reorder but not add to or remove from (templateLock

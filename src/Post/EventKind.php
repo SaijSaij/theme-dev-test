@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Saij\ThemeDevTest\Post;
+namespace WebCodingCat\ThemeDevTest\Post;
 
-use Saij\WpAppFramework\Value\Labeled;
+use WebCodingCat\WpAppFramework\Value\Labeled;
 
 enum EventKind: string implements Labeled
 {

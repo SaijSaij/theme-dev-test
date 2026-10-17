@@ -2,21 +2,21 @@
 
 declare(strict_types=1);
 
-namespace Saij\ThemeDevTest\Table;
+namespace WebCodingCat\ThemeDevTest\Table;
 
 use DateTimeImmutable;
 use DateTimeZone;
 use LogicException;
 use RuntimeException;
-use Saij\ThemeDevTest\Rest\Api;
-use Saij\WpAppFramework\Query\All;
-use Saij\WpAppFramework\Query\Any;
-use Saij\WpAppFramework\Query\Direction;
-use Saij\WpAppFramework\Rest\HttpMethod;
-use Saij\WpAppFramework\Rest\Permission\Capability;
-use Saij\WpAppFramework\Rest\RestController;
-use Saij\WpAppFramework\Rest\RestException;
-use Saij\WpAppFramework\Rest\RestRoute;
+use WebCodingCat\ThemeDevTest\Rest\Api;
+use WebCodingCat\WpAppFramework\Query\All;
+use WebCodingCat\WpAppFramework\Query\Any;
+use WebCodingCat\WpAppFramework\Query\Direction;
+use WebCodingCat\WpAppFramework\Rest\HttpMethod;
+use WebCodingCat\WpAppFramework\Rest\Permission\Capability;
+use WebCodingCat\WpAppFramework\Rest\RestController;
+use WebCodingCat\WpAppFramework\Rest\RestException;
+use WebCodingCat\WpAppFramework\Rest\RestRoute;
 use wpdb;
 
 /**

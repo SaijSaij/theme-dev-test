@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Saij\ThemeDevTest\Repeater;
+namespace WebCodingCat\ThemeDevTest\Repeater;
 
-use Saij\WpAppFramework\Value\PlainText;
+use WebCodingCat\WpAppFramework\Value\PlainText;
 
 final readonly class ItemCardAttributes
 {

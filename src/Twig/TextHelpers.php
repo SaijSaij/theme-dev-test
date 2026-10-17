@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Saij\ThemeDevTest\Twig;
+namespace WebCodingCat\ThemeDevTest\Twig;
 
-use Saij\WpAppFramework\Twig\TemplateFilter;
-use Saij\WpAppFramework\Twig\TemplateFunction;
+use WebCodingCat\WpAppFramework\Twig\TemplateFilter;
+use WebCodingCat\WpAppFramework\Twig\TemplateFunction;
 
 /**
  * Template function and HTML filter; counts its instances to show that the

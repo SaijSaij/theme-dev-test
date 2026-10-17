@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Saij\ThemeDevTest\Block\Hero;
+namespace WebCodingCat\ThemeDevTest\Block\Hero;
 
-use Saij\WpAppFramework\Value\Labeled;
+use WebCodingCat\WpAppFramework\Value\Labeled;
 
 /**
  * The icons of hero badges; the template draws them as inline SVG from path().

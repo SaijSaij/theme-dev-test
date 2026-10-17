@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Saij\ThemeDevTest\Support;
+namespace WebCodingCat\ThemeDevTest\Support;
 
-use Saij\WpAppFramework\Value\Labeled;
+use WebCodingCat\WpAppFramework\Value\Labeled;
 
 enum SurfaceTone: string implements Labeled
 {

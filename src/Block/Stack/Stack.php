@@ -2,17 +2,17 @@
 
 declare(strict_types=1);
 
-namespace Saij\ThemeDevTest\Block\Stack;
+namespace WebCodingCat\ThemeDevTest\Block\Stack;
 
-use Saij\ThemeDevTest\Block\Category;
-use Saij\ThemeDevTest\Block\Hero\Hero;
-use Saij\WpAppFramework\Block\Appender;
-use Saij\WpAppFramework\Block\Block;
-use Saij\WpAppFramework\Block\CoreBlock;
-use Saij\WpAppFramework\Block\Example;
-use Saij\WpAppFramework\Block\InnerBlocks;
-use Saij\WpAppFramework\Block\Supports;
-use Saij\WpAppFramework\Twig\TemplateRenderer;
+use WebCodingCat\ThemeDevTest\Block\Category;
+use WebCodingCat\ThemeDevTest\Block\Hero\Hero;
+use WebCodingCat\WpAppFramework\Block\Appender;
+use WebCodingCat\WpAppFramework\Block\Block;
+use WebCodingCat\WpAppFramework\Block\CoreBlock;
+use WebCodingCat\WpAppFramework\Block\Example;
+use WebCodingCat\WpAppFramework\Block\InnerBlocks;
+use WebCodingCat\WpAppFramework\Block\Supports;
+use WebCodingCat\WpAppFramework\Twig\TemplateRenderer;
 
 /**
  * A container without lock that offers headings first in its quick inserter (prioritized), adds blocks with the

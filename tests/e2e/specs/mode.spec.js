@@ -23,7 +23,7 @@ test.describe( 'Mode', () => {
 				release: IS_RELEASE,
 				devCache: ! IS_RELEASE,
 				slug: 'theme-dev-test',
-				frameworkClass: `${ VENDOR_PREFIX }Saij\\WpAppFramework\\Theme`,
+				frameworkClass: `${ VENDOR_PREFIX }WebCodingCat\\WpAppFramework\\Theme`,
 				twigClass: `${ VENDOR_PREFIX }Twig\\Environment`,
 			} );
 		}

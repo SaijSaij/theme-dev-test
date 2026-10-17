@@ -1,7 +1,7 @@
 /**
  * Editor extension of the check block: replaces the generated control of an attribute.
  */
-import { registerControl } from '@saij/wp-app-framework';
+import { registerControl } from '@webcodingcat/wp-app-framework';
 import { RangeControl } from '@wordpress/components';
 
 registerControl( 'check', 'ratio', ( { value, onChange } ) => (

@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Saij\ThemeDevTest\Block\Inspector;
+namespace WebCodingCat\ThemeDevTest\Block\Inspector;
 
-use Saij\WpAppFramework\Value\Label;
-use Saij\WpAppFramework\Value\ListOf;
-use Saij\WpAppFramework\Value\PlainText;
-use Saij\WpAppFramework\Value\RichText;
+use WebCodingCat\WpAppFramework\Value\Label;
+use WebCodingCat\WpAppFramework\Value\ListOf;
+use WebCodingCat\WpAppFramework\Value\PlainText;
+use WebCodingCat\WpAppFramework\Value\RichText;
 
 final readonly class InspectorAttributes
 {

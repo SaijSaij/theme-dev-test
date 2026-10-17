@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Saij\ThemeDevTest\Cache;
+namespace WebCodingCat\ThemeDevTest\Cache;
 
-use Saij\WpAppFramework\Cache\CacheTag;
+use WebCodingCat\WpAppFramework\Cache\CacheTag;
 
 /**
  * A tag of the theme, invalidated through CacheController::invalidate().

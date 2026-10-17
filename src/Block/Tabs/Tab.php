@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Saij\ThemeDevTest\Block\Tabs;
+namespace WebCodingCat\ThemeDevTest\Block\Tabs;
 
-use Saij\ThemeDevTest\Block\Category;
-use Saij\WpAppFramework\Block\Block;
-use Saij\WpAppFramework\Block\Context;
-use Saij\WpAppFramework\Block\CoreBlock;
-use Saij\WpAppFramework\Block\InnerBlocks;
-use Saij\WpAppFramework\Twig\TemplateRenderer;
+use WebCodingCat\ThemeDevTest\Block\Category;
+use WebCodingCat\WpAppFramework\Block\Block;
+use WebCodingCat\WpAppFramework\Block\Context;
+use WebCodingCat\WpAppFramework\Block\CoreBlock;
+use WebCodingCat\WpAppFramework\Block\InnerBlocks;
+use WebCodingCat\WpAppFramework\Twig\TemplateRenderer;
 
 /**
  * A tab: only inside tabs (parent), with the tone and the active tab of its tabs as typed values of render()

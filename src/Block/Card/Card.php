@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-namespace Saij\ThemeDevTest\Block\Card;
+namespace WebCodingCat\ThemeDevTest\Block\Card;
 
-use Saij\ThemeDevTest\Support\Framed;
-use Saij\ThemeDevTest\Support\Surface;
-use Saij\ThemeDevTest\Support\SurfaceTone;
-use Saij\WpAppFramework\Block\Block;
-use Saij\WpAppFramework\Block\BlockCategory;
-use Saij\WpAppFramework\Block\Support\UseSupport;
-use Saij\WpAppFramework\Twig\TemplateRenderer;
+use WebCodingCat\ThemeDevTest\Support\Framed;
+use WebCodingCat\ThemeDevTest\Support\Surface;
+use WebCodingCat\ThemeDevTest\Support\SurfaceTone;
+use WebCodingCat\WpAppFramework\Block\Block;
+use WebCodingCat\WpAppFramework\Block\BlockCategory;
+use WebCodingCat\WpAppFramework\Block\Support\UseSupport;
+use WebCodingCat\WpAppFramework\Twig\TemplateRenderer;
 
 /**
  * Styled with the utilities of the theme's stylesheet; must look the same in the

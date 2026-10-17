@@ -2,7 +2,7 @@
  * Editor extension of the hero block: a panel that summarizes the lists and shows that panels receive the
  * same props as toolbar buttons (clientId, isPreview).
  */
-import { registerPanel } from '@saij/wp-app-framework';
+import { registerPanel } from '@webcodingcat/wp-app-framework';
 import { PanelBody } from '@wordpress/components';
 
 registerPanel( 'hero', ( { attributes, clientId, isPreview } ) => (

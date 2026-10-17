@@ -3,7 +3,7 @@
  * page (registerSettingsControl() with DefaultControl), with the identifier,
  * the index from the path and the number of regions from the group value.
  */
-import { registerSettingsControl } from '@saij/wp-app-framework/settings';
+import { registerSettingsControl } from '@webcodingcat/wp-app-framework/settings';
 
 registerSettingsControl(
 	'regions',

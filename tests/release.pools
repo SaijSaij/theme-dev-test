@@ -5,11 +5,11 @@
 #
 # Builds the release ZIPs with the framework checkout; each pool installs the newest ZIP of dist/.
 prepare theme-dev-test theme-dev-test-child
-link saij/wp-app-framework=wp-app-framework
-link saij/plugin-dev-test=plugin-dev-test
-link saij/theme-dev-test=theme-dev-test
-tools theme-dev-test composer release -- --package-source=saij/wp-app-framework=../wp-app-framework
-tools theme-dev-test-child composer release -- --package-source=saij/wp-app-framework=../wp-app-framework
+link webcodingcat/wp-app-framework=wp-app-framework
+link webcodingcat/plugin-dev-test=plugin-dev-test
+link webcodingcat/theme-dev-test=theme-dev-test
+tools theme-dev-test composer release -- --package-source=webcodingcat/wp-app-framework=../wp-app-framework
+tools theme-dev-test-child composer release -- --package-source=webcodingcat/wp-app-framework=../wp-app-framework
 
 pool tdt-release
 instances 3

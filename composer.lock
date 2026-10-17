@@ -4,19 +4,19 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "83c948357a3765ae7f2c7fb087148d45",
+    "content-hash": "6c8213363ee63f2a2d1a4c32b131f672",
     "packages": [
         {
-            "name": "saij/wp-app-framework",
+            "name": "webcodingcat/wp-app-framework",
             "version": "dev-main",
             "source": {
                 "type": "git",
-                "url": "https://github.com/SaijSaij/wp-app-framework.git",
+                "url": "https://github.com/webcodingcat/wp-app-framework.git",
                 "reference": "91a1074825b338d0f5d76be2d9b4785cb0ba1a48"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/SaijSaij/wp-app-framework/zipball/91a1074825b338d0f5d76be2d9b4785cb0ba1a48",
+                "url": "https://api.github.com/repos/webcodingcat/wp-app-framework/zipball/91a1074825b338d0f5d76be2d9b4785cb0ba1a48",
                 "reference": "91a1074825b338d0f5d76be2d9b4785cb0ba1a48",
                 "shasum": ""
             },
@@ -39,7 +39,7 @@
             "type": "library",
             "autoload": {
                 "psr-4": {
-                    "Saij\\WpAppFramework\\": "src/"
+                    "WebCodingCat\\WpAppFramework\\": "src/"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -47,7 +47,7 @@
                 "GPL-2.0-or-later"
             ],
             "description": "Framework for standalone full site editing themes for WordPress.",
-            "homepage": "https://saijsaij.github.io/wp-app-framework/",
+            "homepage": "https://webcodingcat.github.io/wp-app-framework/",
             "keywords": [
                 "block-theme",
                 "full-site-editing",
@@ -57,9 +57,9 @@
                 "wordpress"
             ],
             "support": {
-                "docs": "https://saijsaij.github.io/wp-app-framework/",
-                "issues": "https://github.com/saijsaij/wp-app-framework/issues",
-                "source": "https://github.com/saijsaij/wp-app-framework"
+                "docs": "https://webcodingcat.github.io/wp-app-framework/",
+                "issues": "https://github.com/webcodingcat/wp-app-framework/issues",
+                "source": "https://github.com/webcodingcat/wp-app-framework"
             },
             "time": "2026-10-17T11:48:17+00:00"
         },
@@ -1745,7 +1745,7 @@
             "time": "2024-06-11T12:45:25+00:00"
         },
         {
-            "name": "saij/plugin-dev-test",
+            "name": "webcodingcat/plugin-dev-test",
             "version": "dev-main",
             "source": {
                 "type": "git",
@@ -1760,7 +1760,7 @@
             },
             "require": {
                 "php": ">=8.5",
-                "saij/wp-app-framework": "dev-main"
+                "webcodingcat/wp-app-framework": "dev-main"
             },
             "require-dev": {
                 "friendsofphp/php-cs-fixer": "^3.95",
@@ -1773,8 +1773,8 @@
             "extra": {
                 "strauss": {
                     "target_directory": "vendor-prefixed",
-                    "namespace_prefix": "Saij\\PluginDevTest\\Vendor\\",
-                    "classmap_prefix": "Saij_PluginDevTest_Vendor_",
+                    "namespace_prefix": "WebCodingCat\\PluginDevTest\\Vendor\\",
+                    "classmap_prefix": "WebCodingCat_PluginDevTest_Vendor_",
                     "include_root_autoload": true,
                     "update_call_sites": [
                         "src",
@@ -1785,7 +1785,7 @@
             },
             "autoload": {
                 "psr-4": {
-                    "Saij\\PluginDevTest\\": "src/"
+                    "WebCodingCat\\PluginDevTest\\": "src/"
                 }
             },
             "scripts": {
@@ -1808,8 +1808,8 @@
             ],
             "description": "Test plugin for wp-app-framework: its build and browser tests run against this plugin next to the test theme.",
             "support": {
-                "source": "https://github.com/SaijSaij/plugin-dev-test/tree/main",
-                "issues": "https://github.com/SaijSaij/plugin-dev-test/issues"
+                "source": "https://github.com/webcodingcat/plugin-dev-test/tree/main",
+                "issues": "https://github.com/webcodingcat/plugin-dev-test/issues"
             },
             "time": "2026-10-10T13:54:38+00:00"
         },
@@ -3234,8 +3234,8 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "saij/plugin-dev-test": 20,
-        "saij/wp-app-framework": 20
+        "webcodingcat/plugin-dev-test": 20,
+        "webcodingcat/wp-app-framework": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,

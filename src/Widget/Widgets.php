@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Saij\ThemeDevTest\Widget;
+namespace WebCodingCat\ThemeDevTest\Widget;
 
-use Saij\WpAppFramework\Hook\Hook;
+use WebCodingCat\WpAppFramework\Hook\Hook;
 
 /**
  * Registers the widget, which the consumer creates itself.

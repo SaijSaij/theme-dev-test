@@ -5,9 +5,9 @@
 #
 # Every instance runs the checkouts with the framework checkout linked into vendor/.
 prepare theme-dev-test theme-dev-test-child plugin-dev-test
-link saij/wp-app-framework=wp-app-framework
-link saij/plugin-dev-test=plugin-dev-test
-link saij/theme-dev-test=theme-dev-test
+link webcodingcat/wp-app-framework=wp-app-framework
+link webcodingcat/plugin-dev-test=plugin-dev-test
+link webcodingcat/theme-dev-test=theme-dev-test
 
 # The browser tests with the child theme and the test plugin active and a persistent object cache.
 pool tdt-full

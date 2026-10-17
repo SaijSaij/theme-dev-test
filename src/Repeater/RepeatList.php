@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-namespace Saij\ThemeDevTest\Repeater;
+namespace WebCodingCat\ThemeDevTest\Repeater;
 
-use Saij\WpAppFramework\Block\Block;
-use Saij\WpAppFramework\Block\BlockCategory;
-use Saij\WpAppFramework\Block\CoreBlock;
-use Saij\WpAppFramework\Block\InnerBlocks;
-use Saij\WpAppFramework\Block\Repeater;
-use Saij\WpAppFramework\Block\TemplateBlock;
-use Saij\WpAppFramework\Twig\TemplateRenderer;
+use WebCodingCat\WpAppFramework\Block\Block;
+use WebCodingCat\WpAppFramework\Block\BlockCategory;
+use WebCodingCat\WpAppFramework\Block\CoreBlock;
+use WebCodingCat\WpAppFramework\Block\InnerBlocks;
+use WebCodingCat\WpAppFramework\Block\Repeater;
+use WebCodingCat\WpAppFramework\Block\TemplateBlock;
+use WebCodingCat\WpAppFramework\Twig\TemplateRenderer;
 
 /**
  * Repeats its inner blocks for events, genres, comments, users or log entries (Repeater): the IDs are an attribute,

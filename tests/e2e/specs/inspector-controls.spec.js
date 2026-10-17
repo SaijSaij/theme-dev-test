@@ -131,7 +131,7 @@ test.describe( 'Inspector controls', () => {
 		);
 		await openPostWith( { admin, editor, requestUtils }, '' );
 		const api = await page.evaluate( () => {
-			// The import @saij/wp-app-framework resolves to this object; the rest of the global is internal.
+			// The import @webcodingcat/wp-app-framework resolves to this object; the rest of the global is internal.
 			const instance = window.wpAppFramework[ 'theme-dev-test' ].api;
 			instance.registerPanel( 'unknown', () => null );
 			instance.registerControl( 'check', 'unknown', () => null );

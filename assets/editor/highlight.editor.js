@@ -2,7 +2,7 @@
  * An editor script without a block: a RichText format of the theme, titled with view data set in PHP
  * (editor-scripts.spec.js).
  */
-import { getData } from '@saij/wp-app-framework';
+import { getData } from '@webcodingcat/wp-app-framework';
 import { RichTextToolbarButton } from '@wordpress/block-editor';
 import { registerFormatType, toggleFormat } from '@wordpress/rich-text';
 

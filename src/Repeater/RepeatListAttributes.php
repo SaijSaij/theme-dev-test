@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Saij\ThemeDevTest\Repeater;
+namespace WebCodingCat\ThemeDevTest\Repeater;
 
 final readonly class RepeatListAttributes
 {

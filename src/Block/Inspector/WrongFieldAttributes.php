@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Saij\ThemeDevTest\Block\Inspector;
+namespace WebCodingCat\ThemeDevTest\Block\Inspector;
 
-use Saij\WpAppFramework\Value\PlainText;
+use WebCodingCat\WpAppFramework\Value\PlainText;
 
 final readonly class WrongFieldAttributes
 {

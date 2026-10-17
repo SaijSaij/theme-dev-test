@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Saij\ThemeDevTest\Support;
+namespace WebCodingCat\ThemeDevTest\Support;
 
-use Saij\WpAppFramework\Block\Support\BlockSupport;
+use WebCodingCat\WpAppFramework\Block\Support\BlockSupport;
 
 /**
  * Block support with an enum value, in the Styles tab: the class surface-light or

@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Saij\ThemeDevTest\Identifier;
+namespace WebCodingCat\ThemeDevTest\Identifier;
 
-use Saij\WpAppFramework\Value\Identifier;
-use Saij\WpAppFramework\Value\PlainText;
+use WebCodingCat\WpAppFramework\Value\Identifier;
+use WebCodingCat\WpAppFramework\Value\PlainText;
 
 final readonly class Chip
 {

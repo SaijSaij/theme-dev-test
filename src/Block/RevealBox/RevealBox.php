@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Saij\ThemeDevTest\Block\RevealBox;
+namespace WebCodingCat\ThemeDevTest\Block\RevealBox;
 
-use Saij\ThemeDevTest\Support\Reveal;
-use Saij\WpAppFramework\Block\Block;
-use Saij\WpAppFramework\Block\BlockCategory;
-use Saij\WpAppFramework\Block\Support\UseSupport;
-use Saij\WpAppFramework\Twig\TemplateRenderer;
+use WebCodingCat\ThemeDevTest\Support\Reveal;
+use WebCodingCat\WpAppFramework\Block\Block;
+use WebCodingCat\WpAppFramework\Block\BlockCategory;
+use WebCodingCat\WpAppFramework\Block\Support\UseSupport;
+use WebCodingCat\WpAppFramework\Twig\TemplateRenderer;
 
 /**
  * No view script of its own, only the one of the Reveal support (frontend.spec.js).

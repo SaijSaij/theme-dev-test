@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Saij\ThemeDevTest\Post;
+namespace WebCodingCat\ThemeDevTest\Post;
 
-use Saij\WpAppFramework\Post\PostMeta;
-use Saij\WpAppFramework\Value\Link;
+use WebCodingCat\WpAppFramework\Post\PostMeta;
+use WebCodingCat\WpAppFramework\Value\Link;
 
 /**
  * Meta of the data type, edited in a meta box on the classic edit screen.

@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-namespace Saij\ThemeDevTest\Post;
+namespace WebCodingCat\ThemeDevTest\Post;
 
-use Saij\WpAppFramework\Post\PostMeta;
-use Saij\WpAppFramework\Value\DateTime;
-use Saij\WpAppFramework\Value\Image;
-use Saij\WpAppFramework\Value\Label;
-use Saij\WpAppFramework\Value\Link;
-use Saij\WpAppFramework\Value\ListOf;
-use Saij\WpAppFramework\Value\RichText;
-use Saij\WpAppFramework\Value\Url;
+use WebCodingCat\WpAppFramework\Post\PostMeta;
+use WebCodingCat\WpAppFramework\Value\DateTime;
+use WebCodingCat\WpAppFramework\Value\Image;
+use WebCodingCat\WpAppFramework\Value\Label;
+use WebCodingCat\WpAppFramework\Value\Link;
+use WebCodingCat\WpAppFramework\Value\ListOf;
+use WebCodingCat\WpAppFramework\Value\RichText;
+use WebCodingCat\WpAppFramework\Value\Url;
 
 /**
  * Meta of events with every kind of value, private fields with getters and setters.

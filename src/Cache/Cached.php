@@ -2,17 +2,17 @@
 
 declare(strict_types=1);
 
-namespace Saij\ThemeDevTest\Cache;
+namespace WebCodingCat\ThemeDevTest\Cache;
 
-use Saij\ThemeDevTest\Setting\LayoutSettings;
-use Saij\WpAppFramework\Block\Block;
-use Saij\WpAppFramework\Block\BlockCategory;
-use Saij\WpAppFramework\Cache\Cache;
-use Saij\WpAppFramework\Cache\Tag\PostTypeTag;
-use Saij\WpAppFramework\Cache\Tag\SettingsTag;
-use Saij\WpAppFramework\Cache\Vary\QueryParamVary;
-use Saij\WpAppFramework\Twig\TemplateRenderer;
-use Saij\WpAppFramework\View\ViewData;
+use WebCodingCat\ThemeDevTest\Setting\LayoutSettings;
+use WebCodingCat\WpAppFramework\Block\Block;
+use WebCodingCat\WpAppFramework\Block\BlockCategory;
+use WebCodingCat\WpAppFramework\Cache\Cache;
+use WebCodingCat\WpAppFramework\Cache\Tag\PostTypeTag;
+use WebCodingCat\WpAppFramework\Cache\Tag\SettingsTag;
+use WebCodingCat\WpAppFramework\Cache\Vary\QueryParamVary;
+use WebCodingCat\WpAppFramework\Twig\TemplateRenderer;
+use WebCodingCat\WpAppFramework\View\ViewData;
 use WP_Block;
 
 /**

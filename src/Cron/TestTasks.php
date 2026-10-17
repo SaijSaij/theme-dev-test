@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Saij\ThemeDevTest\Cron;
+namespace WebCodingCat\ThemeDevTest\Cron;
 
-use Saij\WpAppFramework\Cron\CronTask;
+use WebCodingCat\WpAppFramework\Cron\CronTask;
 
 final readonly class TestTasks
 {

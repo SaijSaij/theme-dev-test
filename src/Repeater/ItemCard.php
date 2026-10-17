@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Saij\ThemeDevTest\Repeater;
+namespace WebCodingCat\ThemeDevTest\Repeater;
 
-use Saij\ThemeDevTest\Post\Event;
-use Saij\ThemeDevTest\Table\LogEntry;
-use Saij\WpAppFramework\Block\Block;
-use Saij\WpAppFramework\Block\BlockCategory;
-use Saij\WpAppFramework\Block\Item;
-use Saij\WpAppFramework\Twig\TemplateRenderer;
+use WebCodingCat\ThemeDevTest\Post\Event;
+use WebCodingCat\ThemeDevTest\Table\LogEntry;
+use WebCodingCat\WpAppFramework\Block\Block;
+use WebCodingCat\WpAppFramework\Block\BlockCategory;
+use WebCodingCat\WpAppFramework\Block\Item;
+use WebCodingCat\WpAppFramework\Twig\TemplateRenderer;
 use WP_Comment;
 use WP_Term;
 use WP_User;

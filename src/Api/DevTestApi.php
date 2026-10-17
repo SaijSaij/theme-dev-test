@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Saij\ThemeDevTest\Api;
+namespace WebCodingCat\ThemeDevTest\Api;
 
-use Saij\WpAppFramework\Api\PublicApi;
+use WebCodingCat\WpAppFramework\Api\PublicApi;
 
 /**
  * Public API of the theme; the test child theme injects it with #[ThemeApi].

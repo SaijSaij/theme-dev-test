@@ -7,7 +7,7 @@ const RENDER_ROUTE = '/wp-app-framework/v1/theme-dev-test/render';
 const IS_RELEASE = process.env.E2E_TARGET === 'release';
 
 /** Namespace prefix of the dependencies in a release (extra.strauss.namespace_prefix in composer.json). */
-const VENDOR_PREFIX = IS_RELEASE ? 'Saij\\ThemeDevTest\\Vendor\\' : '';
+const VENDOR_PREFIX = IS_RELEASE ? 'WebCodingCat\\ThemeDevTest\\Vendor\\' : '';
 
 /** Posts, media and users created by the tests; cleanUp() removes exactly these. */
 const createdPosts = [];

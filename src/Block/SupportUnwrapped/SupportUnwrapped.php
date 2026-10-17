@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Saij\ThemeDevTest\Block\SupportUnwrapped;
+namespace WebCodingCat\ThemeDevTest\Block\SupportUnwrapped;
 
-use Saij\ThemeDevTest\Support\Framed;
-use Saij\WpAppFramework\Block\Block;
-use Saij\WpAppFramework\Block\BlockCategory;
-use Saij\WpAppFramework\Block\Support\UseSupport;
-use Saij\WpAppFramework\Block\Supports;
+use WebCodingCat\ThemeDevTest\Support\Framed;
+use WebCodingCat\WpAppFramework\Block\Block;
+use WebCodingCat\WpAppFramework\Block\BlockCategory;
+use WebCodingCat\WpAppFramework\Block\Support\UseSupport;
+use WebCodingCat\WpAppFramework\Block\Supports;
 
 /**
  * Intentionally broken: uses a block support, but its root element has no

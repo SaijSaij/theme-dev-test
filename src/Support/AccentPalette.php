@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Saij\ThemeDevTest\Support;
+namespace WebCodingCat\ThemeDevTest\Support;
 
 /**
  * The accents the theme offers; injected into the Accent support.

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Saij\ThemeDevTest\Hook;
+namespace WebCodingCat\ThemeDevTest\Hook;
 
 /**
  * Service injected into the hooks of the test theme.

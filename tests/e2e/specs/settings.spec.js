@@ -136,7 +136,7 @@ test.describe( 'Settings', () => {
 		const values = await injectedValues( requestUtils );
 		expect( values.general ).toEqual( {
 			...DEFAULTS[ GENERAL ],
-			densityType: 'Saij\\ThemeDevTest\\Setting\\Density',
+			densityType: 'WebCodingCat\\ThemeDevTest\\Setting\\Density',
 		} );
 		expect( values.layout ).toEqual( DEFAULTS[ LAYOUT ] );
 	} );
@@ -173,7 +173,7 @@ test.describe( 'Settings', () => {
 			...DEFAULTS[ GENERAL ],
 			tagline: 'Hello & <b>',
 			density: 'compact',
-			densityType: 'Saij\\ThemeDevTest\\Setting\\Density',
+			densityType: 'WebCodingCat\\ThemeDevTest\\Setting\\Density',
 			links: [
 				{ label: 'Docs', url: '', external: false },
 				{ label: 'Home', url: 'https://example.com', external: true },

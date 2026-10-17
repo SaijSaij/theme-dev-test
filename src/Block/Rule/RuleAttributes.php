@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Saij\ThemeDevTest\Block\Rule;
+namespace WebCodingCat\ThemeDevTest\Block\Rule;
 
 final readonly class RuleAttributes
 {

@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Saij\ThemeDevTest\Block\Unmarked;
+namespace WebCodingCat\ThemeDevTest\Block\Unmarked;
 
-use Saij\WpAppFramework\Value\PlainText;
+use WebCodingCat\WpAppFramework\Value\PlainText;
 
 final readonly class UnmarkedAttributes
 {

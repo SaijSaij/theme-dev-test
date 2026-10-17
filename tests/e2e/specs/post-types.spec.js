@@ -449,13 +449,13 @@ test.describe( 'Post types and meta', () => {
 				path: `/dev-test/v1/posts/events/${ id }`,
 			} );
 			expect( read.body ).toMatchObject( {
-				class: 'Saij\\ThemeDevTest\\Post\\Event',
+				class: 'WebCodingCat\\ThemeDevTest\\Post\\Event',
 				title: 'E2E created in PHP',
 				status: 'publish',
 				capacity: 80,
 				kind: 'talk',
 				venue: {
-					class: 'Saij\\ThemeDevTest\\Post\\Venue',
+					class: 'WebCodingCat\\ThemeDevTest\\Post\\Venue',
 					id: venue.id,
 					title: 'Club',
 				},
@@ -479,7 +479,7 @@ test.describe( 'Post types and meta', () => {
 			expect( rejected.body ).toEqual( {
 				saved: false,
 				errors: [
-					'Saij\\ThemeDevTest\\Post\\EventDetails::$venue refers to a post that has not been saved yet; save it first.',
+					'WebCodingCat\\ThemeDevTest\\Post\\EventDetails::$venue refers to a post that has not been saved yet; save it first.',
 				],
 			} );
 			expect(

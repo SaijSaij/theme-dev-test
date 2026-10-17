@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Saij\ThemeDevTest\Table;
+namespace WebCodingCat\ThemeDevTest\Table;
 
-use Saij\WpAppFramework\Table\AbstractRow;
-use Saij\WpAppFramework\Table\Indexed;
-use Saij\WpAppFramework\Table\Length;
-use Saij\WpAppFramework\Table\PrimaryKey;
-use Saij\WpAppFramework\Table\RenamedFrom;
-use Saij\WpAppFramework\Table\Table;
+use WebCodingCat\WpAppFramework\Table\AbstractRow;
+use WebCodingCat\WpAppFramework\Table\Indexed;
+use WebCodingCat\WpAppFramework\Table\Length;
+use WebCodingCat\WpAppFramework\Table\PrimaryKey;
+use WebCodingCat\WpAppFramework\Table\RenamedFrom;
+use WebCodingCat\WpAppFramework\Table\Table;
 
 /**
  * A row of the table wp_dev_test_upgrade_probe, whose older schema TableController simulates: the column title was

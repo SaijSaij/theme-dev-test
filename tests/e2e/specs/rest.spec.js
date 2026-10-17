@@ -276,12 +276,12 @@ test.describe( 'REST routes', () => {
 			body: {
 				links: [
 					{
-						class: 'Saij\\ThemeDevTest\\Rest\\Link',
+						class: 'WebCodingCat\\ThemeDevTest\\Rest\\Link',
 						label: 'A',
 						url: '',
 					},
 					{
-						class: 'Saij\\ThemeDevTest\\Rest\\Link',
+						class: 'WebCodingCat\\ThemeDevTest\\Rest\\Link',
 						label: 'B',
 						url: 'https://example.test/?a=1&b=2',
 					},

@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Saij\ThemeDevTest\Block\Container;
+namespace WebCodingCat\ThemeDevTest\Block\Container;
 
-use Saij\WpAppFramework\Block\Block;
-use Saij\WpAppFramework\Block\BlockCategory;
-use Saij\WpAppFramework\Block\Supports;
-use Saij\WpAppFramework\Twig\TemplateRenderer;
+use WebCodingCat\WpAppFramework\Block\Block;
+use WebCodingCat\WpAppFramework\Block\BlockCategory;
+use WebCodingCat\WpAppFramework\Block\Supports;
+use WebCodingCat\WpAppFramework\Twig\TemplateRenderer;
 
 /**
  * A container without content attributes and without contentRole: in

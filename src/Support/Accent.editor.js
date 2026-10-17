@@ -1,7 +1,7 @@
 /**
  * Replaces the generated text control of the accent support in every block that uses it.
  */
-import { registerSupportControl } from '@saij/wp-app-framework';
+import { registerSupportControl } from '@webcodingcat/wp-app-framework';
 import { RadioControl } from '@wordpress/components';
 
 registerSupportControl( 'accent', ( { value, onChange } ) => (

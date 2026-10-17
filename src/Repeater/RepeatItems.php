@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Saij\ThemeDevTest\Repeater;
+namespace WebCodingCat\ThemeDevTest\Repeater;
 
-use Saij\ThemeDevTest\Post\Event;
-use Saij\ThemeDevTest\Table\LogEntry;
-use Saij\WpAppFramework\Block\Repeater;
-use Saij\WpAppFramework\Block\RepeaterItem;
+use WebCodingCat\ThemeDevTest\Post\Event;
+use WebCodingCat\ThemeDevTest\Table\LogEntry;
+use WebCodingCat\WpAppFramework\Block\Repeater;
+use WebCodingCat\WpAppFramework\Block\RepeaterItem;
 
 /**
  * The items of a repeat list: the inner blocks rendered for each ID, by the kind of item.

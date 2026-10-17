@@ -3,7 +3,7 @@
  * takes the first place of the shared module order.js and loads an "external" script (document-views.spec.js);
  * passes on the URL of an imported image (assets.spec.js).
  */
-import { DocumentView } from '@saij/wp-app-framework/view';
+import { DocumentView } from '@webcodingcat/wp-app-framework/view';
 import { take } from '#shared/order';
 import swatch from './images/swatch.png';
 

@@ -2,17 +2,17 @@
 
 declare(strict_types=1);
 
-namespace Saij\ThemeDevTest\Post;
+namespace WebCodingCat\ThemeDevTest\Post;
 
-use Saij\ThemeDevTest\Rest\Api;
-use Saij\WpAppFramework\Post\Post;
-use Saij\WpAppFramework\Post\PostStatus;
-use Saij\WpAppFramework\Post\PostValidationException;
-use Saij\WpAppFramework\Rest\HttpMethod;
-use Saij\WpAppFramework\Rest\Permission\Capability;
-use Saij\WpAppFramework\Rest\RestController;
-use Saij\WpAppFramework\Rest\RestException;
-use Saij\WpAppFramework\Rest\RestRoute;
+use WebCodingCat\ThemeDevTest\Rest\Api;
+use WebCodingCat\WpAppFramework\Post\Post;
+use WebCodingCat\WpAppFramework\Post\PostStatus;
+use WebCodingCat\WpAppFramework\Post\PostValidationException;
+use WebCodingCat\WpAppFramework\Rest\HttpMethod;
+use WebCodingCat\WpAppFramework\Rest\Permission\Capability;
+use WebCodingCat\WpAppFramework\Rest\RestController;
+use WebCodingCat\WpAppFramework\Rest\RestException;
+use WebCodingCat\WpAppFramework\Rest\RestRoute;
 
 /**
  * Works with post objects in PHP: reads typed meta, changes and creates posts,

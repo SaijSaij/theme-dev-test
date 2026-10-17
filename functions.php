@@ -7,4 +7,4 @@ require is_file(__DIR__ . '/vendor-prefixed/autoload.php')
     ? __DIR__ . '/vendor-prefixed/autoload.php'
     : __DIR__ . '/vendor/autoload.php';
 
-Saij\WpAppFramework\Theme::boot();
+WebCodingCat\WpAppFramework\Theme::boot();

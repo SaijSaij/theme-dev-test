@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-namespace Saij\ThemeDevTest\Table;
+namespace WebCodingCat\ThemeDevTest\Table;
 
 use DateTimeImmutable;
 use DateTimeInterface;
-use Saij\WpAppFramework\Table\AbstractRow;
-use Saij\WpAppFramework\Table\Indexed;
-use Saij\WpAppFramework\Table\Length;
-use Saij\WpAppFramework\Table\PrimaryKey;
-use Saij\WpAppFramework\Table\Table;
-use Saij\WpAppFramework\Table\Text;
+use WebCodingCat\WpAppFramework\Table\AbstractRow;
+use WebCodingCat\WpAppFramework\Table\Indexed;
+use WebCodingCat\WpAppFramework\Table\Length;
+use WebCodingCat\WpAppFramework\Table\PrimaryKey;
+use WebCodingCat\WpAppFramework\Table\Table;
+use WebCodingCat\WpAppFramework\Table\Text;
 
 /**
  * A row of the table wp_dev_test_log: every column type, an index of its own, a unique index and an index of two

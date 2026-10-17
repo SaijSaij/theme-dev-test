@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Saij\ThemeDevTest\Table;
+namespace WebCodingCat\ThemeDevTest\Table;
 
 /**
  * The tables of the theme, for TableController::schema().

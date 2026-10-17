@@ -10,7 +10,7 @@ Unit tests and every build error (with fixtures that would break a theme's build
 
 ## Development
 
-The framework is required from its GitHub repository as `dev-main`: the test theme always follows the current framework, and the lock file pins the commit. For development, [wp-dev-env](https://github.com/webcodingcat/wp-dev-env) replaces `vendor/saij/wp-app-framework` by a relative symlink to a checkout of [wp-app-framework](https://github.com/webcodingcat/wp-app-framework) in the same parent directory (`.env`: `WP_PACKAGE_LINKS=saij/wp-app-framework=wp-app-framework`). After a framework change is pushed, `composer update saij/wp-app-framework` moves the lock file to it. Clone both repositories side by side:
+The framework is required from its GitHub repository as `dev-main`: the test theme always follows the current framework, and the lock file pins the commit. For development, [wp-dev-env](https://github.com/webcodingcat/wp-dev-env) replaces `vendor/webcodingcat/wp-app-framework` by a relative symlink to a checkout of [wp-app-framework](https://github.com/webcodingcat/wp-app-framework) in the same parent directory (`.env`: `WP_PACKAGE_LINKS=webcodingcat/wp-app-framework=wp-app-framework`). After a framework change is pushed, `composer update webcodingcat/wp-app-framework` moves the lock file to it. Clone both repositories side by side:
 
 ```sh
 git clone https://github.com/webcodingcat/wp-app-framework.git
@@ -19,9 +19,9 @@ git clone https://github.com/webcodingcat/theme-dev-test.git
 
 For a local WordPress to develop with, use [wp-dev-env](https://github.com/webcodingcat/wp-dev-env) in the same parent directory with `WP_THEMES=theme-dev-test` and `WP_ACTIVE_THEME=theme-dev-test`; its setup also runs `composer install`, `npm ci` and `npm run build` for this theme. Tests run in [wp-test-env](https://github.com/webcodingcat/wp-test-env) instead (see [Tests](#tests)), which links the framework checkout the same way (`bin/prepare --link`).
 
-The theme is also the consumer of the test plugin [plugin-dev-test](https://github.com/webcodingcat/plugin-dev-test): it injects the plugin's public API, calls its public template functions (`extra.wp-app-framework.template-plugins`) and overrides one of its templates (`overrides/plugin-dev-test/`). The plugin is a development dependency (`require-dev`, for static analysis); the release ZIP does not contain it. Check it out next to the theme and activate it in wp-dev-env (`WP_PLUGINS=plugin-dev-test`, `WP_PACKAGE_LINKS=saij/wp-app-framework=wp-app-framework,saij/plugin-dev-test=plugin-dev-test`). The tests of `plugin.spec.js` expect the plugin's behavior if it is active and the theme's fallback otherwise.
+The theme is also the consumer of the test plugin [plugin-dev-test](https://github.com/webcodingcat/plugin-dev-test): it injects the plugin's public API, calls its public template functions (`extra.wp-app-framework.template-plugins`) and overrides one of its templates (`overrides/plugin-dev-test/`). The plugin is a development dependency (`require-dev`, for static analysis); the release ZIP does not contain it. Check it out next to the theme and activate it in wp-dev-env (`WP_PLUGINS=plugin-dev-test`, `WP_PACKAGE_LINKS=webcodingcat/wp-app-framework=wp-app-framework,webcodingcat/plugin-dev-test=plugin-dev-test`). The tests of `plugin.spec.js` expect the plugin's behavior if it is active and the theme's fallback otherwise.
 
-The theme is also the parent of the test child theme [theme-dev-test-child](https://github.com/webcodingcat/theme-dev-test-child), which uses its public API (`Saij\ThemeDevTest\Api\DevTestApi`, `#[PublicApi]`), its public template functions `theme_dev_test_badge(label)` and `theme_dev_test_partial(name)` and overrides `Twig/ChildOverridable.twig`. In wp-dev-env the child theme may be the active theme (`WP_ACTIVE_THEME=theme-dev-test-child`); the theme's tests pass with and without it and leave what the child theme does to the child theme's tests.
+The theme is also the parent of the test child theme [theme-dev-test-child](https://github.com/webcodingcat/theme-dev-test-child), which uses its public API (`WebCodingCat\ThemeDevTest\Api\DevTestApi`, `#[PublicApi]`), its public template functions `theme_dev_test_badge(label)` and `theme_dev_test_partial(name)` and overrides `Twig/ChildOverridable.twig`. In wp-dev-env the child theme may be the active theme (`WP_ACTIVE_THEME=theme-dev-test-child`); the theme's tests pass with and without it and leave what the child theme does to the child theme's tests.
 
 Scripts (the framework's editor runtime, the scripts next to the blocks in `src/` and the scripts in `assets/`) and the stylesheet `assets/styles.css` (Tailwind CSS, tokens on the values of `theme.json`) are built with `@wordpress/scripts` and the framework's webpack helper into `build/`; `npm install` needs `vendor/` from `composer install` first. In wp-dev-env:
 
@@ -35,7 +35,7 @@ docker compose run --rm tools npm --prefix /workspace/theme-dev-test run start  
 `composer release` builds `dist/theme-dev-test-<version>.zip` with the release pipeline of the framework (see [Release](https://webcodingcat.github.io/wp-app-framework/next/build-and-release/release.html) in its documentation); the framework comes from the lock file. To build with the local framework checkout instead (from this directory, with [wp-test-env](https://github.com/webcodingcat/wp-test-env) next to it):
 
 ```sh
-../wp-test-env/bin/tools -w theme-dev-test composer release -- --package-source=saij/wp-app-framework=../wp-app-framework
+../wp-test-env/bin/tools -w theme-dev-test composer release -- --package-source=webcodingcat/wp-app-framework=../wp-app-framework
 ```
 
 `.gitattributes` marks the development files (`export-ignore`) the ZIP leaves out. A tag `v<version>` (= `Version` in `style.css`) runs `.github/workflows/release.yml`: build, release test with all browser tests, then the ZIP is attached to the GitHub release of the tag.
@@ -51,7 +51,7 @@ Manifest OK (theme theme-dev-test): 115 service candidates, 73 services, 7 hooks
 Block markup OK: 10 templates, template parts and patterns checked.
 Public: 1 APIs, 2 template functions and filters.
 Templates use the public template callables of: plugin-dev-test.
-Not loaded by the build (building on a class outside the project, its Composer dependencies and PHP): Saij\ThemeDevTest\Widget\NoteWidget (WP_Widget).
+Not loaded by the build (building on a class outside the project, its Composer dependencies and PHP): WebCodingCat\ThemeDevTest\Widget\NoteWidget (WP_Widget).
 Assets: 6 static files, 6 image variants.
 ```
 
@@ -139,7 +139,7 @@ Expected log entries of a test run (WP_DEBUG): the failures of `dev-test/v1/item
 ## Structure
 
 - `functions.php` loads the autoloader (`vendor-prefixed/` in release builds, `vendor/` in source checkouts) and boots the framework.
-- `src/` contains the theme's PHP classes (PSR-4 `Saij\ThemeDevTest\`), discovered by the framework, with their Twig templates and editor scripts next to them, organized by the feature they test.
+- `src/` contains the theme's PHP classes (PSR-4 `WebCodingCat\ThemeDevTest\`), discovered by the framework, with their Twig templates and editor scripts next to them, organized by the feature they test.
 - `templates/` holds the block templates (`index.html` with titles and excerpts, `single.html` and `page.html` with the content).
 - `overrides/plugin-dev-test/` overrides templates of the test plugin.
 - `theme.json` defines the colors, font size, spacing, layout sizes and block gap the stylesheet maps to Tailwind tokens. `settings.spacing.blockGap` is set on purpose: without it, WordPress 7.1 puts space between blocks in the editor but not on the front end.

@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Saij\ThemeDevTest\Block\Tabs;
+namespace WebCodingCat\ThemeDevTest\Block\Tabs;
 
-use Saij\WpAppFramework\Value\Labeled;
+use WebCodingCat\WpAppFramework\Value\Labeled;
 
 enum TabTone: string implements Labeled
 {

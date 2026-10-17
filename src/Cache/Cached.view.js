@@ -3,7 +3,7 @@
  * front end it shows the render count from the view data, set again by a cache hit, and its place in the mount
  * order of the shared module order.js, after the document view (document-views.spec.js).
  */
-import { BlockView } from '@saij/wp-app-framework/view';
+import { BlockView } from '@webcodingcat/wp-app-framework/view';
 import { take } from '#shared/order';
 
 export default class Cached extends BlockView {

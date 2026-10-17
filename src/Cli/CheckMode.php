@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Saij\ThemeDevTest\Cli;
+namespace WebCodingCat\ThemeDevTest\Cli;
 
 /**
  * Values of the option --mode of `wp dev-test check values`.

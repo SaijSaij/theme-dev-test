@@ -2,17 +2,17 @@
 
 declare(strict_types=1);
 
-namespace Saij\ThemeDevTest\Twig;
+namespace WebCodingCat\ThemeDevTest\Twig;
 
 use FilesystemIterator;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
-use Saij\ThemeDevTest\Rest\Api;
-use Saij\WpAppFramework\Rest\HttpMethod;
-use Saij\WpAppFramework\Rest\Permission\PublicAccess;
-use Saij\WpAppFramework\Rest\RestController;
-use Saij\WpAppFramework\Rest\RestRoute;
-use Saij\WpAppFramework\Twig\TemplateRenderer;
+use WebCodingCat\ThemeDevTest\Rest\Api;
+use WebCodingCat\WpAppFramework\Rest\HttpMethod;
+use WebCodingCat\WpAppFramework\Rest\Permission\PublicAccess;
+use WebCodingCat\WpAppFramework\Rest\RestController;
+use WebCodingCat\WpAppFramework\Rest\RestRoute;
+use WebCodingCat\WpAppFramework\Twig\TemplateRenderer;
 
 /**
  * Renders the templates of this directory through the injected renderer.

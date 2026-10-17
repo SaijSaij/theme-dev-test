@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Saij\ThemeDevTest\Block;
+namespace WebCodingCat\ThemeDevTest\Block;
 
-use Saij\WpAppFramework\Block\CustomBlockCategory;
+use WebCodingCat\WpAppFramework\Block\CustomBlockCategory;
 
 /**
  * Block categories of the theme, shown before those of WordPress in the inserter (containers.spec.js).

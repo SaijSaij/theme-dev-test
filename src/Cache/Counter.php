@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Saij\ThemeDevTest\Cache;
+namespace WebCodingCat\ThemeDevTest\Cache;
 
 /**
  * Counts how often something was computed, in the option theme_dev_test_cache_counts: a cache hit does not count.

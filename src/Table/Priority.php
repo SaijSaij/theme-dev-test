@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Saij\ThemeDevTest\Table;
+namespace WebCodingCat\ThemeDevTest\Table;
 
 /**
  * The priority of a log entry: an int enum, stored as bigint.

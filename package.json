@@ -17,7 +17,7 @@
 	},
 	"devDependencies": {
 		"@playwright/test": "1.64.0",
-		"@saij/wp-app-framework": "file:vendor/saij/wp-app-framework",
+		"@webcodingcat/wp-app-framework": "file:vendor/webcodingcat/wp-app-framework",
 		"@tailwindcss/webpack": "^4.3.3",
 		"@wordpress/e2e-test-utils-playwright": "^3.0.0",
 		"@wordpress/scripts": "^36.1.0",

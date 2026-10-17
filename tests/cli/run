@@ -157,7 +157,7 @@ expect_output 'unexpected exception with WP_DEBUG' 1 'Uncaught RuntimeException:
 # A class building on WordPress is not loaded by the build; the theme creates and registers it itself.
 # shellcheck disable=SC2016 # PHP code, not shell expansions
 wp_cli eval 'foreach ($GLOBALS["wp_widget_factory"]->widgets as $widget) { if ($widget->id_base === "theme-dev-test-note") { echo get_class($widget); } }'
-expect_stdout 'widget building on WP_Widget, created by the theme' 0 'Saij\ThemeDevTest\Widget\NoteWidget'
+expect_stdout 'widget building on WP_Widget, created by the theme' 0 'WebCodingCat\ThemeDevTest\Widget\NoteWidget'
 
 # The framework's list of WP-CLI commands (rejected as namespace by the build) must match the installed WP-CLI.
 # Development mode only: the release prefixes the framework classes.
@@ -166,7 +166,7 @@ if [[ "$("${test_env}/bin/mode" "${instance}")" == dev ]]; then
     wp_cli eval '
         $dump = WP_CLI::runcommand("cli cmd-dump --skip-plugins --skip-themes", ["return" => true, "parse" => "json", "launch" => true]);
         $installed = array_column($dump["subcommands"], "name");
-        $listed = \Saij\WpAppFramework\WpCli\CliCommandCollector::WP_CLI_COMMANDS;
+        $listed = \WebCodingCat\WpAppFramework\WpCli\CliCommandCollector::WP_CLI_COMMANDS;
         sort($installed);
         sort($listed);
         echo json_encode(["missing" => array_values(array_diff($installed, $listed)), "obsolete" => array_values(array_diff($listed, $installed))]);

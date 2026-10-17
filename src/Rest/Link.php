@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Saij\ThemeDevTest\Rest;
+namespace WebCodingCat\ThemeDevTest\Rest;
 
-use Saij\WpAppFramework\Value\Url;
+use WebCodingCat\WpAppFramework\Value\Url;
 
 final readonly class Link
 {

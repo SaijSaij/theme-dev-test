@@ -2,18 +2,18 @@
 
 declare(strict_types=1);
 
-namespace Saij\ThemeDevTest\Setting;
+namespace WebCodingCat\ThemeDevTest\Setting;
 
-use Saij\WpAppFramework\Setting\SettingsGroup;
-use Saij\WpAppFramework\Value\Hidden;
-use Saij\WpAppFramework\Value\Image;
-use Saij\WpAppFramework\Value\Label;
-use Saij\WpAppFramework\Value\Link;
-use Saij\WpAppFramework\Value\ListOf;
-use Saij\WpAppFramework\Value\PlainText;
-use Saij\WpAppFramework\Value\PostReference;
-use Saij\WpAppFramework\Value\RichText;
-use Saij\WpAppFramework\Value\Url;
+use WebCodingCat\WpAppFramework\Setting\SettingsGroup;
+use WebCodingCat\WpAppFramework\Value\Hidden;
+use WebCodingCat\WpAppFramework\Value\Image;
+use WebCodingCat\WpAppFramework\Value\Label;
+use WebCodingCat\WpAppFramework\Value\Link;
+use WebCodingCat\WpAppFramework\Value\ListOf;
+use WebCodingCat\WpAppFramework\Value\PlainText;
+use WebCodingCat\WpAppFramework\Value\PostReference;
+use WebCodingCat\WpAppFramework\Value\RichText;
+use WebCodingCat\WpAppFramework\Value\Url;
 
 /**
  * A settings group with every kind of value: option dev_test_general.

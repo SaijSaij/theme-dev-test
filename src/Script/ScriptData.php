@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Saij\ThemeDevTest\Script;
+namespace WebCodingCat\ThemeDevTest\Script;
 
-use Saij\WpAppFramework\Hook\Hook;
-use Saij\WpAppFramework\View\ViewData;
+use WebCodingCat\WpAppFramework\Hook\Hook;
+use WebCodingCat\WpAppFramework\View\ViewData;
 
 /**
  * View data for the scripts in assets/: the document view reads "document" on the front end, the editor script

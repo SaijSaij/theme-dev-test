@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Saij\ThemeDevTest\Identifier;
+namespace WebCodingCat\ThemeDevTest\Identifier;
 
-use Saij\WpAppFramework\Setting\SettingsGroup;
-use Saij\WpAppFramework\Value\ListOf;
+use WebCodingCat\WpAppFramework\Setting\SettingsGroup;
+use WebCodingCat\WpAppFramework\Value\ListOf;
 
 /**
  * Regions with identifiers (#[Identifier]) in a settings group: option dev_test_regions. The first region of the

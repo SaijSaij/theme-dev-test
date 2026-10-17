@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Saij\ThemeDevTest\Twig;
+namespace WebCodingCat\ThemeDevTest\Twig;
 
-use Saij\WpAppFramework\Twig\TemplateFunction;
-use Saij\WpAppFramework\Twig\TemplateRenderer;
+use WebCodingCat\WpAppFramework\Twig\TemplateFunction;
+use WebCodingCat\WpAppFramework\Twig\TemplateRenderer;
 
 /**
  * Public template functions of the theme; the test child theme calls them by name.

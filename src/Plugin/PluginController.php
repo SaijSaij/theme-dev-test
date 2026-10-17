@@ -2,17 +2,17 @@
 
 declare(strict_types=1);
 
-namespace Saij\ThemeDevTest\Plugin;
+namespace WebCodingCat\ThemeDevTest\Plugin;
 
-use Saij\PluginDevTest\Api\NoteApi;
-use Saij\PluginDevTest\Api\NoteSummary;
-use Saij\ThemeDevTest\Rest\Api;
-use Saij\WpAppFramework\Api\PluginApi;
-use Saij\WpAppFramework\Rest\HttpMethod;
-use Saij\WpAppFramework\Rest\Permission\PublicAccess;
-use Saij\WpAppFramework\Rest\RestController;
-use Saij\WpAppFramework\Rest\RestRoute;
-use Saij\WpAppFramework\Twig\TemplateRenderer;
+use WebCodingCat\PluginDevTest\Api\NoteApi;
+use WebCodingCat\PluginDevTest\Api\NoteSummary;
+use WebCodingCat\ThemeDevTest\Rest\Api;
+use WebCodingCat\WpAppFramework\Api\PluginApi;
+use WebCodingCat\WpAppFramework\Rest\HttpMethod;
+use WebCodingCat\WpAppFramework\Rest\Permission\PublicAccess;
+use WebCodingCat\WpAppFramework\Rest\RestController;
+use WebCodingCat\WpAppFramework\Rest\RestRoute;
+use WebCodingCat\WpAppFramework\Twig\TemplateRenderer;
 
 /**
  * Uses the test plugin (https://github.com/webcodingcat/plugin-dev-test) if it is

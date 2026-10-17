@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Saij\ThemeDevTest\Block\WordPressFunctions;
+namespace WebCodingCat\ThemeDevTest\Block\WordPressFunctions;
 
-use Saij\WpAppFramework\Value\PostReference;
-use Saij\WpAppFramework\Value\UserReference;
+use WebCodingCat\WpAppFramework\Value\PostReference;
+use WebCodingCat\WpAppFramework\Value\UserReference;
 
 final readonly class WordPressFunctionsAttributes
 {

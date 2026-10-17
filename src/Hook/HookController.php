@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Saij\ThemeDevTest\Hook;
+namespace WebCodingCat\ThemeDevTest\Hook;
 
-use Saij\ThemeDevTest\Rest\Api;
-use Saij\WpAppFramework\Rest\HttpMethod;
-use Saij\WpAppFramework\Rest\Permission\PublicAccess;
-use Saij\WpAppFramework\Rest\RestController;
-use Saij\WpAppFramework\Rest\RestRoute;
+use WebCodingCat\ThemeDevTest\Rest\Api;
+use WebCodingCat\WpAppFramework\Rest\HttpMethod;
+use WebCodingCat\WpAppFramework\Rest\Permission\PublicAccess;
+use WebCodingCat\WpAppFramework\Rest\RestController;
+use WebCodingCat\WpAppFramework\Rest\RestRoute;
 
 /**
  * Applies the filter of FilterCheck, so the browser tests can observe it.

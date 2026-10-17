@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Saij\ThemeDevTest\Post;
+namespace WebCodingCat\ThemeDevTest\Post;
 
-use Saij\WpAppFramework\Post\Page;
-use Saij\WpAppFramework\Post\Post;
-use Saij\WpAppFramework\Post\PostMeta;
-use Saij\WpAppFramework\Value\PlainText;
+use WebCodingCat\WpAppFramework\Post\Page;
+use WebCodingCat\WpAppFramework\Post\Post;
+use WebCodingCat\WpAppFramework\Post\PostMeta;
+use WebCodingCat\WpAppFramework\Value\PlainText;
 
 /**
  * Meta of WordPress' own post types.

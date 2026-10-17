@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Saij\ThemeDevTest\Block\EventList;
+namespace WebCodingCat\ThemeDevTest\Block\EventList;
 
-use Saij\ThemeDevTest\Post\Genre;
-use Saij\WpAppFramework\Value\TermReference;
+use WebCodingCat\ThemeDevTest\Post\Genre;
+use WebCodingCat\WpAppFramework\Value\TermReference;
 
 final readonly class EventListAttributes
 {

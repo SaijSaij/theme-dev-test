@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Saij\ThemeDevTest\Rest;
+namespace WebCodingCat\ThemeDevTest\Rest;
 
 enum Variant: string
 {

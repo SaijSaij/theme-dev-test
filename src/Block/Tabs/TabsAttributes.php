@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Saij\ThemeDevTest\Block\Tabs;
+namespace WebCodingCat\ThemeDevTest\Block\Tabs;
 
-use Saij\WpAppFramework\Block\ProvidesContext;
-use Saij\WpAppFramework\Value\Label;
+use WebCodingCat\WpAppFramework\Block\ProvidesContext;
+use WebCodingCat\WpAppFramework\Value\Label;
 
 final readonly class TabsAttributes
 {

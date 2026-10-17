@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Saij\ThemeDevTest\Block\Hero;
+namespace WebCodingCat\ThemeDevTest\Block\Hero;
 
-use Saij\ThemeDevTest\Support\Accent;
-use Saij\ThemeDevTest\Support\Surface;
-use Saij\WpAppFramework\Block\Block;
-use Saij\WpAppFramework\Block\BlockCategory;
-use Saij\WpAppFramework\Block\Support\UseSupport;
-use Saij\WpAppFramework\Twig\TemplateRenderer;
+use WebCodingCat\ThemeDevTest\Support\Accent;
+use WebCodingCat\ThemeDevTest\Support\Surface;
+use WebCodingCat\WpAppFramework\Block\Block;
+use WebCodingCat\WpAppFramework\Block\BlockCategory;
+use WebCodingCat\WpAppFramework\Block\Support\UseSupport;
+use WebCodingCat\WpAppFramework\Twig\TemplateRenderer;
 
 /**
  * Full-width intro: headline, subline, up to three badges and three buttons on a background color and image

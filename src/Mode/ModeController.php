@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-namespace Saij\ThemeDevTest\Mode;
+namespace WebCodingCat\ThemeDevTest\Mode;
 
-use Saij\ThemeDevTest\Rest\Api;
-use Saij\WpAppFramework\Rest\HttpMethod;
-use Saij\WpAppFramework\Rest\Permission\PublicAccess;
-use Saij\WpAppFramework\Rest\RestController;
-use Saij\WpAppFramework\Rest\RestRoute;
-use Saij\WpAppFramework\Theme;
 use Twig\Environment;
+use WebCodingCat\ThemeDevTest\Rest\Api;
+use WebCodingCat\WpAppFramework\Rest\HttpMethod;
+use WebCodingCat\WpAppFramework\Rest\Permission\PublicAccess;
+use WebCodingCat\WpAppFramework\Rest\RestController;
+use WebCodingCat\WpAppFramework\Rest\RestRoute;
+use WebCodingCat\WpAppFramework\Theme;
 
 /**
  * Reports the mode of the framework instance (step 6): source checkout or release build.

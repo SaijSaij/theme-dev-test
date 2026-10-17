@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Saij\ThemeDevTest\Hook;
+namespace WebCodingCat\ThemeDevTest\Hook;
 
-use Saij\WpAppFramework\DependencyInjection\NoService;
+use WebCodingCat\WpAppFramework\DependencyInjection\NoService;
 
 /**
  * Passed to the filter as a WordPress argument; #[NoService] keeps it out of the container.

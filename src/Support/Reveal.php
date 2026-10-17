@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Saij\ThemeDevTest\Support;
+namespace WebCodingCat\ThemeDevTest\Support;
 
-use Saij\WpAppFramework\Block\Support\BlockSupport;
-use Saij\WpAppFramework\Block\Support\SupportGroup;
+use WebCodingCat\WpAppFramework\Block\Support\BlockSupport;
+use WebCodingCat\WpAppFramework\Block\Support\SupportGroup;
 
 /**
  * Block support with a view script (Reveal.view.js): marks the blocks that use it on the front end.

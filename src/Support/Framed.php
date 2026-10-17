@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Saij\ThemeDevTest\Support;
+namespace WebCodingCat\ThemeDevTest\Support;
 
-use Saij\WpAppFramework\Block\Support\BlockSupport;
-use Saij\WpAppFramework\Block\Support\SupportGroup;
+use WebCodingCat\WpAppFramework\Block\Support\BlockSupport;
+use WebCodingCat\WpAppFramework\Block\Support\SupportGroup;
 
 /**
  * Block support with a boolean value, in the Settings panel: two classes when on, none when off.

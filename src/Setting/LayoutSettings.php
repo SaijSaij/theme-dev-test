@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Saij\ThemeDevTest\Setting;
+namespace WebCodingCat\ThemeDevTest\Setting;
 
-use Saij\WpAppFramework\Setting\SettingsGroup;
+use WebCodingCat\WpAppFramework\Setting\SettingsGroup;
 
 /**
  * A second group, shown before "General" (position): option dev_test_layout.

@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Saij\ThemeDevTest\Block\Inspector;
+namespace WebCodingCat\ThemeDevTest\Block\Inspector;
 
-use Saij\WpAppFramework\Value\Image;
-use Saij\WpAppFramework\Value\Label;
-use Saij\WpAppFramework\Value\PlainText;
+use WebCodingCat\WpAppFramework\Value\Image;
+use WebCodingCat\WpAppFramework\Value\Label;
+use WebCodingCat\WpAppFramework\Value\PlainText;
 
 final readonly class Slide
 {

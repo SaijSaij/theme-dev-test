@@ -15,6 +15,6 @@
         {% if details.registration.url %}
             <a class="event-info__registration" {{ link_attributes(details.registration) }}>Register</a>
         {% endif %}
-        <p class="event-info__genres">{{ event.terms('Saij\\ThemeDevTest\\Post\\Genre')|map(term => term.name)|join(', ') }}</p>
+        <p class="event-info__genres">{{ event.terms('WebCodingCat\\ThemeDevTest\\Post\\Genre')|map(term => term.name)|join(', ') }}</p>
     {% endif %}
 </div>

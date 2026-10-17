@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Saij\ThemeDevTest\Cron;
+namespace WebCodingCat\ThemeDevTest\Cron;
 
-use Saij\WpAppFramework\Cron\CronEvent;
-use Saij\WpAppFramework\Cron\CronInterval;
-use Saij\WpAppFramework\Cron\Weekday;
+use WebCodingCat\WpAppFramework\Cron\CronEvent;
+use WebCodingCat\WpAppFramework\Cron\CronInterval;
+use WebCodingCat\WpAppFramework\Cron\Weekday;
 
 /**
  * Recurring events: an interval in seconds, a daily and a weekly event with a start time.

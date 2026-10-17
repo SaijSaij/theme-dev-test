@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Saij\ThemeDevTest\Block\Check;
+namespace WebCodingCat\ThemeDevTest\Block\Check;
 
-use Saij\WpAppFramework\Value\Label;
-use Saij\WpAppFramework\Value\PlainText;
-use Saij\WpAppFramework\Value\Url;
+use WebCodingCat\WpAppFramework\Value\Label;
+use WebCodingCat\WpAppFramework\Value\PlainText;
+use WebCodingCat\WpAppFramework\Value\Url;
 
 /**
  * A nested value class (not a list) with an inline field.

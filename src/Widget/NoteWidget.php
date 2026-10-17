@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Saij\ThemeDevTest\Widget;
+namespace WebCodingCat\ThemeDevTest\Widget;
 
 use WP_Widget;
 

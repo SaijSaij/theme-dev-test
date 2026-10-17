@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Saij\ThemeDevTest\Setting;
+namespace WebCodingCat\ThemeDevTest\Setting;
 
 /**
  * A value class nested in a list item.

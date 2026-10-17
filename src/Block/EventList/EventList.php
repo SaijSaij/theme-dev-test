@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-namespace Saij\ThemeDevTest\Block\EventList;
+namespace WebCodingCat\ThemeDevTest\Block\EventList;
 
-use Saij\ThemeDevTest\Post\Event;
-use Saij\ThemeDevTest\Post\EventDetailsFields;
-use Saij\ThemeDevTest\Post\Genre;
-use Saij\WpAppFramework\Block\Block;
-use Saij\WpAppFramework\Block\BlockCategory;
-use Saij\WpAppFramework\Query\PostOrder;
-use Saij\WpAppFramework\Query\Terms;
-use Saij\WpAppFramework\Twig\TemplateRenderer;
+use WebCodingCat\ThemeDevTest\Post\Event;
+use WebCodingCat\ThemeDevTest\Post\EventDetailsFields;
+use WebCodingCat\ThemeDevTest\Post\Genre;
+use WebCodingCat\WpAppFramework\Block\Block;
+use WebCodingCat\WpAppFramework\Block\BlockCategory;
+use WebCodingCat\WpAppFramework\Query\PostOrder;
+use WebCodingCat\WpAppFramework\Query\Terms;
+use WebCodingCat\WpAppFramework\Twig\TemplateRenderer;
 
 /**
  * The next events, optionally of a genre: a cached query in render(), the post objects in Twig.

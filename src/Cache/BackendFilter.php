@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Saij\ThemeDevTest\Cache;
+namespace WebCodingCat\ThemeDevTest\Cache;
 
-use Saij\WpAppFramework\Hook\Hook;
+use WebCodingCat\WpAppFramework\Hook\Hook;
 
 /**
  * Lets the tests force the cache backends (CacheController::setBackends()).

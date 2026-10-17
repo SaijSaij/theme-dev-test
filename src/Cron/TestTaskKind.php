@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Saij\ThemeDevTest\Cron;
+namespace WebCodingCat\ThemeDevTest\Cron;
 
 enum TestTaskKind: string
 {

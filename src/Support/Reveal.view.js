@@ -3,7 +3,7 @@
  * support's value and records its life cycle in window.devTestViewLog for
  * frontend.spec.js.
  */
-import { SupportView } from '@saij/wp-app-framework/view';
+import { SupportView } from '@webcodingcat/wp-app-framework/view';
 
 export default class Reveal extends SupportView {
 	mount() {

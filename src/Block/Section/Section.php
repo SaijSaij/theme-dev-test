@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-namespace Saij\ThemeDevTest\Block\Section;
+namespace WebCodingCat\ThemeDevTest\Block\Section;
 
-use Saij\ThemeDevTest\Block\Hero\Hero;
-use Saij\WpAppFramework\Block\Align;
-use Saij\WpAppFramework\Block\Block;
-use Saij\WpAppFramework\Block\BlockCategory;
-use Saij\WpAppFramework\Block\InnerBlocks;
-use Saij\WpAppFramework\Block\Supports;
-use Saij\WpAppFramework\Twig\TemplateRenderer;
+use WebCodingCat\ThemeDevTest\Block\Hero\Hero;
+use WebCodingCat\WpAppFramework\Block\Align;
+use WebCodingCat\WpAppFramework\Block\Block;
+use WebCodingCat\WpAppFramework\Block\BlockCategory;
+use WebCodingCat\WpAppFramework\Block\InnerBlocks;
+use WebCodingCat\WpAppFramework\Block\Supports;
+use WebCodingCat\WpAppFramework\Twig\TemplateRenderer;
 
 #[Block('section', title: 'Section', category: BlockCategory::Design, icon: 'columns', description: 'Container for hero blocks.', excerptWrapper: true)]
 #[InnerBlocks(allowed: [Hero::class])]

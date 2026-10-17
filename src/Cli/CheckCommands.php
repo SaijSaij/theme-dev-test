@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-namespace Saij\ThemeDevTest\Cli;
+namespace WebCodingCat\ThemeDevTest\Cli;
 
 use RuntimeException;
-use Saij\ThemeDevTest\Hook\Greeting;
-use Saij\WpAppFramework\WpCli\Argument;
-use Saij\WpAppFramework\WpCli\CliCommand;
-use Saij\WpAppFramework\WpCli\CliException;
-use Saij\WpAppFramework\WpCli\CliOutput;
-use Saij\WpAppFramework\WpCli\CliSubcommand;
-use Saij\WpAppFramework\WpCli\Option;
+use WebCodingCat\ThemeDevTest\Hook\Greeting;
+use WebCodingCat\WpAppFramework\WpCli\Argument;
+use WebCodingCat\WpAppFramework\WpCli\CliCommand;
+use WebCodingCat\WpAppFramework\WpCli\CliException;
+use WebCodingCat\WpAppFramework\WpCli\CliOutput;
+use WebCodingCat\WpAppFramework\WpCli\CliSubcommand;
+use WebCodingCat\WpAppFramework\WpCli\Option;
 
 /**
  * WP-CLI commands `wp dev-test check …`, run by tests/cli/run.

@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Saij\ThemeDevTest\Asset;
+namespace WebCodingCat\ThemeDevTest\Asset;
 
-use Saij\ThemeDevTest\Rest\Api;
-use Saij\WpAppFramework\Asset\MediaLibrary;
-use Saij\WpAppFramework\Rest\HttpMethod;
-use Saij\WpAppFramework\Rest\Permission\Capability;
-use Saij\WpAppFramework\Rest\RestController;
-use Saij\WpAppFramework\Rest\RestRoute;
+use WebCodingCat\ThemeDevTest\Rest\Api;
+use WebCodingCat\WpAppFramework\Asset\MediaLibrary;
+use WebCodingCat\WpAppFramework\Rest\HttpMethod;
+use WebCodingCat\WpAppFramework\Rest\Permission\Capability;
+use WebCodingCat\WpAppFramework\Rest\RestController;
+use WebCodingCat\WpAppFramework\Rest\RestRoute;
 
 /**
  * Imports an asset of the theme into the media library (assets.spec.js).

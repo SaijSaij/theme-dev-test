@@ -2,17 +2,17 @@
 
 declare(strict_types=1);
 
-namespace Saij\ThemeDevTest\Repeater;
+namespace WebCodingCat\ThemeDevTest\Repeater;
 
-use Saij\ThemeDevTest\Cache\Counter;
-use Saij\ThemeDevTest\Post\Event;
-use Saij\WpAppFramework\Block\Block;
-use Saij\WpAppFramework\Block\BlockCategory;
-use Saij\WpAppFramework\Block\InnerBlocks;
-use Saij\WpAppFramework\Block\Repeater;
-use Saij\WpAppFramework\Cache\Cache;
-use Saij\WpAppFramework\Cache\Tag\PostTypeTag;
-use Saij\WpAppFramework\Twig\TemplateRenderer;
+use WebCodingCat\ThemeDevTest\Cache\Counter;
+use WebCodingCat\ThemeDevTest\Post\Event;
+use WebCodingCat\WpAppFramework\Block\Block;
+use WebCodingCat\WpAppFramework\Block\BlockCategory;
+use WebCodingCat\WpAppFramework\Block\InnerBlocks;
+use WebCodingCat\WpAppFramework\Block\Repeater;
+use WebCodingCat\WpAppFramework\Cache\Cache;
+use WebCodingCat\WpAppFramework\Cache\Tag\PostTypeTag;
+use WebCodingCat\WpAppFramework\Twig\TemplateRenderer;
 
 /**
  * A cached repeat list of events (#[Cache] on a block with Repeater) that shows how often it rendered: a changed

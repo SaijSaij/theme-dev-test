@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Saij\ThemeDevTest\Cron;
+namespace WebCodingCat\ThemeDevTest\Cron;
 
 /**
  * Records the runs of the cron events and the last task in the option theme_dev_test_cron_counts (cron.spec.js).

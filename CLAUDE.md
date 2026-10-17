@@ -1,6 +1,6 @@
 # CLAUDE.md – theme-dev-test
 
-Test theme of [wp-app-framework](https://github.com/webcodingcat/wp-app-framework) (slug `theme-dev-test`, namespace `dev-test`: blocks `dev-test/…`, REST `dev-test/v1`, options `dev_test_…`, PHP `Saij\ThemeDevTest\`). Not a product theme: everything here exists to exercise the framework, and the framework's build and browser tests run against it. Framework principles, conventions and testing rules: the [developer documentation](https://webcodingcat.github.io/wp-app-framework/next/development/) (in the framework checkout `docs/content/development/`) and the framework's CLAUDE.md; this file covers the theme.
+Test theme of [wp-app-framework](https://github.com/webcodingcat/wp-app-framework) (slug `theme-dev-test`, namespace `dev-test`: blocks `dev-test/…`, REST `dev-test/v1`, options `dev_test_…`, PHP `WebCodingCat\ThemeDevTest\`). Not a product theme: everything here exists to exercise the framework, and the framework's build and browser tests run against it. Framework principles, conventions and testing rules: the [developer documentation](https://webcodingcat.github.io/wp-app-framework/next/development/) (in the framework checkout `docs/content/development/`) and the framework's CLAUDE.md; this file covers the theme.
 
 <!-- Maintainers: keep this file under 200 lines; the README holds commands in full and the spec table. -->
 
@@ -38,7 +38,7 @@ Every Playwright worker has a WordPress instance of its own (`WP_BASE_URLS`, cho
 ## Keep in sync
 
 - `composer build-manifest` prints counts of services, hooks, routes, template callables and blocks; when they change, update the expected output in the README.
-- The framework is required as `dev-main` from GitHub; after a framework change is pushed, `composer update saij/wp-app-framework` moves the lock file to it (locally, the package links of wp-dev-env and wp-test-env link the checkout instead).
+- The framework is required as `dev-main` from GitHub; after a framework change is pushed, `composer update webcodingcat/wp-app-framework` moves the lock file to it (locally, the package links of wp-dev-env and wp-test-env link the checkout instead).
 - A release tag `v<version>` must equal `Version:` in `style.css`; the release workflow fails otherwise.
 - Every GitHub release gets short release notes instead of the generated compare link alone: what the theme tests anew, the framework version it is built with, and the compare link last. The release workflow creates the release with `--generate-notes`; once it has passed, replace the text with `gh release edit <tag> --notes-file <file>` (a rerun only uploads the ZIP and keeps the text).
 - New development files that must not ship go to `.gitattributes` as `export-ignore` (directories as `dir/**`).

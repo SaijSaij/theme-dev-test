@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Saij\ThemeDevTest\Setting;
+namespace WebCodingCat\ThemeDevTest\Setting;
 
 /**
  * A nullable value class.

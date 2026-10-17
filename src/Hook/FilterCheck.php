@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Saij\ThemeDevTest\Hook;
+namespace WebCodingCat\ThemeDevTest\Hook;
 
-use Saij\WpAppFramework\Hook\Hook;
+use WebCodingCat\WpAppFramework\Hook\Hook;
 
 /**
  * Filter with an injected service between WordPress arguments; the optional

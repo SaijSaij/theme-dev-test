@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Saij\ThemeDevTest\Post;
+namespace WebCodingCat\ThemeDevTest\Post;
 
-use Saij\WpAppFramework\Query\Field\BoolField;
-use Saij\WpAppFramework\Query\MetaFields;
+use WebCodingCat\WpAppFramework\Query\Field\BoolField;
+use WebCodingCat\WpAppFramework\Query\MetaFields;
 
 /**
  * Written by hand: only the field that queries use.

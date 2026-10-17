@@ -2,28 +2,28 @@
 
 declare(strict_types=1);
 
-namespace Saij\ThemeDevTest\Post;
+namespace WebCodingCat\ThemeDevTest\Post;
 
 use DateTimeImmutable;
-use Saij\ThemeDevTest\Rest\Api;
-use Saij\WpAppFramework\Post\AbstractPost;
-use Saij\WpAppFramework\Post\Category;
-use Saij\WpAppFramework\Post\Page;
-use Saij\WpAppFramework\Post\Post;
-use Saij\WpAppFramework\Post\PostFormat;
-use Saij\WpAppFramework\Post\PostStatus;
-use Saij\WpAppFramework\Post\Tag;
-use Saij\WpAppFramework\Query\Any;
-use Saij\WpAppFramework\Query\Comparison;
-use Saij\WpAppFramework\Query\Direction;
-use Saij\WpAppFramework\Query\DiscussionStatus;
-use Saij\WpAppFramework\Query\PostOrder;
-use Saij\WpAppFramework\Query\SearchColumn;
-use Saij\WpAppFramework\Query\Terms;
-use Saij\WpAppFramework\Rest\HttpMethod;
-use Saij\WpAppFramework\Rest\Permission\Capability;
-use Saij\WpAppFramework\Rest\RestController;
-use Saij\WpAppFramework\Rest\RestRoute;
+use WebCodingCat\ThemeDevTest\Rest\Api;
+use WebCodingCat\WpAppFramework\Post\AbstractPost;
+use WebCodingCat\WpAppFramework\Post\Category;
+use WebCodingCat\WpAppFramework\Post\Page;
+use WebCodingCat\WpAppFramework\Post\Post;
+use WebCodingCat\WpAppFramework\Post\PostFormat;
+use WebCodingCat\WpAppFramework\Post\PostStatus;
+use WebCodingCat\WpAppFramework\Post\Tag;
+use WebCodingCat\WpAppFramework\Query\Any;
+use WebCodingCat\WpAppFramework\Query\Comparison;
+use WebCodingCat\WpAppFramework\Query\Direction;
+use WebCodingCat\WpAppFramework\Query\DiscussionStatus;
+use WebCodingCat\WpAppFramework\Query\PostOrder;
+use WebCodingCat\WpAppFramework\Query\SearchColumn;
+use WebCodingCat\WpAppFramework\Query\Terms;
+use WebCodingCat\WpAppFramework\Rest\HttpMethod;
+use WebCodingCat\WpAppFramework\Rest\Permission\Capability;
+use WebCodingCat\WpAppFramework\Rest\RestController;
+use WebCodingCat\WpAppFramework\Rest\RestRoute;
 
 /**
  * Runs queries of post objects on the posts a test created (`ids`, comma-separated), so other content of the site

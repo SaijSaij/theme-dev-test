@@ -2,7 +2,7 @@
  * Front-end behavior of the FAQ block: the question opens and closes the answer.
  * Records its life cycle in window.devTestViewLog for frontend.spec.js.
  */
-import { BlockView } from '@saij/wp-app-framework/view';
+import { BlockView } from '@webcodingcat/wp-app-framework/view';
 
 export default class Faq extends BlockView {
 	mount() {
