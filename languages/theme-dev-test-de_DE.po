@@ -1,0 +1,33 @@
+# German translation of a few texts of theme-dev-test, for the browser test of translations.
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=UTF-8\n"
+"Language: de_DE\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#. Title of a block.
+msgid "Translated"
+msgstr "Übersetzt"
+
+msgid "Hello world"
+msgstr "Hallo Welt"
+
+msgctxt "month"
+msgid "May"
+msgstr "Mai"
+
+msgid "%d day"
+msgid_plural "%d days"
+msgstr[0] "%d Tag"
+msgstr[1] "%d Tage"
+
+#. Label of a value of the hero.
+msgid "Background image"
+msgstr "Hintergrundbild"
+
+#. Label of the post type of events.
+msgid "Events"
+msgstr "Veranstaltungen"
+
+msgid "Untranslated so far"
+msgstr ""

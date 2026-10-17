@@ -47,7 +47,7 @@ All checks run with [wp-test-env](https://github.com/saijsaij/wp-test-env), chec
 Build: `composer build-manifest` builds and checks the manifest (writes nothing) and must report
 
 ```
-Manifest OK (theme theme-dev-test): 111 service candidates, 70 services, 6 hooks, 64 routes, 40 template functions, 1 template filters, 28 blocks, 6 CLI commands, 3 cron events, 1 cron tasks, 2 tables, 2 lifecycle methods. Nothing written (no --output).
+Manifest OK (theme theme-dev-test): 115 service candidates, 73 services, 7 hooks, 65 routes, 44 template functions, 1 template filters, 29 blocks, 6 CLI commands, 3 cron events, 1 cron tasks, 2 tables, 2 lifecycle methods. Nothing written (no --output).
 Block markup OK: 10 templates, template parts and patterns checked.
 Public: 1 APIs, 2 template functions and filters.
 Templates use the public template callables of: plugin-dev-test.
@@ -100,6 +100,7 @@ The fixtures in `tests/e2e/fixtures.js` fail every test that causes a console wa
 |---|---|---|
 | `hook.spec.js` | `#[Hook]` action and filter, injected services, WordPress arguments, `#[NoService]`, init hook of the framework | `src/Hook/` |
 | `rest.spec.js` | REST arguments (`int`, `float`, `bool`, enum, `#[Param]` keywords), `WP_REST_Request` parameter, enum path parameters, 400/401/403/404/500, 201/204, `OPTIONS`, `Capability`/`Callback` and the `Allow` header, `#[ListOf]` | `src/Rest/` |
+| `translations.spec.js` | Texts of attributes, templates (`__()`, `_x()`, `_n()`) and the controls of the framework in German (`languages/theme-dev-test-de_DE.po`), on the front end and in the editor | `src/I18n/`, `src/Block/Translated/` |
 | `twig.spec.js` | Theme templates with partial, `#[TemplateFunction]`, `#[TemplateFilter]` (`pre_escape`), lazy services, `strict_variables`, cache directory, `@theme` of a template a child theme may override | `src/Twig/` |
 | `blocks.spec.js` | Escaping and sanitizing of every value type on the front end (scalars, nullable, enum, nested value class, URL, image, inner blocks), supports, render arguments, stored content, block types in the editor, `usesContext` in a query loop | `src/Block/Check/`, `src/Block/PostInfo/`, `src/Block/Container/` |
 | `editor-runtime.spec.js` | Editor runtime: inline editing, refetch rule, batch rendering and cache, layout stability, images, containers, contentOnly, errors per block, site editor, list cards (collapsed, expanded one by one or several, new items expanded, titled with the item label, sorted by drag and drop and the menu), canvas outlines, `registerPanel`, multiline plain text in the canvas (Enter, Shift+Enter, pasted lines), a void element as root element | `src/Block/Hero/`, `src/Block/Section/`, `src/Block/Rule/` |
