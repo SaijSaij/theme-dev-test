@@ -214,11 +214,15 @@ test.describe( 'Hero', () => {
 		await expect( hero.locator( BADGES ) ).toHaveCount( 3 );
 		await expect( add ).toBeDisabled();
 
-		// The palette of theme.json; a click on the chosen color clears it.
+		// The palette of theme.json, behind the compact button of the color; a click on the chosen color clears it.
 		await openBlockSettings( page, editor );
+		const toggle = page.locator( '.wp-app-framework-color__toggle' );
+		await expect( toggle ).toHaveText( 'No color' );
+		await toggle.click();
 		const primary = page.getByRole( 'option', { name: 'Primary' } );
 		await primary.click();
 		await expect( hero ).toHaveCSS( 'background-color', PRIMARY );
+		await expect( toggle ).toHaveText( 'Primary (#1e4d8c)' );
 		await screenshot(
 			page.getByRole( 'region', { name: 'Editor settings' } ),
 			'inspector-hero-color'
@@ -232,6 +236,8 @@ test.describe( 'Hero', () => {
 			{ text: '', icon: 'star' },
 		] );
 
+		// Saving closed the popover, like those of the block editor.
+		await toggle.click();
 		await primary.click();
 		await expect( hero ).toHaveCSS( 'background-color', CONTRAST );
 		await editor.saveDraft();
